@@ -81,6 +81,20 @@ function pickRandom(){
 let ytPlayer=null, vmPlayer=null;
 function ensureYT(){ if(!document.querySelector('script[data-yt]')){ const s=document.createElement('script'); s.src="https://www.youtube.com/iframe_api"; s.dataset.yt="1"; document.head.appendChild(s);} }
 function ensureVimeo(){ if(!document.querySelector('script[data-vm]')){ const s=document.createElement('script'); s.src="https://player.vimeo.com/api/player.js"; s.dataset.vm="1"; document.head.appendChild(s);} }
+
+async function fetchYouTubeStream(vid){
+  try{
+    const r=await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(`https://www.youtube.com/watch?v=${vid}`)}`);
+    const j=await r.json();
+    const html=j.contents||"";
+    let m=html.match(/"hlsManifestUrl":"([^"]+)"/);
+    if(m) return m[1].replace(/\\u0026/g,'&');
+    m=html.match(/"url":"(https:\/\/[^"]+googlevideo\.com[^"]+)"/);
+    if(m) return m[1].replace(/\\u0026/g,'&').replace(/\\/g,'');
+  }catch(e){}
+  return null;
+}
+
 function setupPlayer(){
   clearInterval(timer);
   const _oldViz=document.getElementById('viz'); if(_oldViz) _oldViz.style.display='none';
@@ -152,7 +166,17 @@ function setupPlayer(){
   v.pause(); v.controls=false; v.src=cur.video_url; v.load();
   v.onerror=()=>{ if(cur.video_url && cur.video_url.includes("localhost:8789")){ v.src=`https://yewtu.be/latest_version?id=${cur.video_id}&itag=18`; v.load(); v.play().catch(()=>{}); } };
   const _ld=document.getElementById('video-loading'); if(_ld) _ld.classList.add('show');
-  v.onerror=()=>{ if(cur.local_video){ v.src=cur.local_video; v.load(); v.play().catch(()=>{}); } };
+  v.onerror=async()=>{
+    if(cur.local_video){ v.src=cur.local_video; v.load(); v.play().catch(()=>{}); return; }
+    // try allorigins fallback for YouTube on GitHub Pages
+    if(cur.video_url && cur.video_url.includes("yewtu.be")){
+      const vid=cur.video_id;
+      const stream=await fetchYouTubeStream(vid);
+      if(stream){ v.src=stream; v.load(); v.play().catch(()=>{}); return; }
+    }
+    const fb=document.getElementById('feedback');
+    if(fb) fb.innerHTML=`Video failed — <a href="${cur.embed_url}" target="_blank" style="color:#b8c0ff">Watch on YouTube ↗</a>`;
+  };
   const seek=()=>{ try{ v.currentTime=cur.start_time; v.pause(); }catch(e){} /* time removed */ };
   v.onloadedmetadata=seek; v.onloadeddata=seek; setTimeout(seek,400);
 }

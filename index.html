@@ -128,6 +128,20 @@ function pickRandom(){
 let ytPlayer=null, vmPlayer=null;
 function ensureYT(){ if(!document.querySelector('script[data-yt]')){ const s=document.createElement('script'); s.src="https://www.youtube.com/iframe_api"; s.dataset.yt="1"; document.head.appendChild(s);} }
 function ensureVimeo(){ if(!document.querySelector('script[data-vm]')){ const s=document.createElement('script'); s.src="https://player.vimeo.com/api/player.js"; s.dataset.vm="1"; document.head.appendChild(s);} }
+
+async function fetchYouTubeStream(vid){
+  try{
+    const r=await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(`https://www.youtube.com/watch?v=${vid}`)}`);
+    const j=await r.json();
+    const html=j.contents||"";
+    let m=html.match(/"hlsManifestUrl":"([^"]+)"/);
+    if(m) return m[1].replace(/\\u0026/g,'&');
+    m=html.match(/"url":"(https:\/\/[^"]+googlevideo\.com[^"]+)"/);
+    if(m) return m[1].replace(/\\u0026/g,'&').replace(/\\/g,'');
+  }catch(e){}
+  return null;
+}
+
 function setupPlayer(){
   clearInterval(timer);
   const _oldViz=document.getElementById('viz'); if(_oldViz) _oldViz.style.display='none';
