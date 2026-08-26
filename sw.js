@@ -1,4 +1,4 @@
-const CACHE='taalflex-v1';
+const CACHE='taalflex-v2';
 const ASSETS=['./standalone.html','./style.css','./app.js','./manifest.json'];
-self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS))));
+self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS).catch(()=>c.addAll(['./standalone.html'])) )));
 self.addEventListener('fetch',e=>e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request))));
