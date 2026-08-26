@@ -118,7 +118,7 @@ function setupPlayer(){
   }
 })();
 
-  document.getElementById('attribution').innerHTML=`<a href="${cur.embed_url}" target="_blank">${cur.title}</a> · <a href="${cur.license_url}" target="_blank">${cur.license}</a> · ${cur.verified?'✅ Verified':'⚠️ Rights UNVERIFIED'}${cur.local_audio?' · 🔊 audio segment':''}`;
+  document.getElementById('attribution').innerHTML=`<a href="${cur.embed_url}" target="_blank">${cur.title}</a> · <a href="${cur.license_url}" target="_blank">${cur.license}</a>`;
   const isYT=cur.provider==='youtube', isVM=cur.provider==='vimeo', isArch=cur.provider==='archive_embed';
   const vEl=document.getElementById('v'), ytW=document.getElementById('ytWrap'), vmF=document.getElementById('vm');
   document.getElementById('yt').style.display=isYT?'block':'none';
@@ -128,7 +128,7 @@ function setupPlayer(){
   if(isArch){ archF.style.display='block'; archF.src=cur.video_url; } else { archF.style.display='none'; archF.src=''; }
   if(isYT){
     ensureYT();
-    const init=()=>{ if(window.YT && window.YT.Player){ try{ if(ytPlayer) ytPlayer.destroy(); }catch(e){}; ytPlayer=new window.YT.Player('yt',{videoId:cur.video_id.split('?')[0].split('/') .pop(), playerVars:{modestbranding:1,rel:0,playsinline:1}, events:{onReady:(e)=>{e.target.seekTo(cur.start_time,true); e.target.pauseVideo();}, onError:(e)=>{ document.getElementById('attribution').innerHTML+=` <br><span style='color:#FF8A8A'>⚠️ تضمين محظور — <a href="${cur.embed_url}" target="_blank" style="color:#b8c0ff">شاهد على YouTube ↗</a></span>`; }}}); } else setTimeout(init,500); };
+    const init=()=>{ if(window.YT && window.YT.Player){ try{ if(ytPlayer) ytPlayer.destroy(); }catch(e){}; ytPlayer=new window.YT.Player('yt',{videoId:cur.video_id.split('?')[0].split('/') .pop(), playerVars:{modestbranding:1,rel:0,playsinline:1,controls:0,disablekb:1,fs:0,iv_load_policy:3,cc_load_policy:0}, events:{onReady:(e)=>{ setTimeout(function(){ playClip(); },400); }, onError:(e)=>{ document.getElementById('attribution').innerHTML+=` <br><span style='color:#FF8A8A'>⚠️ تضمين محظور — <a href="${cur.embed_url}" target="_blank" style="color:#b8c0ff">شاهد على YouTube ↗</a></span>`; }}}); } else setTimeout(init,500); };
     init();
     /* time removed */
     return;
@@ -148,8 +148,8 @@ function setupPlayer(){
     vEl.style.display='block'; v.pause(); v.controls=false; v.src=cur.local_video; v.load();
   const _ld2=document.getElementById('video-loading'); if(_ld2) _ld2.classList.add('show');
     const durv=cur.end_time-cur.start_time;
-    const sv=()=>{ try{ v.currentTime=0; v.pause(); }catch(e){} /* time removed */ };
-    v.onloadedmetadata=sv; setTimeout(sv,400);
+    // sv no longer seeks; canplay listener handles it
+    v.onloadedmetadata=()=>{}; v.addEventListener('canplay',function ap(){ v.removeEventListener('canplay',ap); setTimeout(playClip,90); },{once:true});
     v.onerror=()=>{ vEl.style.display='none'; if(cur.local_audio){ window.segP=window.segP||document.createElement('audio'); window.segP.src=cur.local_audio;
     window.segP.play().catch(()=>{}); startViz(window.segP);
     window.segP.onended=()=>{ const b=document.getElementById('play'); if(b) b.textContent='\u25B6 Play'; }; } /* time removed */ };
@@ -164,21 +164,33 @@ function setupPlayer(){
     return;
   }
   console.log('[TaalFlix] load', cur.clip_id, cur.video_url); v.pause(); v.controls=false; v.src=cur.video_url; v.load();
-  v.onerror=()=>{ if(cur.video_url && cur.video_url.includes("localhost:8789")){ v.src=`https://yewtu.be/latest_version?id=${cur.video_id}&itag=18`; v.load(); v.play().catch(()=>{}); } };
+
   const _ld=document.getElementById('video-loading'); if(_ld) _ld.classList.add('show');
-  v.onerror=async(e)=>{ console.log('[TaalFlix] video error', cur.video_url, e);
-    if(cur.local_video){ v.src=cur.local_video; v.load(); v.play().catch(()=>{}); return; }
-    // try allorigins fallback for YouTube on GitHub Pages
+  const _ld=document.getElementById('video-loading'); if(_ld) _ld.classList.add('show');
+  v.onerror=async()=>{
+    const ld=document.getElementById('video-loading'); if(ld) ld.classList.remove('show');
     if(cur.video_url && cur.video_url.includes("yewtu.be")){
       const vid=cur.video_id;
-      const stream=await fetchYouTubeStream(vid);
-      if(stream){ v.src=stream; v.load(); v.play().catch(()=>{}); return; }
+      const ytWrap=document.getElementById('ytWrap');
+      const ytFrame=document.getElementById('yt');
+      if(ytWrap && ytFrame){
+        ytFrame.src=`https://www.youtube-nocookie.com/embed/${vid}?rel=0&modestbranding=1&playsinline=1`;
+        ytWrap.style.display='block';
+        document.getElementById('v').style.display='none';
+        return;
+      }
     }
+    if(cur.local_video){ v.src=cur.local_video; v.load(); v.play().then(()=>{ const ld2=document.getElementById('video-loading'); if(ld2) ld2.classList.remove('show'); }).catch(()=>{}); return; }
+    // try allorigins direct stream as last resort
+    try{
+      const s=await fetchYouTubeStream(cur.video_id);
+      if(s){ v.src=s; v.load(); v.play().then(()=>{ const ld3=document.getElementById('video-loading'); if(ld3) ld3.classList.remove('show'); }).catch(()=>{}); return; }
+    }catch(e){}
     const fb=document.getElementById('feedback');
     if(fb) fb.innerHTML=`Video failed — <a href="${cur.embed_url}" target="_blank" style="color:#b8c0ff">Watch on YouTube ↗</a>`;
   };
-  const seek=()=>{ try{ v.currentTime=cur.start_time; v.pause(); }catch(e){} /* time removed */ };
-  v.onloadedmetadata=seek; v.onloadeddata=seek; setTimeout(seek,400);
+  const seek=()=>{ try{ v.currentTime=cur.start_time; }catch(e){} };
+  v.onloadedmetadata=seek; v.onloadeddata=seek; v.addEventListener('canplay',function ap(){ v.removeEventListener('canplay',ap); try{ v.currentTime=cur.start_time; }catch(e){} setTimeout(playClip,90); },{once:true}); setTimeout(seek,400);
 }
 function playClip(){
   // toggle pause if already playing
