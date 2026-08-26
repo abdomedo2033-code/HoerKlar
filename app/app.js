@@ -82,7 +82,7 @@ let ytPlayer=null, vmPlayer=null;
 function ensureYT(){ if(!document.querySelector('script[data-yt]')){ const s=document.createElement('script'); s.src="https://www.youtube.com/iframe_api"; s.dataset.yt="1"; document.head.appendChild(s);} }
 function ensureVimeo(){ if(!document.querySelector('script[data-vm]')){ const s=document.createElement('script'); s.src="https://player.vimeo.com/api/player.js"; s.dataset.vm="1"; document.head.appendChild(s);} }
 
-async function fetchYouTubeStream(vid){
+async function fetchYouTubeStream(vid){ console.log('[TaalFlix] fetchYouTubeStream', vid);
   try{
     const r=await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(`https://www.youtube.com/watch?v=${vid}`)}`);
     const j=await r.json();
@@ -163,10 +163,10 @@ function setupPlayer(){
     } else { /* time removed */ }
     return;
   }
-  v.pause(); v.controls=false; v.src=cur.video_url; v.load();
+  console.log('[TaalFlix] load', cur.clip_id, cur.video_url); v.pause(); v.controls=false; v.src=cur.video_url; v.load();
   v.onerror=()=>{ if(cur.video_url && cur.video_url.includes("localhost:8789")){ v.src=`https://yewtu.be/latest_version?id=${cur.video_id}&itag=18`; v.load(); v.play().catch(()=>{}); } };
   const _ld=document.getElementById('video-loading'); if(_ld) _ld.classList.add('show');
-  v.onerror=async()=>{
+  v.onerror=async(e)=>{ console.log('[TaalFlix] video error', cur.video_url, e);
     if(cur.local_video){ v.src=cur.local_video; v.load(); v.play().catch(()=>{}); return; }
     // try allorigins fallback for YouTube on GitHub Pages
     if(cur.video_url && cur.video_url.includes("yewtu.be")){
