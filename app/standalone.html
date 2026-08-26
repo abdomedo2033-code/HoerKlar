@@ -73,7 +73,7 @@ function bindFilters(){
         cur.video_url=newUrl;
         v.src=newUrl;
         v.load();
-        v.onloadedmetadata=()=>{ try{ v.currentTime=curT; if(!wasPaused) v.play().catch(()=>{}); }catch(e){} };
+        v.onloadedmetadata=()=>{ try{ v.currentTime=curT; if(!wasPaused) v.play().then(()=>{ const ld=document.getElementById('video-loading'); if(ld) ld.classList.remove('show'); }).catch(()=>{}); }catch(e){} };
         setTimeout(()=>{ try{ v.currentTime=curT; }catch(e){} },400);
       }
     });
@@ -197,8 +197,9 @@ function setupPlayer(){
     return;
   }
   v.pause(); v.controls=false; v.src=cur.video_url; v.load();
+  v.onerror=()=>{ if(cur.video_url && cur.video_url.includes("localhost:8789")){ v.src=`https://yewtu.be/latest_version?id=${cur.video_id}&itag=18`; v.load(); v.play().then(()=>{ const ld=document.getElementById('video-loading'); if(ld) ld.classList.remove('show'); }).catch(()=>{}); } };
   const _ld=document.getElementById('video-loading'); if(_ld) _ld.classList.add('show');
-  v.onerror=()=>{ if(cur.local_video){ v.src=cur.local_video; v.load(); v.play().catch(()=>{}); } };
+  v.onerror=()=>{ if(cur.local_video){ v.src=cur.local_video; v.load(); v.play().then(()=>{ const ld=document.getElementById('video-loading'); if(ld) ld.classList.remove('show'); }).catch(()=>{}); } };
   const seek=()=>{ try{ v.currentTime=cur.start_time; }catch(e){} };
   v.onloadedmetadata=seek; v.onloadeddata=seek; v.addEventListener('canplay',function ap(){ v.removeEventListener('canplay',ap); try{ v.currentTime=cur.start_time; }catch(e){} setTimeout(playClip,90); },{once:true}); setTimeout(seek,400);
 }
@@ -213,7 +214,7 @@ function playClip(){
   if(isVM){ const vmF=document.getElementById('vm'); try{ const p=new window.Vimeo.Player(vmF); p.setCurrentTime(cur.start_time).then(()=>p.play()); vmPlayer=p; }catch(e){} return; }
   if(!cur.video_url && cur.local_video){
     const durv=cur.end_time-cur.start_time;
-    if(!(v.paused && v.currentTime>0 && v.currentTime<durv && v.currentTime>0.2)){ v.currentTime=0; } v.playbackRate=slow?0.75:1; v.play().catch(()=>{});
+    if(!(v.paused && v.currentTime>0 && v.currentTime<durv && v.currentTime>0.2)){ v.currentTime=0; } v.playbackRate=slow?0.75:1; v.play().then(()=>{ const ld=document.getElementById('video-loading'); if(ld) ld.classList.remove('show'); }).catch(()=>{});
     v.ontimeupdate=()=>{ if(prog) prog.style.width=Math.min(100,(v.currentTime/durv)*100)+'%';
       if(v.currentTime>=durv){ v.pause(); v.ontimeupdate=null; if(prog) prog.style.width='100%'; } };
     return;
@@ -225,7 +226,7 @@ function playClip(){
     } else if(prog) prog.style.width='100%';
     return;
   }
-  if(!(v.paused && v.currentTime>=cur.start_time-0.3 && v.currentTime<cur.end_time-0.2)){ v.currentTime=cur.start_time; } v.playbackRate=slow?0.75:1; v.play().catch(()=>{});
+  if(!(v.paused && v.currentTime>=cur.start_time-0.3 && v.currentTime<cur.end_time-0.2)){ v.currentTime=cur.start_time; } v.playbackRate=slow?0.75:1; v.play().then(()=>{ const ld=document.getElementById('video-loading'); if(ld) ld.classList.remove('show'); }).catch(()=>{});
   v.ontimeupdate=()=>{
     if(prog) prog.style.width=((v.currentTime-cur.start_time)/(cur.end_time-cur.start_time)*100)+'%';
     if(v.currentTime>=cur.end_time){ v.pause(); v.ontimeupdate=null; if(prog) prog.style.width='100%'; }
