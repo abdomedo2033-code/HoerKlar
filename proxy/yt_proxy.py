@@ -36,7 +36,7 @@ class H(BaseHTTPRequestHandler):
             if range_hdr:
                 # pass through to yt-dlp via --downloader-args? For now ignore and serve full, browser will handle
                 pass
-            p=subprocess.Popen([YTDLP,"--no-warnings","-f",fmt,"-o","-",f"https://www.youtube.com/watch?v={vid}"], env=ENV, stdout=subprocess.PIPE)
+            p=subprocess.Popen([YTDLP,"--quiet","--no-warnings","-f",fmt,"-o","-",f"https://www.youtube.com/watch?v={vid}"], env=ENV, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
             try:
                 while True:
                     chunk=p.stdout.read(65536)
