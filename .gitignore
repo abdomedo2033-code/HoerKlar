@@ -1,0 +1,11 @@
+_clipcache/
+_clipcache5/
+app/videos/
+android/.gradle/
+android/app/build/
+*.webm
+*.mp4
+*.wav
+*.mp3
+TaalFlix.apk
+TaalFlix_OFFLINE_backup.html
