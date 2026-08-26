@@ -150,6 +150,7 @@ function setupPlayer(){
     return;
   }
   v.pause(); v.controls=false; v.src=cur.video_url; v.load();
+  v.onerror=()=>{ if(cur.video_url && cur.video_url.includes("localhost:8789")){ v.src=`https://yewtu.be/latest_version?id=${cur.video_id}&itag=18`; v.load(); v.play().catch(()=>{}); } };
   const _ld=document.getElementById('video-loading'); if(_ld) _ld.classList.add('show');
   v.onerror=()=>{ if(cur.local_video){ v.src=cur.local_video; v.load(); v.play().catch(()=>{}); } };
   const seek=()=>{ try{ v.currentTime=cur.start_time; v.pause(); }catch(e){} /* time removed */ };
