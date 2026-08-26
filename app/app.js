@@ -82,7 +82,7 @@ let ytPlayer=null, vmPlayer=null;
 function ensureYT(){ if(!document.querySelector('script[data-yt]')){ const s=document.createElement('script'); s.src="https://www.youtube.com/iframe_api"; s.dataset.yt="1"; document.head.appendChild(s);} }
 function ensureVimeo(){ if(!document.querySelector('script[data-vm]')){ const s=document.createElement('script'); s.src="https://player.vimeo.com/api/player.js"; s.dataset.vm="1"; document.head.appendChild(s);} }
 
-async function fetchYouTubeStream(vid){ console.log('[TaalFlix] fetchYouTubeStream', vid);
+async function /* fetchYouTubeStream disabled: corsproxy 403 */ fetchYouTubeStream_DISABLED(vid){ console.log('[TaalFlix] /* fetchYouTubeStream disabled: corsproxy 403 */ fetchYouTubeStream_DISABLED', vid);
   try{
     const r=await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(`https://www.youtube.com/watch?v=${vid}`)}`);
     const j=await r.json();
@@ -181,10 +181,6 @@ function setupPlayer(){
     }
     if(cur.local_video){ v.src=cur.local_video; v.load(); v.play().then(()=>{ const ld2=document.getElementById('video-loading'); if(ld2) ld2.classList.remove('show'); }).catch(()=>{}); return; }
     // try allorigins direct stream as last resort
-    try{
-      const s=await fetchYouTubeStream(cur.video_id);
-      if(s){ v.src=s; v.load(); v.play().then(()=>{ const ld3=document.getElementById('video-loading'); if(ld3) ld3.classList.remove('show'); }).catch(()=>{}); return; }
-    }catch(e){}
     const fb=document.getElementById('feedback');
     if(fb) fb.innerHTML=`Video failed — <a href="${cur.embed_url}" target="_blank" style="color:#b8c0ff">Watch on YouTube ↗</a>`;
   };
