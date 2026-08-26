@@ -212,8 +212,7 @@ function setupPlayer(){
   }
   console.log('[TaalFlix] load', cur.clip_id, cur.video_url); v.pause(); v.controls=false; v.src=cur.video_url; v.load();
 
-  const _ld=document.getElementById('video-loading'); if(_ld) _ld.classList.add('show');
-  const _ld=document.getElementById('video-loading'); if(_ld) _ld.classList.add('show');
+  const _ld3=document.getElementById('video-loading'); if(_ld3) _ld3.classList.add('show');
   v.onerror=async()=>{
     const ld=document.getElementById('video-loading'); if(ld) ld.classList.remove('show');
     if(cur.video_url && cur.video_url.includes("yewtu.be")){
