@@ -6389,7 +6389,6 @@
     "difficulty": 1,
     "verified": true,
     "section": "nicos",
-    "local_video": "videos/de_nico_15.mp4",
     "translations": {
       "en": "Thanks to Ögut and you. Good morning Mr. Müller, how are you?",
       "ar": "شكرا لأوغوت ولك. صباح الخير سيد مولر، كيف حالك ؟"
@@ -6428,7 +6427,6 @@
     "difficulty": 1,
     "verified": true,
     "section": "nicos",
-    "local_video": "videos/de_nico_21.mp4",
     "translations": {
       "en": "Ms. Schneider, thank you very much and you.",
       "ar": "السيدة شنايدر، شكرا جزيلا لك ولك."
@@ -6467,7 +6465,6 @@
     "difficulty": 1,
     "verified": true,
     "section": "nicos",
-    "local_video": "videos/de_nico_27.mp4",
     "translations": {
       "en": "Hello, how are you? Very good, thank you and you.",
       "ar": "مرحبًا، كيف حالك ؟ جيد جدا، شكرا لك ولك."
@@ -6506,7 +6503,6 @@
     "difficulty": 1,
     "verified": true,
     "section": "nicos",
-    "local_video": "videos/de_nico_33.mp4",
     "translations": {
       "en": "Hey Lena, well, how are you? Hello Grandpa.",
       "ar": "مرحبا لينا، حسنا، كيف حالك ؟ مرحبا جدي."
@@ -6545,7 +6541,6 @@
     "difficulty": 1,
     "verified": true,
     "section": "nicos",
-    "local_video": "videos/de_nico_39.mp4",
     "translations": {
       "en": "Hi Sarah, how are you? Hi Tom, super thank you.",
       "ar": "مرحبا سارة، كيف حالك ؟ مرحباً توم، شكراً جزيلاً لك."
@@ -6584,7 +6579,6 @@
     "difficulty": 1,
     "verified": true,
     "section": "nicos",
-    "local_video": "videos/de_nico_63.mp4",
     "translations": {
       "en": "Emma, come now. Sorry.",
       "ar": "(إيمّا)، تعالي الآن. آسف."
@@ -6623,7 +6617,6 @@
     "difficulty": 1,
     "verified": true,
     "section": "nicos",
-    "local_video": "videos/de_nico_75.mp4",
     "translations": {
       "en": "Ship of the road.",
       "ar": "سفينة الطريق."
@@ -6661,7 +6654,6 @@
     "difficulty": 1,
     "verified": true,
     "section": "nicos",
-    "local_video": "videos/de_nico_9.mp4",
     "translations": {
       "en": "Good morning Mr. Müller, how are you? Good morning.",
       "ar": "صباح الخير سيد مولر، كيف حالك ؟ صباح الخير."
