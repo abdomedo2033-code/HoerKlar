@@ -5,7 +5,7 @@ import os as _os
 ENV={k:v for k,v in _os.environ.items() if k.lower() not in ("http_proxy","https_proxy","all_proxy")}
 
 def piped_url(vid, max_h):
-    for base in ["https://pipedapi.kavin.rocks","https://api.piped.projectsegfau.lt","https://pipedapi.adminforge.de"]:
+    for base in ["https://pipedapi.kavin.rocks","https://pipedapi.syncpundit.io","https://pipedapi.leptun.net","https://pipedapi.r4fo.com","https://pipedapi.osphost.fi","https://pipedapi.adminforge.de"]:
         try:
             with urllib.request.urlopen(f"{base}/streams/{vid}", timeout=12) as r:
                 j=json.loads(r.read().decode())
@@ -17,6 +17,17 @@ def piped_url(vid, max_h):
                 if best and best.get("url"): return best["url"]
                 vs=j.get("videoStreams",[])
                 if vs and vs[0].get("url"): return vs[0]["url"]
+        except: continue
+    for base in ["https://inv.nadeko.net","https://invidious.nerdvpn.de","https://iv.melmac.space","https://invidious.privacydev.net"]:
+        try:
+            with urllib.request.urlopen(f"{base}/api/v1/videos/{vid}", timeout=12) as r:
+                j=json.loads(r.read().decode())
+                best=None; best_h=-1
+                for s in j.get("formatStreams",[]):
+                    h=int(s.get("height") or 0)
+                    if h<=max_h and h>best_h:
+                        best=s; best_h=h
+                if best and best.get("url"): return best["url"]
         except: continue
     return None
 
