@@ -33,7 +33,7 @@ class H(BaseHTTPRequestHandler):
             except: q=360
             q=min(q,1080)
             fmt=f"bv*[height<={q}]+ba/b[height<={q}]/b/b/ba/best"
-            cmd=[YTDLP,"--quiet","--no-warnings","-f",fmt,"-o","-"]
+            cmd=[YTDLP,"--quiet","--no-warnings","--extractor-args","youtube:player_client=android","--extractor-args","youtube:player_skip=webpage","-f",fmt,"-o","-"]
             if start is not None and end is not None:
                 cmd.extend(["--download-sections",f"*{start}-{end}","--force-keyframes-at-cuts"])
             cmd.append(f"https://www.youtube.com/watch?v={vid}")
