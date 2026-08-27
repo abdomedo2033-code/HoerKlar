@@ -168,24 +168,14 @@ function setupPlayer(){
   const _ld3=document.getElementById('video-loading'); if(_ld3) _ld3.classList.add('show');
   v.onerror=async()=>{
     const ld=document.getElementById('video-loading'); if(ld) ld.classList.remove('show');
-    if(cur.video_url && cur.video_url.includes("yewtu.be")){
-      const vid=cur.video_id;
-      const ytWrap=document.getElementById('ytWrap');
-      const ytFrame=document.getElementById('yt');
-      if(ytWrap && ytFrame){
-        ytFrame.src=`https://www.youtube-nocookie.com/embed/${vid}?rel=0&modestbranding=1&playsinline=1`;
-        ytWrap.style.display='block';
-        document.getElementById('v').style.display='none';
-        return;
-      }
-    }
-    if(cur.local_video){ v.src=cur.local_video; v.load(); v.play().then(()=>{ const ld2=document.getElementById('video-loading'); if(ld2) ld2.classList.remove('show'); }).catch(()=>{}); return; }
-    // try allorigins direct stream as last resort
+    if(cur.local_video){ v.src=cur.local_video; v.load(); v.play().then(()=>{ if(ld) ld.classList.remove('show'); }).catch(()=>{}); return; }
     const fb=document.getElementById('feedback');
     if(fb) fb.innerHTML=`Video failed — <a href="${cur.embed_url}" target="_blank" style="color:#b8c0ff">Watch on YouTube ↗</a>`;
   };
   const seek=()=>{ try{ v.currentTime=cur.start_time; }catch(e){} };
-  v.onloadedmetadata=seek; v.onloadeddata=seek; v.addEventListener('canplay',function ap(){ v.removeEventListener('canplay',ap); try{ v.currentTime=cur.start_time; }catch(e){} setTimeout(playClip,90); },{once:true}); setTimeout(seek,400);
+  v.onloadedmetadata=()=>{ const ld=document.getElementById('video-loading'); if(ld) ld.classList.remove('show'); seek(); };
+  v.onloadeddata=seek;
+  v.addEventListener('canplay',function ap(){ v.removeEventListener('canplay',ap); const ld=document.getElementById('video-loading'); if(ld) ld.classList.remove('show'); try{ v.currentTime=cur.start_time; }catch(e){} setTimeout(playClip,90); },{once:true}); setTimeout(seek,400);
 }
 function playClip(){
   // toggle pause if already playing
@@ -210,7 +200,7 @@ function playClip(){
     } else if(prog) prog.style.width='100%';
     return;
   }
-  if(!(v.paused && v.currentTime>=cur.start_time-0.3 && v.currentTime<cur.end_time-0.2)){ v.currentTime=cur.start_time; } v.playbackRate=slow?0.75:1; v.play().catch(()=>{});
+  if(!(v.paused && v.currentTime>=cur.start_time-0.3 && v.currentTime<cur.end_time-0.2)){ v.currentTime=cur.start_time; } v.playbackRate=slow?0.75:1; v.play().then(()=>{ const ld=document.getElementById('video-loading'); if(ld) ld.classList.remove('show'); }).catch(()=>{});
   v.ontimeupdate=()=>{
     if(prog) prog.style.width=((v.currentTime-cur.start_time)/(cur.end_time-cur.start_time)*100)+'%';
     if(v.currentTime>=cur.end_time){ v.pause(); v.ontimeupdate=null; if(prog) prog.style.width='100%'; }

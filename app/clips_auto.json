@@ -1,0 +1,25 @@
+[
+  {
+    "clip_id": "auto_1787521592_3",
+    "provider": "wikimedia",
+    "video_url": "https://upload.wikimedia.org/wikipedia/commons/2/20/WIKITONGUES-_Gereon_speaking_German.webm?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "embed_url": "https://commons.wikimedia.org/wiki/File:WIKITONGUES-_Gereon_speaking_German.webm",
+    "title": "File:WIKITONGUES- Gereon speaking German.webm — auto",
+    "start_time": 32.2,
+    "end_time": 36.0,
+    "dutch_text": "Ich denke, eine gute Methode ist zu sein in der Nähe, welche Grenzen man wohnt.",
+    "english_translation": "Translation of: Ich denke, eine gute Methode ist zu sein in der Nähe, welche Grenzen man wohnt.",
+    "cefr": "A1",
+    "question_type": "translation",
+    "correct_answer": "Translation of: Ich denke, eine gute Methode ist zu sein in der Nähe, welche Grenzen man wohnt.",
+    "wrong_answers": [
+      "Translation of: Ich denke, eine gute Methode ist zu sein in der Nähe, welche Grenzen man wohnt.",
+      "Translation of: Ich denke, eine gute Methode ist zu sein in der Nähe, welche Grenzen man wohnt.",
+      "Translation of: Ich denke, eine gute Methode ist zu sein in der Nähe, welche Grenzen man wohnt."
+    ],
+    "license": "CC BY-SA 4.0",
+    "verified": true,
+    "menschen": "L1",
+    "difficulty": 1
+  }
+]
