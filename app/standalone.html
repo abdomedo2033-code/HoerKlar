@@ -155,7 +155,7 @@ async function /* fetchYouTubeStream disabled: corsproxy 403 */ fetchYouTubeStre
   return null;
 }
 
-function setupPlayer(){
+async function setupPlayer(){
   clearInterval(timer);
   const _oldViz=document.getElementById('viz'); if(_oldViz) _oldViz.style.display='none';
   let ov=document.getElementById('clipOverlay'); if(!ov){ ov=document.createElement('div'); ov.id='clipOverlay'; ov.style.cssText='position:absolute;top:8px;left:8px;background:rgba(0,0,0,0.75);color:#7CFF9A;padding:4px 8px;border-radius:6px;font:12px monospace;z-index:2'; document.getElementById('playerWrap').style.position='relative'; document.getElementById('playerWrap').appendChild(ov); }
@@ -239,9 +239,23 @@ function setupPlayer(){
       return;
     }
   }
-  console.log('[TaalFlix] load', cur.clip_id, cur.video_url); v.pause(); v.controls=false; v.src=cur.video_url; v.load();
-
   const _ld3=document.getElementById('video-loading'); if(_ld3) _ld3.classList.add('show');
+  if(cur.video_url && cur.video_url.includes("/yt/") && cur.video_id){
+    const u=await fetchYouTubeExp(cur.video_id);
+    if(u){ console.log('[TaalFlix] load', cur.clip_id, 'via expiring link'); v.pause(); v.controls=false; v.src=u; v.load();
+      const seek=()=>{ try{ v.currentTime=cur.start_time; }catch(e){} };
+      v.onloadedmetadata=()=>{ const ld=document.getElementById('video-loading'); if(ld) ld.classList.remove('show'); seek(); };
+      v.onloadeddata=seek;
+      v.addEventListener('canplay',function ap(){ v.removeEventListener('canplay',ap); const ld=document.getElementById('video-loading'); if(ld) ld.classList.remove('show'); try{ v.currentTime=cur.start_time; }catch(e){} setTimeout(playClip,90); },{once:true}); setTimeout(seek,400);
+      v.onerror=async()=>{
+        const ld=document.getElementById('video-loading'); if(ld) ld.classList.remove('show');
+        if(cur.local_video){ v.src=cur.local_video; v.load(); v.play().then(()=>{ if(ld) ld.classList.remove('show'); }).catch(()=>{}); return; }
+        const fb=document.getElementById('feedback'); if(fb) fb.innerHTML=`Video failed — <a href="${cur.embed_url}" target="_blank" style="color:#b8c0ff">Watch on YouTube ↗</a>`;
+      };
+      return;
+    }
+  }
+  console.log('[TaalFlix] load', cur.clip_id, cur.video_url); v.pause(); v.controls=false; v.src=cur.video_url; v.load();
   async function fetchYouTubeExp(key){
     try{
       const r=await fetch("https://www.youtube.com/youtubei/v1/player?key=AIzaSyA8eiZmM1FaDVjRy-df2KTyQ_vz_yYM39w",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({videoId:key,context:{client:{clientName:"ANDROID",clientVersion:"19.09.37",hl:"en",gl:"US"}}})});
