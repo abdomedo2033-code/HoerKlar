@@ -36,6 +36,9 @@ class H(BaseHTTPRequestHandler):
             cmd=[YTDLP,"--quiet","--no-warnings","--extractor-args","youtube:player_client=tv,android,ios,web,mweb","--extractor-args","youtube:player_skip=webpage,configs","--extractor-args","youtube:innertube_host=youtubei.googleapis.com","-f",fmt,"-o","-"]
             if start is not None and end is not None:
                 cmd.extend(["--download-sections",f"*{start}-{end}","--force-keyframes-at-cuts"])
+            for _cp in [os.path.join(os.path.dirname(__file__),"cookies.txt"),"cookies.txt","proxy/cookies.txt","/opt/render/project/src/proxy/cookies.txt"]:
+                if os.path.exists(_cp):
+                    cmd.extend(["--cookies",_cp]); break
             cmd.append(f"https://www.youtube.com/watch?v={vid}")
             tmp_path=None
             try:
