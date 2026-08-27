@@ -60,7 +60,7 @@ class H(BaseHTTPRequestHandler):
             except: q=360
             q=min(q,1080)
             fmt=f"bv*[height<={q}]+ba/b[height<={q}]/b/b/ba/best"
-            cmd=[YTDLP,"--quiet","--no-warnings","--extractor-args","youtube:player_client=android,web,ios,mweb,tv;player_skip=webpage,configs","-f",fmt,"-o","-"]
+            cmd=[YTDLP,"--quiet","--no-warnings","--extractor-args","youtube:player_client=tv,android,web,mweb,ios;player_skip=webpage,configs","-f",fmt,"-o","-"]
             if start is not None and end is not None:
                 cmd.extend(["--download-sections",f"*{start}-{end}","--force-keyframes-at-cuts"])
             for _cp in [os.path.join(os.path.dirname(__file__),"cookies.txt"),"cookies.txt","proxy/cookies.txt","/opt/render/project/src/proxy/cookies.txt"]:
