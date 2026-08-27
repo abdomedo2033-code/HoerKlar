@@ -2,7 +2,8 @@ import subprocess, urllib.parse, os, tempfile, json, urllib.request, urllib.erro
 from http.server import BaseHTTPRequestHandler, HTTPServer
 YTDLP="yt-dlp"
 import os as _os
-ENV={k:v for k,v in _os.environ.items() if k.lower() not in ("http_proxy","https_proxy","all_proxy")}
+ENV={k:v for k,v in _os.environ.items()}
+# WARP proxy is set in startCommand as socks5://127.0.0.1:40000 - keep it for yt-dlp to bypass YouTube bot check
 
 def piped_url(vid, max_h):
     for base in ["https://pipedapi.kavin.rocks","https://pipedapi.syncpundit.io","https://pipedapi.leptun.net","https://pipedapi.r4fo.com","https://pipedapi.osphost.fi","https://pipedapi.adminforge.de"]:
