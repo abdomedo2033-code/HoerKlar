@@ -19,7 +19,7 @@ class H(BaseHTTPRequestHandler):
             try: q=int(q)
             except: q=360
             q=min(q,1080)
-            fmt=f"bv*[height<={q}]+ba/b[height<={q}]/b"
+            fmt=f"bv*[height<={q}]+ba/b[height<={q}]/b/b/ba/best"
             self.send_response(200)
             self.send_header("Access-Control-Allow-Origin","*")
             self.send_header("Access-Control-Allow-Methods","GET, HEAD, OPTIONS")
