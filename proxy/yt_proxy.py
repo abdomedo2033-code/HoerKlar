@@ -1,8 +1,24 @@
-import subprocess, urllib.parse, os, tempfile
+import subprocess, urllib.parse, os, tempfile, json, urllib.request, urllib.error
 from http.server import BaseHTTPRequestHandler, HTTPServer
 YTDLP="yt-dlp"
 import os as _os
 ENV={k:v for k,v in _os.environ.items() if k.lower() not in ("http_proxy","https_proxy","all_proxy")}
+
+def piped_url(vid, max_h):
+    for base in ["https://pipedapi.kavin.rocks","https://api.piped.projectsegfau.lt","https://pipedapi.adminforge.de"]:
+        try:
+            with urllib.request.urlopen(f"{base}/streams/{vid}", timeout=12) as r:
+                j=json.loads(r.read().decode())
+                best=None; best_h=-1
+                for s in j.get("videoStreams",[]):
+                    h=s.get("height") or 0
+                    if h<=max_h and h>best_h:
+                        best=s; best_h=h
+                if best and best.get("url"): return best["url"]
+                vs=j.get("videoStreams",[])
+                if vs and vs[0].get("url"): return vs[0]["url"]
+        except: continue
+    return None
 
 def detect_mime(path):
     try:
@@ -56,11 +72,23 @@ class H(BaseHTTPRequestHandler):
                 p.wait(timeout=120)
                 fsize=os.path.getsize(tmp_path)
                 if fsize==0:
-                    self.send_response(502)
-                    self.send_header("Access-Control-Allow-Origin","*")
-                    self.end_headers()
-                    self.wfile.write(stderr_data[:500] if stderr_data else b"empty response from yt-dlp")
-                    return
+                    pu=piped_url(vid, q)
+                    if pu:
+                        try:
+                            with urllib.request.urlopen(pu, timeout=30) as pr, open(tmp_path,"wb") as fw:
+                                while True:
+                                    c=pr.read(65536)
+                                    if not c: break
+                                    fw.write(c)
+                            fsize=os.path.getsize(tmp_path)
+                            stderr_data=b"piped fallback used"
+                        except: fsize=0
+                    if fsize==0:
+                        self.send_response(502)
+                        self.send_header("Access-Control-Allow-Origin","*")
+                        self.end_headers()
+                        self.wfile.write(stderr_data[:500] if stderr_data else b"empty response from yt-dlp")
+                        return
                 mime=detect_mime(tmp_path)
                 self.send_response(200)
                 self.send_header("Access-Control-Allow-Origin","*")
