@@ -60,28 +60,34 @@ class H(BaseHTTPRequestHandler):
             except: q=360
             q=min(q,1080)
             fmt=f"bv*[height<={q}]+ba/b[height<={q}]/b/b/ba/best"
-            cmd=[YTDLP,"--quiet","--no-warnings","--extractor-args","youtube:player_client=tv,android,web,mweb,ios;player_skip=webpage,configs","-f",fmt,"-o","-"]
+            base_cmd=[YTDLP,"--quiet","--no-warnings","--extractor-args","youtube:player_client=tv,android,web,mweb,ios;player_skip=webpage,configs","-f",fmt,"-o","-"]
             if start is not None and end is not None:
-                cmd.extend(["--download-sections",f"*{start}-{end}","--force-keyframes-at-cuts"])
+                base_cmd.extend(["--download-sections",f"*{start}-{end}","--force-keyframes-at-cuts"])
+            base_cmd.append(f"https://www.youtube.com/watch?v={vid}")
+            cookies=None
             for _cp in [os.path.join(os.path.dirname(__file__),"cookies.txt"),"cookies.txt","proxy/cookies.txt","/opt/render/project/src/proxy/cookies.txt"]:
                 if os.path.exists(_cp):
-                    cmd.extend(["--cookies",_cp]); break
-            cmd.append(f"https://www.youtube.com/watch?v={vid}")
+                    cookies=_cp; break
+            tries=[base_cmd]
+            if cookies: tries.append(base_cmd[:-1]+["--cookies",cookies,base_cmd[-1]])
             tmp_path=None
+            stderr_data=b""; fsize=0
             try:
                 fd,tmp_path=tempfile.mkstemp(suffix=".bin")
                 os.close(fd)
-                p=subprocess.Popen(cmd, env=ENV, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-                with open(tmp_path,"wb") as f:
-                    while True:
-                        chunk=p.stdout.read(65536)
-                        if not chunk: break
-                        f.write(chunk)
-                stderr_data=b""
-                if p.stderr:
-                    stderr_data=p.stderr.read()
-                p.wait(timeout=120)
-                fsize=os.path.getsize(tmp_path)
+                for cmd in tries:
+                    open(tmp_path,"wb").close()
+                    p=subprocess.Popen(cmd, env=ENV, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                    with open(tmp_path,"wb") as f:
+                        while True:
+                            chunk=p.stdout.read(65536)
+                            if not chunk: break
+                            f.write(chunk)
+                    if p.stderr:
+                        stderr_data=p.stderr.read()
+                    p.wait(timeout=120)
+                    fsize=os.path.getsize(tmp_path)
+                    if fsize>0: break
                 if fsize==0:
                     pu=piped_url(vid, q)
                     if pu:
