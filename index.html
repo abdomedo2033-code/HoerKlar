@@ -241,16 +241,23 @@ async function setupPlayer(){
   }
   const _ld3=document.getElementById('video-loading'); if(_ld3) _ld3.classList.add('show');
   if(cur.video_url && cur.video_url.includes("/yt/")){
-    cur.video_url = cur.video_url.replace('https://taalflix.onrender.com','https://taalflix.onrender.com');
     const ld0=document.getElementById('video-loading'); if(ld0) ld0.classList.add('show');
     let tries=0;
     const tryLoad=()=>{
+      v.style.display='block'; document.getElementById('ytWrap').style.display='none';
       v.src=cur.video_url; v.load();
       v.onerror=()=>{
         const ld=document.getElementById('video-loading'); if(ld) ld.classList.remove('show');
-        if(tries++<1){ const fb=document.getElementById('feedback'); if(fb) fb.innerHTML=`⏳ Waking Render (free tier sleeps) — retrying in 8s… <a href="${cur.embed_url}" target="_blank" style="color:#b8c0ff">Watch on YouTube ↗</a>`; setTimeout(tryLoad,8000); return; }
+        if(tries++<1){ const fb=document.getElementById('feedback'); if(fb) fb.innerHTML=`⏳ Waking Render (free tier sleeps) — retrying in 8s…`; setTimeout(tryLoad,8000); return; }
+        if(cur.video_id){
+          console.log('[TaalFlix] proxy 502, fallback to YT embed', cur.video_id);
+          v.style.display='none'; const ytW=document.getElementById('ytWrap'); ytW.style.display='block'; document.getElementById('yt').style.display='block';
+          ensureYT(); const init=()=>{ if(window.YT && window.YT.Player){ try{ if(ytPlayer) ytPlayer.destroy(); }catch(e){}; ytPlayer=new window.YT.Player('yt',{videoId:cur.video_id.split('?')[0].split('/').pop(), playerVars:{modestbranding:1,rel:0,playsinline:1,controls:0,disablekb:1,fs:0}, events:{onReady:(e)=>setTimeout(playClip,600), onError:()=>{ document.getElementById('feedback').innerHTML=`Fallback also blocked — <a href="${cur.embed_url}" target="_blank" style="color:#b8c0ff">Watch on YouTube ↗</a>`; }}}); } else setTimeout(init,500); }; init();
+          const fb=document.getElementById('feedback'); if(fb) fb.innerHTML=`⚠️ Proxy down (502) — playing via YouTube embed (no precise clip) <a href="${cur.embed_url}" target="_blank" style="color:#b8c0ff">↗</a>`;
+          return;
+        }
         if(cur.local_video){ v.src=cur.local_video; v.load(); v.play().catch(()=>{}); return; }
-        const fb=document.getElementById('feedback'); if(fb) fb.innerHTML=`Video failed (502) — <a href="${cur.embed_url}" target="_blank" style="color:#b8c0ff">Watch on YouTube ↗</a> · <button onclick="location.reload()" style="margin-left:6px">Retry</button>`;
+        const fb=document.getElementById('feedback'); if(fb) fb.innerHTML=`Video failed (502) — <a href="${cur.embed_url}" target="_blank" style="color:#b8c0ff">Watch on YouTube ↗</a>`;
       };
     };
     console.log('[TaalFlix] load', cur.clip_id, cur.video_url); tryLoad();
