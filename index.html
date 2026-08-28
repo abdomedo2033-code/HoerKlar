@@ -116,7 +116,7 @@ function bindFilters(){
       if(qs) qs.style.display='inline-block';
     };
   }
-  const ti=document.getElementById('toggleInfo'); if(ti){ ti.style.display='none'; ti.onclick=()=>{ const wrap=document.getElementById('ytWrap'); const yt=document.getElementById('yt'); const show=wrap.classList.toggle('showInfo'); if(show){ wrap.style.overflow='visible'; yt.style.top='0'; yt.style.height='100%'; yt.style.pointerEvents='auto'; ti.textContent='🙈 Hide'; ti.title='Hide info'; } else { wrap.style.overflow='hidden'; yt.style.top='-120px'; yt.style.height='calc(100% + 240px)'; yt.style.pointerEvents='none'; ti.textContent='👁 Info'; ti.title='Show info to change quality'; } }; }
+  const ti=document.getElementById('toggleInfo'); if(ti){ ti.style.display='none'; ti.onclick=()=>{ const wrap=document.getElementById('ytWrap'); const yt=document.getElementById('yt'); const show=wrap.classList.toggle('showInfo'); if(show){ wrap.style.overflow='visible'; yt.style.top='0'; yt.style.height='100%'; yt.style.pointerEvents='auto'; ti.textContent='🙈 Hide'; ti.title='Hide info'; } else { wrap.style.overflow='hidden'; yt.style.top='-120px'; yt.style.height='calc(100% + 240px)'; yt.style.pointerEvents='none'; ti.textContent='👁 Info'; ti.title='Show info to change quality'; } setTimeout(playClip,120); }; }
   const dc=document.getElementById('dictCheck'); if(dc) dc.onclick=checkDict;
   const bv=document.getElementById('browserWhisperBtn'); if(bv) bv.onclick=browserWhisper;
 }
