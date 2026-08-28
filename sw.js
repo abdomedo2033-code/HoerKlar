@@ -1,4 +1,4 @@
-const CACHE='taalflix-v39';
+const CACHE='taalflix-v40';
 const ASSETS=['./standalone.html','./style.css','./app.js','./manifest.json'];
 self.addEventListener('install',e=>{ self.skipWaiting(); e.waitUntil(caches.open(CACHE).then(async c=>{ for(let u of ASSETS){ try{ await c.add(u); }catch(e){} } })); });
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
