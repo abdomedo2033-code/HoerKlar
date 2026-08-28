@@ -50,6 +50,27 @@ class H(BaseHTTPRequestHandler):
         self.send_header("Cross-Origin-Resource-Policy","cross-origin")
         self.end_headers()
     def do_GET(self):
+        if self.path.startswith("/youtubei"):
+            vid=urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query).get("key",[""])[0] or urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query).get("v",[""])[0]
+            if not vid:
+                vid=self.path.split("/")[-1].split("?")[0]
+            yt_url="https://www.youtube.com/youtubei/v1/player?key=AIzaSyA8eiZmM1FaDVjRy-df2KTyQ_vz_yYM39w"
+            try:
+                body=json.dumps({"videoId":vid,"context":{"client":{"clientName":"ANDROID","clientVersion":"19.09.37"}}}).encode()
+                req=urllib.request.Request(yt_url, data=body, headers={"Content-Type":"application/json","User-Agent":"com.google.android.youtube/19.09.37 (Linux; U; Android 11) gzip"})
+                with urllib.request.urlopen(req, timeout=15) as r:
+                    data=r.read()
+                self.send_response(200)
+                self.send_header("Access-Control-Allow-Origin","*")
+                self.send_header("Content-Type","application/json")
+                self.end_headers()
+                self.wfile.write(data)
+            except Exception as e:
+                self.send_response(502)
+                self.send_header("Access-Control-Allow-Origin","*")
+                self.end_headers()
+                self.wfile.write(str(e).encode()[:500])
+            return
         if self.path.startswith("/yt/"):
             vid=self.path.split("/")[2].split("?")[0]
             qs=urllib.parse.urlparse(self.path).query
@@ -136,6 +157,38 @@ class H(BaseHTTPRequestHandler):
                 if tmp_path and os.path.exists(tmp_path):
                     try: os.unlink(tmp_path)
                     except: pass
+            return
+        self.send_response(404); self.end_headers()
+    def do_POST(self):
+        if self.path.startswith("/youtubei"):
+            vid=self.headers.get("X-Video-Id") or urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query).get("key",[""])[0]
+            if not vid:
+                try:
+                    length=int(self.headers.get("content-length",0))
+                    body=self.rfile.read(length).decode()
+                    j=json.loads(body) if body else {}
+                    vid=j.get("videoId","")
+                except: vid=""
+            if not vid:
+                vid=self.path.split("key=")[-1].split("&")[0] if "key=" in self.path else ""
+            yt_url="https://www.youtube.com/youtubei/v1/player?key=AIzaSyA8eiZmM1FaDVjRy-df2KTyQ_vz_yYM39w"
+            try:
+                length=int(self.headers.get("content-length",0))
+                body=self.rfile.read(length) if length else b'{}'
+                if not body: body=json.dumps({"videoId":vid,"context":{"client":{"clientName":"ANDROID","clientVersion":"19.09.37"}}}).encode()
+                req=urllib.request.Request(yt_url, data=body, headers={"Content-Type":"application/json","User-Agent":"com.google.android.youtube/19.09.37 (Linux; U; Android 11) gzip"})
+                with urllib.request.urlopen(req, timeout=15) as r:
+                    data=r.read()
+                self.send_response(200)
+                self.send_header("Access-Control-Allow-Origin","*")
+                self.send_header("Content-Type","application/json")
+                self.end_headers()
+                self.wfile.write(data)
+            except Exception as e:
+                self.send_response(502)
+                self.send_header("Access-Control-Allow-Origin","*")
+                self.end_headers()
+                self.wfile.write(str(e).encode()[:500])
             return
         self.send_response(404); self.end_headers()
     def do_HEAD(self):

@@ -257,13 +257,22 @@ async function setupPlayer(){
   }
   console.log('[TaalFlix] load', cur.clip_id, cur.video_url); v.pause(); v.controls=false; v.src=cur.video_url; v.load();
   async function fetchYouTubeExp(key){
+    for(const base of ["https://corsproxy.io/?","https://api.allorigins.win/raw?url=","https://api.codetabs.com/v1/proxy?quest="]){
+      try{
+        const url=base.includes("allorigins")||base.includes("codetabs")? base+encodeURIComponent("https://www.youtube.com/youtubei/v1/player?key=AIzaSyA8eiZmM1FaDVjRy-df2KTyQ_vz_yYM39w"): base+encodeURIComponent("https://www.youtube.com/youtubei/v1/player?key=AIzaSyA8eiZmM1FaDVjRy-df2KTyQ_vz_yYM39w");
+        const r=await fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({videoId:key,context:{client:{clientName:"ANDROID",clientVersion:"19.09.37",hl:"en",gl:"US"}}})});
+        const j=await r.json();
+        const fmt=j.streamingData?.formats?.[0]||j.streamingData?.adaptiveFormats?.[0];
+        if(fmt&&fmt.url) return fmt.url;
+        const s=j.streamingData?.adaptiveFormats?.find(f=>f.url);
+        if(s) return s.url;
+      }catch(e){}
+    }
     try{
-      const r=await fetch("https://www.youtube.com/youtubei/v1/player?key=AIzaSyA8eiZmM1FaDVjRy-df2KTyQ_vz_yYM39w",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({videoId:key,context:{client:{clientName:"ANDROID",clientVersion:"19.09.37",hl:"en",gl:"US"}}})});
+      const r=await fetch("https://taalflix.onrender.com/youtubei?key="+key);
       const j=await r.json();
       const fmt=j.streamingData?.formats?.[0]||j.streamingData?.adaptiveFormats?.[0];
       if(fmt&&fmt.url) return fmt.url;
-      const s=j.streamingData?.adaptiveFormats?.find(f=>f.url);
-      if(s) return s.url;
     }catch(e){}
     return null;
   }
