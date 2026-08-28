@@ -69,18 +69,28 @@ function bindFilters(){
   if(qsel){
     const qmap={144:'tiny',240:'small',360:'medium',480:'large',720:'hd720',1080:'hd1080'};
     const savedQ=localStorage._ytQ; if(savedQ && qsel.querySelector(`option[value="${savedQ}"]`)) qsel.value=savedQ;
+    const applyQuality=(q)=>{
+      const yq=qmap[q]||q;
+      try{ localStorage.setItem('yt-player-quality', JSON.stringify({data:yq, creation:Date.now(), expiration:Date.now()+2419200000})); }catch(_){}
+      if(ytPlayer && cur && cur._fallbackYT && typeof ytPlayer.getCurrentTime==='function'){
+        const wasT=ytPlayer.getCurrentTime()||cur.start_time;
+        const clampedT=Math.max(cur.start_time, Math.min(wasT, cur.end_time-0.5));
+        if(ytPlayer._clipTimer) clearInterval(ytPlayer._clipTimer);
+        if(ytPlayer._adSkip) clearTimeout(ytPlayer._adSkip);
+        try{ ytPlayer.loadVideoById({videoId:cur.video_id.split('?')[0].split('/').pop(), startSeconds:Math.floor(clampedT), endSeconds:Math.floor(cur.end_time), suggestedQuality:yq}); }catch(_){ try{ ytPlayer.loadVideoById(cur.video_id.split('?')[0].split('/').pop(), clampedT, yq); }catch(_){} }
+        setTimeout(()=>{ try{ ytPlayer.setPlaybackQuality(yq); ytPlayer.setPlaybackQualityRange(yq,yq); ytPlayer.seekTo(clampedT,true); ytPlayer.playVideo(); }catch(_){} },600);
+        const fb=document.getElementById('feedback'); if(fb){ fb.textContent='Quality → '+q+'p'; fb.style.color='#7CFF9A'; setTimeout(()=>{ try{ const curQ=ytPlayer.getPlaybackQuality?.(); if(curQ && curQ!==yq) fb.textContent='Quality → '+q+'p (YouTube auto: '+curQ+')'; }catch(_){} },1200); setTimeout(()=>fb.textContent='',2500); }
+        return true;
+      }
+      return false;
+    };
     qsel.addEventListener('change', ()=>{
       const q=qsel.value;
       const yq=qmap[q]||q;
       localStorage._ytQ=q;
-      if(ytPlayer && cur && cur._fallbackYT && typeof ytPlayer.getCurrentTime==='function'){
-        const wasT=ytPlayer.getCurrentTime();
-        const clampedT=Math.max(cur.start_time, Math.min(wasT, cur.end_time-0.5));
-        try{ if(ytPlayer) ytPlayer.destroy(); } catch(e){}
-        ytPlayer=null;
-        const qmap2={144:'tiny',240:'small',360:'medium',480:'large',720:'hd720',1080:'hd1080'};
-        ytPlayer=new YT.Player('yt',{host:'https://www.youtube-nocookie.com', videoId:cur.video_id.split('?')[0].split('/').pop(), playerVars:{start:Math.floor(cur.start_time), end:Math.floor(cur.end_time), vq:yq, modestbranding:1,rel:0,playsinline:1,controls:0,disablekb:1,fs:0,iv_load_policy:3,cc_load_policy:0,origin:location.origin, rel:0, hl:'de', cc_lang_pref:''}, events:{onReady:(e)=>{ try{ e.target.setPlaybackQuality(yq); e.target.setPlaybackQualityRange(yq,yq); } catch(_){} try{ e.target.unloadModule('captions'); e.target.unloadModule('cc'); e.target.setOption('captions','track',{}); e.target.setOption('captions','reload',false);} catch(_){} e.target.seekTo(clampedT,true); e.target.playVideo(); if(ytPlayer._clipTimer) clearInterval(ytPlayer._clipTimer); const prog=document.getElementById('clipProg'); ytPlayer._clipTimer=setInterval(()=>{ try{ const c=e.target.getCurrentTime(); if(prog) prog.style.width=Math.max(0,Math.min(100,((c-cur.start_time)/(cur.end_time-cur.start_time)*100)))+'%'; if(c>=cur.end_time-0.2){ e.target.pauseVideo(); clearInterval(ytPlayer._clipTimer); e.target.seekTo(cur.end_time,true); if(prog) prog.style.width='100%'; } } catch(_){}},90); }, onError:()=>{ const fb=document.getElementById('feedback'); if(fb) fb.innerHTML=`Embed blocked — <a href="${cur.embed_url}" target="_blank" style="color:#b8c0ff">Watch on YouTube ↗</a>`; }}});
-        const fb=document.getElementById('feedback'); if(fb){ fb.textContent='Quality → '+q+'p (reloaded)'; fb.style.color='#7CFF9A'; setTimeout(()=>fb.textContent='',1500); }
+      if(applyQuality(q)) return;
+      if(ytPlayer && typeof ytPlayer.setPlaybackQuality==='function'){
+        try{ ytPlayer.setPlaybackQuality(yq); ytPlayer.setPlaybackQualityRange(yq,yq); const fb=document.getElementById('feedback'); if(fb){ fb.textContent='Quality → '+q+'p'; fb.style.color='#7CFF9A'; setTimeout(()=>fb.textContent='',1500); } }catch(e){}
         return;
       }
       if(ytPlayer && typeof ytPlayer.setPlaybackQuality==='function'){
