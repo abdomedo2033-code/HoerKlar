@@ -344,6 +344,36 @@ function playClip(){
     if(v.currentTime>=cur.end_time){ v.pause(); v.ontimeupdate=null; if(prog) prog.style.width='100%'; }
   };
 }
+(function(){
+  let raf;
+  const progEl=()=>document.getElementById('clipProg');
+  function loop(){
+    try{
+      if(cur && typeof cur.start_time==='number' && typeof cur.end_time==='number'){
+        const prog=progEl();
+        if(prog){
+          let c=null;
+          const isYT = cur._fallbackYT || cur.provider==='youtube';
+          if(isYT && typeof ytPlayer!=='undefined' && ytPlayer && ytPlayer.getCurrentTime){
+            try{ c=ytPlayer.getCurrentTime(); }catch(_){}
+          } else if(typeof v!=='undefined' && v && !v.paused && v.currentTime){
+            c=v.currentTime;
+          } else if(typeof window.segP!=='undefined' && window.segP && !window.segP.paused){
+            c=window.segP.currentTime + (cur.start_time||0);
+            if(cur.local_video) c=window.segP.currentTime;
+          }
+          if(c!==null && isFinite(c)){
+            const dur=(cur.end_time-cur.start_time)||5;
+            const pct=Math.max(0,Math.min(1,(c-cur.start_time)/dur));
+            prog.style.width=(pct*100)+'%';
+          }
+        }
+      }
+    }catch(_){}
+    raf=requestAnimationFrame(loop);
+  }
+  raf=requestAnimationFrame(loop);
+})();
 function safeReplace(text, find, rep){
   if(!find) return text;
   return text.split(find).join(rep);
