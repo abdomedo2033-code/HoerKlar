@@ -117,9 +117,11 @@ function setupPlayer(){
   bar.style.cursor='pointer';
   bar.style.touchAction='none';
   let isDragging=false;
+  let lastPct=0;
   const getPct=(clientX)=>{ const r=bar.getBoundingClientRect(); return r.width?Math.max(0,Math.min(1,(clientX-r.left)/r.width)):0; };
   const pauseAll=()=>{ try{ if(ytPlayer&&ytPlayer.pauseVideo) ytPlayer.pauseVideo(); }catch(_){} try{ v.pause(); }catch(_){} try{ window.segP&&window.segP.pause(); }catch(_){} };
-  const seekTo=(pct)=>{ if(prog){ prog.style.transition='none'; prog.style.width=(pct*100)+'%'; } window._seekPct=pct; window._seekUntil=Date.now()+6000; const dur=cur?(cur.end_time-cur.start_time):5; const target=cur.start_time+pct*dur; window._seekTarget=(cur&&cur.local_video)?pct*dur:target; if(ytPlayer&&cur._fallbackYT&&typeof ytPlayer.seekTo==='function'){ try{ ytPlayer.seekTo(target,true); }catch(_){} } else if(cur&&cur.local_video){ try{ v.currentTime=pct*dur; }catch(_){} } else if(cur&&cur.video_url){ try{ v.currentTime=target; }catch(_){} } else if(window.segP){ try{ window.segP.currentTime=pct*5; }catch(_){} } };
+  const seekTo=(pct)=>{ if(prog){ prog.style.transition='none'; prog.style.width=(pct*100)+'%'; } lastPct=pct; window._seekPct=pct; window._seekUntil=Date.now()+6000; const dur=cur?(cur.end_time-cur.start_time):5; const target=cur.start_time+pct*dur; window._seekTarget=(cur&&cur.local_video)?pct*dur:target; if(ytPlayer&&cur._fallbackYT&&typeof ytPlayer.seekTo==='function'){ try{ ytPlayer.seekTo(target,true); }catch(_){} } else if(cur&&cur.local_video){ try{ v.currentTime=pct*dur; }catch(_){} } else if(cur&&cur.video_url){ try{ v.currentTime=target; }catch(_){} } else if(window.segP){ try{ window.segP.currentTime=pct*5; }catch(_){} } };
+  const resumeAt=(pct)=>{ window._seekPct=null; const dur=cur?(cur.end_time-cur.start_time):5; const target=cur.start_time+pct*dur; if(ytPlayer&&cur._fallbackYT&&typeof ytPlayer.seekTo==='function'){ try{ ytPlayer.seekTo(target,true); ytPlayer.playVideo(); }catch(_){} } else if(cur&&cur.local_video){ try{ v.currentTime=pct*dur; v.play().catch(()=>{}); }catch(_){} } else if(cur&&cur.video_url){ try{ v.currentTime=target; v.play().catch(()=>{}); }catch(_){} } else if(window.segP){ try{ window.segP.currentTime=pct*5; window.segP.play().catch(()=>{}); }catch(_){} } };
   bar.addEventListener('pointerdown',(e)=>{
     if(e.button!==0&&e.pointerType==='mouse') return;
     isDragging=true; window._clipDragging=true; pauseAll();
@@ -128,9 +130,9 @@ function setupPlayer(){
     e.preventDefault();
   });
   bar.addEventListener('pointermove',(e)=>{ if(!isDragging) return; const pct=getPct(e.clientX); seekTo(pct); e.preventDefault(); });
-  bar.addEventListener('pointerup',(e)=>{ if(!isDragging) return; isDragging=false; window._clipDragging=false; try{ bar.releasePointerCapture(e.pointerId); }catch(_){} });
+  bar.addEventListener('pointerup',(e)=>{ if(!isDragging) return; isDragging=false; window._clipDragging=false; const pct=lastPct; try{ bar.releasePointerCapture(e.pointerId); }catch(_){} resumeAt(pct); });
   bar.addEventListener('pointercancel',(e)=>{ if(!isDragging) return; isDragging=false; window._clipDragging=false; });
-  bar.addEventListener('click',(e)=>{ if(isDragging) return; const pct=getPct(e.clientX); seekTo(pct); });
+  bar.addEventListener('click',(e)=>{ if(isDragging) return; const pct=getPct(e.clientX); resumeAt(pct); });
 })();
 
   document.getElementById('attribution').innerHTML=`<a href="${cur.embed_url}" target="_blank">${cur.title}</a> · <a href="${cur.license_url}" target="_blank">${cur.license}</a>`;
