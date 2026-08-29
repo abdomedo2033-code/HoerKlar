@@ -195,7 +195,7 @@ async function setupPlayer(){
   if(bar && !bar._seek){
     bar.style.cursor='pointer';
     bar._seek=true;
-    let dragging=false;
+    window._clipDragging=false; let dragging=false;
     const seek=(e, live)=>{
       const r=bar.getBoundingClientRect();
       const x=e.touches?e.touches[0].clientX:e.clientX;
@@ -211,13 +211,13 @@ async function setupPlayer(){
     };
     const pauseAll=()=>{ try{ if(ytPlayer && ytPlayer.pauseVideo) ytPlayer.pauseVideo(); }catch(_){} try{ v.pause(); }catch(_){} try{ window.segP && window.segP.pause(); }catch(_){} };
     const resumeAll=()=>{ const pct=prog?parseFloat(prog.style.width)/100:0; const dur=cur ? (cur.end_time-cur.start_time) : 5; const target=cur.start_time+pct*dur; if(ytPlayer && cur._fallbackYT && typeof ytPlayer.seekTo==='function'){ try{ ytPlayer.seekTo(target,true); ytPlayer.playVideo(); }catch(_){} } else if(cur && cur.local_video){ v.currentTime=pct*dur; v.play().catch(()=>{}); } else if(cur && cur.video_url){ v.currentTime=target; v.play().catch(()=>{}); } else if(window.segP){ window.segP.currentTime=pct*5; window.segP.play().catch(()=>{}); } };
-    bar.addEventListener('mousedown',(e)=>{ dragging=true; pauseAll(); seek(e,true); e.preventDefault(); });
-    bar.addEventListener('touchstart',(e)=>{ dragging=true; pauseAll(); seek(e,true); },{passive:false});
-    window.addEventListener('mousemove',(e)=>{ if(dragging) seek(e,true); });
-    window.addEventListener('touchmove',(e)=>{ if(dragging) seek(e,true); },{passive:false});
-    const endDrag=(e)=>{ if(!dragging) return; dragging=false; const r=bar.getBoundingClientRect(); const x=e.changedTouches?e.changedTouches[0].clientX:e.clientX; const pct=Math.max(0,Math.min(1,(x-r.left)/r.width)); const dur=cur ? (cur.end_time-cur.start_time) : 5; const target=cur.start_time+pct*dur; if(ytPlayer && cur._fallbackYT && typeof ytPlayer.seekTo==='function'){ try{ ytPlayer.seekTo(target,true); ytPlayer.playVideo(); }catch(_){} } else if(cur && cur.local_video){ v.currentTime=pct*dur; v.play().catch(()=>{}); } else if(cur && cur.video_url){ v.currentTime=target; v.play().catch(()=>{}); } else if(window.segP){ window.segP.currentTime=pct*5; window.segP.play().catch(()=>{}); } };
-    window.addEventListener('mouseup',endDrag);
-    window.addEventListener('touchend',endDrag);
+    bar.addEventListener('mousedown',(e)=>{ window._clipDragging=true; dragging=true; pauseAll(); seek(e,true); e.preventDefault(); });
+    bar.addEventListener('touchstart',(e)=>{ window._clipDragging=true; dragging=true; pauseAll(); seek(e,true); },{passive:false});
+    window.addEventListener('mousemove',(e)=>{ if(window._clipDragging) seek(e,true); });
+    window.addEventListener('touchmove',(e)=>{ if(window._clipDragging) seek(e,true); },{passive:false});
+    const endDrag=(e)=>{ if(!window._clipDragging) return; window._clipDragging=false; dragging=false; const r=bar.getBoundingClientRect(); const x=e.changedTouches?e.changedTouches[0].clientX:e.clientX; const pct=Math.max(0,Math.min(1,(x-r.left)/r.width)); const dur=cur ? (cur.end_time-cur.start_time) : 5; const target=cur.start_time+pct*dur; if(ytPlayer && cur._fallbackYT && typeof ytPlayer.seekTo==='function'){ try{ ytPlayer.seekTo(target,true); ytPlayer.playVideo(); }catch(_){} } else if(cur && cur.local_video){ v.currentTime=pct*dur; v.play().catch(()=>{}); } else if(cur && cur.video_url){ v.currentTime=target; v.play().catch(()=>{}); } else if(window.segP){ window.segP.currentTime=pct*5; window.segP.play().catch(()=>{}); } };
+    window.addEventListener('mouseup',()=>{ window._clipDragging=false; dragging=false; });
+    window.addEventListener('touchend',()=>{ window._clipDragging=false; dragging=false; });
     bar.addEventListener('click',(e)=>{ if(dragging) return; seek(e,false); if(ytPlayer && cur._fallbackYT) try{ ytPlayer.playVideo(); }catch(_){} });
   }
 })();
@@ -348,6 +348,7 @@ function playClip(){
   let raf;
   const progEl=()=>document.getElementById('clipProg');
   function loop(){
+    if(window._clipDragging){ raf=requestAnimationFrame(loop); return; }
     try{
       if(cur && typeof cur.start_time==='number' && typeof cur.end_time==='number'){
         const prog=progEl();
