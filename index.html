@@ -294,10 +294,19 @@ async function setupPlayer(){
   console.log('[TaalFlix] load', cur.clip_id, cur.video_url); v.pause(); v.controls=false; v.src=cur.video_url; v.load();
   async function fetchYouTubeExp(key){ return null; }
   v.onerror=()=>{
-    const ld=document.getElementById('video-loading'); if(ld) ld.classList.remove('show');
+    const ld=document.getElementById('video-loading'); if(ld) ld.classList.add('show');
     if(cur.local_video){ v.src=cur.local_video; v.load(); v.play().then(()=>{ if(ld) ld.classList.remove('show'); }).catch(()=>{}); return; }
+    cur._retries=(cur._retries||0)+1;
+    if(cur._retries<5){
+      const fb=document.getElementById('feedback');
+      if(fb) fb.textContent=`Loading… retry ${cur._retries}/5`;
+      const ld2=document.getElementById('video-loading'); if(ld2) ld2.classList.add('show');
+      setTimeout(()=>{ try{ v.load(); }catch(_){} setTimeout(()=>{ try{ v.play().catch(()=>{}); }catch(_){} },500); },1500*cur._retries);
+      return;
+    }
     const fb=document.getElementById('feedback');
     if(fb) fb.innerHTML=`Video failed — <a href="${cur.embed_url}" target="_blank" style="color:#b8c0ff">Watch on YouTube ↗</a>`;
+    if(ld) ld.classList.remove('show');
   };
   const seek=()=>{ try{ v.currentTime=cur.start_time; } catch(e){} };
   v.onloadedmetadata=()=>{ const ld=document.getElementById('video-loading'); if(ld) ld.classList.remove('show'); seek(); };
