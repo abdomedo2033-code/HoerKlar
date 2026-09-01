@@ -503,11 +503,15 @@ function renderQuiz(){
   let opts=null;
   let mode=(cur.question_type==='dictation')?'dictation':modeNow();
   if(mode==='cloze'){
-    const cz=buildCloze();
-    window._clozeAns=cz.answers; window._clozePick=new Set(); window._clozeDone=false;
-    qAnswer=cz.answers.join(' '); displayText=cz.blanked;
-    label=`Fill ${cz.answers.length} blank${cz.answers.length>1?'s':''}`;
-    opts=cz.opts;
+    const wc=cur.dutch_text.split(/\s+/).filter(Boolean).length;
+    if(wc<4){ mode='listening'; }
+    else {
+      const cz=buildCloze();
+      window._clozeAns=cz.answers; window._clozePick=new Set(); window._clozeDone=false;
+      qAnswer=cz.answers.join(' '); displayText=cz.blanked;
+      label=`Fill ${cz.answers.length} blank${cz.answers.length>1?'s':''}`;
+      opts=cz.opts;
+    }
   }
   if(mode==='translation'){
     const tr=cur.translations||{};
