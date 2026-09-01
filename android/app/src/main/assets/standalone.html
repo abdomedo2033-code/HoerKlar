@@ -31,7 +31,7 @@ video{width:100%;aspect-ratio:16/9;min-height:220px;object-fit:cover;border-radi
 #next{margin-top:14px;background:linear-gradient(135deg, var(--accent), var(--accent2));color:#fff;border:0;border-radius:999px;padding:12px 20px;cursor:pointer;font-weight:600;box-shadow:0 6px 18px rgba(108,92,255,0.3);transition:all .2s}
 #next:hover{transform:translateY(-1px);box-shadow:0 8px 22px rgba(108,92,255,0.4)}
 #clipBar{height:6px;background:rgba(255,255,255,0.08);border-radius:999px;overflow:hidden;margin-top:10px}
-#clipProg{height:100%;width:0%;background:linear-gradient(90deg, var(--accent), #00d4ff);transition:width .1s linear}
+#clipProg{height:100%;width:0%;background:linear-gradient(90deg, var(--accent), #00d4ff);transition:none}
 #clipInfo:empty{display:none}#clipInfo{margin:0 16px 16px;padding:10px 14px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:12px;color:var(--muted);font-size:12px}
 @media(max-width:860px){main{grid-template-columns:1fr}h1{font-size:18px}}
 #video-loading{position:absolute;inset:0;display:none;place-items:center;background:rgba(10,14,30,0.85);z-index:3;border-radius:14px}#video-loading.show{display:grid}.spinner{width:44px;height:44px;border:3px solid rgba(255,255,255,0.15);border-top-color:#6c5cff;border-radius:50%;animation:spin 0.9s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}</style><rect width='3' height='0.66' fill='%23000'/><rect y='0.66' width='3' height='0.66' fill='%23D00'/><rect y='1.32' width='3' height='0.68' fill='%23FFCE00'/></svg>
@@ -164,6 +164,7 @@ async function setupPlayer(){
 // seekable clip bar + pause toggle
 (function(){
   const bar=document.getElementById('clipBar');
+  const prog=document.getElementById('clipProg');
   if(bar && !bar._seek){
     bar.style.cursor='pointer';
     bar._seek=true;
@@ -171,6 +172,7 @@ async function setupPlayer(){
       const r=bar.getBoundingClientRect();
       const pct=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width));
       const dur=cur ? (cur.end_time-cur.start_time) : 5;
+      if(prog){ prog.style.transition='none'; prog.style.width=(pct*100)+'%'; void prog.offsetWidth; window._seekLockUntil=Date.now()+600; }
       if(cur && cur.local_video){ v.currentTime=pct*dur; }
       else if(cur && cur.video_url){ v.currentTime=cur.start_time+pct*dur; }
       else if(window.segP){ window.segP.currentTime=pct*5; }
