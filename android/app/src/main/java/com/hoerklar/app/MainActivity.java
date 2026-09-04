@@ -96,7 +96,7 @@ public class MainActivity extends Activity {
 
         wv.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         setContentView(wv);
-        wv.loadUrl("https://appassets.androidplatform.net/assets/standalone.html"); // ex: https://abdomedo2033-code.github.io/TaalFlix/ → HörKlar
+        wv.loadUrl("https://abdomedo2033-code.github.io/HoerKlar/");
     }
 
     @Override public void onBackPressed() {
