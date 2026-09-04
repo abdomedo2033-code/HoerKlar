@@ -42,7 +42,7 @@ video{width:100%;aspect-ratio:16/9;min-height:220px;object-fit:cover;border-radi
 <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.7/dist/hls.min.js"></script>
 </head><body>
 <header><h1><span style="background:linear-gradient(135deg,#6c5cff,#00d4ff);-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:800">🎬 HörKlar</span></h1><div id="stats">XP <b id="xp">0</b> · Streak <b id="streak">0</b> · <span id="level">A1</span></div></header>
-<div id="filters"><button data-sec="movies" class="secbtn active">🎬 Movies</button><button data-sec="nicos" class="secbtn">🎓 Nicos Weg</button><button data-sec="songs" class="secbtn">🎵 Songs</button><button data-sec="playphrase" class="secbtn">🔍 PlayPhrase</button><button data-cefr="all" class="active">All</button><button data-cefr="A1">A1</button><button data-cefr="A2">A2</button><button data-cefr="B1">B1</button><select id="qtype"><option value="all">Auto (mixed)</option><option value="listening">Listening</option><option value="cloze">Cloze</option><option value="translation">Translation</option></select><input id="phraseSearch" placeholder="Type any phrase..." style="display:none;margin-left:8px;padding:8px 12px;border-radius:999px;border:1px solid rgba(255,255,255,0.12);background:#14182e;color:#eef0ff;min-width:220px"><button id="phraseSearchBtn" style="display:none;margin-left:6px;background:linear-gradient(135deg, var(--accent), var(--accent2));color:#fff;border:0;border-radius:999px;padding:8px 16px;cursor:pointer;font-weight:600">Search</button></div>
+<div id="filters"><button data-sec="movies" class="secbtn active">🎬 Movies</button><button data-sec="nicos" class="secbtn">🎓 Nicos Weg</button><button data-sec="songs" class="secbtn">🎵 Songs</button><button data-sec="playphrase" class="secbtn">🔍 PlayPhrase</button><button data-cefr="all" class="active">All</button><button data-cefr="A1">A1</button><button data-cefr="A2">A2</button><button data-cefr="B1">B1</button><select id="qtype"><option value="all">Auto (mixed)</option><option value="listening">Listening</option><option value="cloze">Cloze</option><option value="translation">Translation</option></select><select id="trlang" title="Translation quiz language"><option value="ar">🌐 عربي</option><option value="en">🌐 EN</option></select><input id="phraseSearch" placeholder="Type any phrase..." style="display:none;margin-left:8px;padding:8px 12px;border-radius:999px;border:1px solid rgba(255,255,255,0.12);background:#14182e;color:#eef0ff;min-width:220px"><button id="phraseSearchBtn" style="display:none;margin-left:6px;background:linear-gradient(135deg, var(--accent), var(--accent2));color:#fff;border:0;border-radius:999px;padding:8px 16px;cursor:pointer;font-weight:600">Search</button></div>
 <main><div id="playerWrap"><div id="ytWrap" style="display:none"><div id="yt"></div><iframe id="arch" style="width:100%;aspect-ratio:16/9;border:0;display:none" allow="autoplay; fullscreen; picture-in-picture"></iframe><iframe id="vm" style="width:100%;aspect-ratio:16/9;border:0;display:none" allow="autoplay; fullscreen; picture-in-picture"></iframe></div><div id="video-loading"><div class="spinner"></div><div style="color:#9aa3c7;font-size:12px;margin-top:8px">Loading…</div></div><video id="v" playsinline preload="metadata"></video><div id="clipBar"><div id="clipProg"></div></div><div id="attribution"></div><div id="controls"><button id="slow">0.75×</button><select id="quality" title="YouTube quality"><option value="144" selected>144p</option><option value="240">240p</option><option value="360">360p</option><option value="480">480p</option><option value="720">720p</option><option value="1080">1080p</option></select><button id="toggleInfo" title="Show YouTube info/controls to change quality in fullscreen">👁 Info</button><button id="switchQuiz">↺ Different quiz</button></div></div><div id="quiz"><div id="dutch"></div><div id="question"></div><div id="options"></div><div id="dictBox" style="display:none"><input id="dictInput" placeholder="Type what you heard…"><button id="dictCheck">Check</button></div><div id="feedback"></div><button id="next" style="display:none">Next clip →</button></div></main><div id="clipInfo"></div>
 <div id="whisperBox" style="display:none" style="margin:16px;padding:12px;background:#1a2a1a;border:1px solid #2a5a2a;border-radius:10px;color:#9aa3c7;font-size:12px"><b>🤖 Whisper (clip-only):</b> <button id="browserWhisperBtn">Browser verify this clip</button> <span id="whisperStatus" style="margin-left:8px;color:#7CFF9A"></span><div style="font-size:11px;margin-top:6px">Terminal (accurate): <code>~/whisperenv/bin/python /home/deck/Downloads/Dutch_App/app/auto_verify.py --limit 2</code></div></div>
 
@@ -58,6 +58,7 @@ function bindFilters(){
   const _pb0=document.getElementById('phraseSearchBtn'); if(_pb0) _pb0.onclick=()=>applyFilter();
   const _ps1=document.getElementById('phraseSearch'); if(_ps1) _ps1.addEventListener('keydown',e=>{ if(e.key==='Enter') applyFilter(); });
   document.getElementById('qtype').onchange=function(){ renderQuiz(); };
+  const _trl=document.getElementById('trlang'); if(_trl) _trl.onchange=function(){ renderQuiz(); };
   const pw=document.getElementById('playerWrap');
   if(pw && !pw._click){ pw._click=true; pw.style.cursor='pointer'; pw.addEventListener('click', (e)=>{ if(e.target.closest('button')||e.target.closest('#clipBar')||e.target.closest('a')) return; playClip(); }); }
   const sq=document.getElementById('switchQuiz'); if(sq) sq.onclick=()=>{ renderQuiz(); };
@@ -153,6 +154,7 @@ function applyFilter(){
     pickRandom(); return;
   }
   filtered=clips.filter(c=> (window._sec||'movies')===(c.section||'movies') && (cefr==='all'||c.cefr===cefr));
+  if(!filtered.length) filtered=clips.filter(c=> (window._sec||'movies')===(c.section||'movies'));
   if(!filtered.length) filtered=[...clips];
   pickRandom();
 }
@@ -185,6 +187,10 @@ async function /* fetchYouTubeStream disabled: corsproxy 403 */ fetchYouTubeStre
 }
 
 async function setupPlayer(){
+  try{ v.pause(); }catch(_){}
+  try{ const _sp0=document.getElementById('segP'); if(_sp0) _sp0.pause(); }catch(_){}
+  try{ if(ytPlayer){ if(ytPlayer._clipTimer) clearInterval(ytPlayer._clipTimer); if(ytPlayer._adTimer) clearInterval(ytPlayer._adTimer); if(ytPlayer._adSkip) clearTimeout(ytPlayer._adSkip); try{ ytPlayer.pauseVideo(); }catch(_){} } }catch(_){}
+  try{ if(vmPlayer){ try{ vmPlayer.pause(); }catch(_){} if(vmPlayer._clipTimer) clearInterval(vmPlayer._clipTimer); } }catch(_){}
   clearInterval(timer);
   const _oldViz=document.getElementById('viz'); if(_oldViz) _oldViz.style.display='none';
   let ov=document.getElementById('clipOverlay'); if(!ov){ ov=document.createElement('div'); ov.id='clipOverlay'; ov.style.cssText='position:absolute;top:8px;left:8px;background:rgba(0,0,0,0.75);color:#7CFF9A;padding:4px 8px;border-radius:6px;font:12px monospace;z-index:2'; document.getElementById('playerWrap').style.position='relative'; document.getElementById('playerWrap').appendChild(ov); }
@@ -420,8 +426,9 @@ window._wpool=[...new Set((typeof clips!=='undefined'?clips:[]).flatMap(c=>((c.d
 window._stop=new Set(("ich du er sie es wir ihr der die das ein eine einen einer und oder aber nicht kein keine keinen zu von auf an im in ist sind war waren werden wird habe hat haben mit für nach aus bei um als wie so auch noch nur schon immer nie jetzt dann dort hier mein dein sein unser euer mir mich dich dir uns ihm ihnen sich dem den man was wer wenn weil dass damit gern gerne mal bitte danke na ja nein doch denn am da den dann das des die ob".split(" ")));
 window._dewords=("gestern heute morgen kommen gehen sehen sagen machen haben sein wollen können müssen wissen denken arbeiten spielen essen trinken schlafen sprechen lesen schreiben fahren fliegen laufen springen lachen weinen singen tanzen kaufen verkaufen finden geben nehmen bringen holen öffnen schließen wohnen lieben hassen helfen fragen antworten verstehen vergessen erinnern Geld Zeit Haus Buch Wasser Mann Frau Kind Freund Stadt Land Welt Arbeit Schule Lehrer Schüler Musik Film Tisch Stuhl Fenster Tür Straße Auto Zug Bahnhof Zimmer Küche sitzen stehen liegen schicken bekommen warten treffen besuchen reisen kochen backen schneiden legen stellen fühlen freuen sorgen rennen schwimmen wandern erzählen üben wiederholen hören sehen schauen gucken verlassen ankommen abfahren aufstehen aufwachen frühstücken klingeln läuten rufen melden erklären beschreiben berichten zeigen machen tun bringen holen nehmen geben schenken leihen bezahlen verkaufen kaufen bekommen finden suchen verlieren spielen gewinnen hoffen wünschen träumen studieren jobben verdienen sparen zahlen kosten rechnen feiern genießen dürfen sollen mögen bleiben fliegen reisen klettern Schein Glück Kleid Schuhe Jacke Mantel Hemd Hose Rock Pullover Socken Treppe Keller Dach Boden Wand Lampe Sessel Sessel Sofa Bett Schrank Regal Bild Uhr Heft Bleistift Tafel Apfel Banane Brot Käse Milch Wasser Saft Bier Wein Zucker Salz Pfeffer Suppe Salat Fleisch Wurst Brötchen Kuchen Torte Schokolade Eis Tomate Gurke Zwiebel Kartoffel Karotte Paprika Pilz Reis Nudeln Mehl Öl Eltern Mutter Vater Oma Opa Tante Onkel Bruder Schwester Familie Freunde Partner Nachbar Polizei Arzt Ärztin Apotheke Krankenhaus Flughafen Haltestelle Kreuzung Ampel Weg Richtung Platz Park Geschäft Laden Markt Bäckerei Supermarkt Kaufhaus".split(" "));
 function modeNow(){ const sel=document.getElementById('qtype').value; if(sel!=='all' && sel!=='dictation') return sel; if(sel==='dictation') return 'listening'; const r=Math.random();
-  const ar=(cur.translations&&cur.translations.ar)?1:0;
-  return r<0.35?'listening':(r<0.70?'cloze':(ar?'translation':'cloze')); }
+  const _tl=((document.getElementById('trlang')||{}).value)||'ar';
+  const _hasT=!!(cur.translations&&(cur.translations[_tl]||cur.translations.ar||cur.translations.en));
+  return r<0.35?'listening':(r<0.70?'cloze':(_hasT?'translation':'cloze')); }
 function simWord(w,ex){ const pool=window._dewords||[]; let wl=w.toLowerCase(); let c=pool.filter(x=>x.toLowerCase()!==wl&&!ex.has(x.toLowerCase())&&Math.abs(x.length-w.length)<=2&&x[0].toLowerCase()===wl[0]); if(!c.length)c=pool.filter(x=>x.toLowerCase()!==wl&&!ex.has(x.toLowerCase())&&Math.abs(x.length-w.length)<=2); if(!c.length)c=pool.filter(x=>x.toLowerCase()!==wl&&!ex.has(x.toLowerCase())); c.sort((a,b)=>Math.abs(a.length-w.length)-Math.abs(b.length-w.length)); return c.length?c[Math.floor(Math.random()*Math.min(5,c.length))]:null; }
 function buildCloze(){
   const toks=cur.dutch_text.split(/\s+/).filter(Boolean);
@@ -529,7 +536,8 @@ function renderQuiz(){
   }
   if(mode==='translation'){
     const tr=cur.translations||{};
-    const langPick='ar'; // Arabic-only: English translations are machine-garbled
+    let langPick=(((document.getElementById('trlang')||{}).value)||'ar');
+    if(!tr[langPick]) langPick=(langPick==='ar')?'en':'ar'; // fallback to whichever exists
     const correctT=tr[langPick];
     if(correctT){
       qAnswer=correctT; displayText=null;
