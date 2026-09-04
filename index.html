@@ -62,7 +62,7 @@ function bindFilters(){
   if(pw && !pw._click){ pw._click=true; pw.style.cursor='pointer'; pw.addEventListener('click', (e)=>{ if(e.target.closest('button')||e.target.closest('#clipBar')||e.target.closest('a')) return; playClip(); }); }
   const sq=document.getElementById('switchQuiz'); if(sq) sq.onclick=()=>{ renderQuiz(); };
   // replay removed
-  document.getElementById('slow').onclick=()=>{ slow=!slow; v.playbackRate=slow?0.75:1; document.getElementById('slow').textContent=slow?'1×':'0.75×'; };
+  document.getElementById('slow').onclick=()=>{ slow=!slow; v.playbackRate=slow?0.75:1; try{ if(ytPlayer&&ytPlayer.setPlaybackRate) ytPlayer.setPlaybackRate(slow?0.75:1); }catch(_){} try{ const _sp=document.getElementById('segP'); if(_sp) _sp.playbackRate=slow?0.75:1; }catch(_){} document.getElementById('slow').textContent=slow?'1×':'0.75×'; };
   // subtitles toggle removed
   document.getElementById('next').onclick=()=>pickRandom();
   const qsel=document.getElementById('quality');
@@ -518,7 +518,7 @@ function renderQuiz(){
     if(wc<4){ mode='listening'; }
     else {
       const cz=buildCloze();
-      window._clozeAns=cz.answers; window._clozePick=new Set(); window._clozeDone=false;
+      window._clozeAns=[cz.phrase]; window._clozePick=new Set(); window._clozeDone=false;
       qAnswer=cz.answers.join(', '); displayText=cz.blanked;
       label=`Fill ${cz.answers.length} blank${cz.answers.length>1?'s':''}`;
       opts=cz.opts;
