@@ -1,4 +1,4 @@
-package com.taalflix.app;
+package com.hoerklar.app;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
@@ -71,7 +71,7 @@ public class MainActivity extends Activity {
             @Override public WebResourceResponse shouldInterceptRequest(WebView v, WebResourceRequest r) {
                 try{
                     String u=r.getUrl().toString();
-                    if(u.contains("localhost:8789/yt/") || u.contains("taalflix.local/yt/")){
+                    if(u.contains("localhost:8789/yt/") || u.contains("taalflix.local/yt/") || u.contains("hoerklar.local/yt/") || u.contains("hoerklar.onrender.com/yt/") || u.contains("taalflix.onrender.com/yt/")){
                         String vid=u.substring(u.lastIndexOf("/")+1).split("\\?")[0].split("&")[0];
                         StreamInfo info=StreamInfo.getInfo("https://www.youtube.com/watch?v="+vid);
                         String stream=null;
@@ -96,7 +96,7 @@ public class MainActivity extends Activity {
 
         wv.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         setContentView(wv);
-        wv.loadUrl("https://appassets.androidplatform.net/assets/standalone.html");
+        wv.loadUrl("https://appassets.androidplatform.net/assets/standalone.html"); // ex: https://abdomedo2033-code.github.io/TaalFlix/ → HörKlar
     }
 
     @Override public void onBackPressed() {

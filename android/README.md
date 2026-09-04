@@ -1,4 +1,4 @@
-# TaalFlix Android
+# HörKlar Android (ex-TaalFlix)
 
 Built ✅ — APK ready
 
@@ -45,4 +45,4 @@ npx @bubblewrap/cli build
 ## Notes
 - `standalone.html` is 29MB (500+ clips with base64 audio). APK is 22MB compressed. For smaller APK, serve clips remotely and keep only HTML shell.
 - Icon: `app/icon-512.png` → `mipmap-xxxhdpi/ic_launcher.png`
-- Package: `com.taalflix.app` — change in `app/build.gradle` + `AndroidManifest.xml`
+- Package: `com.hoerklar.app` (legacy `com.taalflix.app` still in build cache) — change in `app/build.gradle` + `AndroidManifest.xml`

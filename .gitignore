@@ -7,6 +7,8 @@ android/app/build/
 *.mp4
 *.wav
 *.mp3
+HörKlar.apk
+HörKlar_OFFLINE_backup.html
 TaalFlix.apk
 TaalFlix_OFFLINE_backup.html
 opencode.json

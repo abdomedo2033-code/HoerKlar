@@ -1,6 +1,6 @@
 {
-  "name": "TaalFlix — Learn German with Clips",
-  "short_name": "TaalFlix",
+  "name": "HörKlar — Learn German with Clips",
+  "short_name": "HörKlar",
   "description": "Voscreen-style German learning from movies & Nicos Weg",
   "start_url": "./standalone.html",
   "display": "standalone",
