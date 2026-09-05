@@ -25,7 +25,16 @@ FUNC = {"der": "die", "die": "der", "das": "der", "ein": "eine",
 
 
 class NoSubtitles(Exception):
-    pass
+    """Raised when no usable German subtitles exist. Carries the yt-dlp
+    stderr tail so operators can tell 'video has no subs' apart from
+    'YouTube blocked our datacenter IP' (see job.error)."""
+
+
+def _tail(b, n=300):
+    try:
+        return b.decode("utf-8", "ignore")[-n:]
+    except Exception:
+        return ""
 
 
 def ts2sec(x):
@@ -74,12 +83,14 @@ def parse_vtt(path):
 
 def fetch_subs(video_id, workdir, langs=("de.*", "en-de", "ar-de")):
     base = os.path.join(workdir, f"subs_{video_id}")
-    subprocess.run(
+    proc = subprocess.run(
         [YTDLP, "--no-warnings", "--skip-download",
          "--write-subs", "--write-auto-subs",
          "--sub-langs", ",".join(langs), "--sub-format", "vtt/best",
          "-o", base, f"https://www.youtube.com/watch?v={video_id}"],
         env=ENV, capture_output=True, timeout=120)
+    open(base + ".fetch.log", "w", encoding="utf-8").write(
+        f"rc={proc.returncode}\nSTDERR:\n{_tail(proc.stderr)}\nSTDOUT:\n{_tail(proc.stdout)}")
     return base
 
 
@@ -218,7 +229,11 @@ def run_fastpath(video_id, title, workdir, vocab=(), seed=41,
     base = fetch_subs(video_id, workdir)
     cues, used = pick_de_cues(base)
     if not cues:
-        raise NoSubtitles(f"no German subtitles for {video_id}")
+        try:
+            log = open(base + ".fetch.log", encoding="utf-8").read()[-400:]
+        except Exception:
+            log = "no fetch log"
+        raise NoSubtitles(f"no German subtitles for {video_id} | {log}")
     ce, ca = attach_translations(base, cues)
     wins = build_windows(cues)
     clips = []

@@ -69,11 +69,12 @@ def process_one(data_dir, queue_store, job):
         queue_store.update(data_dir, jid, status="done", stage="done",
                            progress=1.0, clips_ready=clips)
         print(f"[inline] job {jid}: +{added} clips (fast-path)", flush=True)
-    except fp.NoSubtitles:
+    except fp.NoSubtitles as e:
+        detail = str(e)[:300]
         queue_store.update(data_dir, jid, status="queued", stage="awaiting_deck",
                            progress=0.1, deck_only=True,
-                           error="no subtitles — waiting for Deck Whisper")
-        print(f"[inline] job {jid}: no subs, handed to Deck", flush=True)
+                           error=f"inline: {detail}")
+        print(f"[inline] job {jid}: {detail} -> Deck", flush=True)
     except Exception as e:
         traceback.print_exc()
         queue_store.update(data_dir, jid, status="queued", stage="awaiting_deck",
