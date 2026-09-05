@@ -1,5 +1,7 @@
 _clipcache/
 _clipcache5/
+_clipcache_ingest/
+server/data/
 app/videos/
 android/.gradle/
 android/app/build/
@@ -17,3 +19,4 @@ app/clips_new_sentences.json
 app/gale1999.pdf
 standalone copy.html
 app/standalone copy.txt
+__pycache__/

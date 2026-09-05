@@ -1,0 +1,3 @@
+# server/ has NO pip dependencies (stdlib only) by design — Render free tier safe.
+# Deck worker needs the existing whisper env (faster-whisper, yt-dlp, ffmpeg):
+#   /home/deck/whisperenv/bin/python worker/worker.py
