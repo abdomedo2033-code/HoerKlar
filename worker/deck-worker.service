@@ -6,7 +6,7 @@ Wants=network-online.target
 [Service]
 Type=simple
 WorkingDirectory=/home/deck/Downloads/Dutch_App
-Environment=API_BASE=https://hoerklar-proxy.onrender.com
+Environment=API_BASE=https://hoerklar-api.onrender.com
 Environment=HK_WORKDIR=/home/deck/Downloads/Dutch_App/_clipcache_ingest
 # Set once: systemctl --user edit deck-worker  ->  Environment=HK_WORKER_TOKEN=...
 ExecStart=/home/deck/whisperenv/bin/python /home/deck/Downloads/Dutch_App/worker/worker.py
