@@ -108,7 +108,8 @@ def handle_playlist(job):
                                          section=section)
         all_clips.extend(clips)
         done_titles.append(title)
-    res = _req("POST", f"/api/jobs/{jid}/complete", {"clips": all_clips[:180]})
+    res = _req("POST", f"/api/jobs/{jid}/complete",
+              {"clips": all_clips[:180], "store": bool(job.get("store", False))})
     print(f"[worker] playlist completed: +{res.get('added', 0)} clips from {len(items)} videos", flush=True)
 
 
@@ -154,7 +155,8 @@ def handle(job):
                                      on_partial=stream, cefr=CEFR,
                                      section=section)
         print(f"[worker] whisper done: {len(clips)} clips", flush=True)
-    res = _req("POST", f"/api/jobs/{jid}/complete", {"clips": clips})
+    res = _req("POST", f"/api/jobs/{jid}/complete",
+              {"clips": clips, "store": bool(job.get("store", False))})
     print(f"[worker] completed: +{res.get('added', 0)} clips", flush=True)
 
 

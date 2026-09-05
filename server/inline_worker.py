@@ -75,7 +75,7 @@ def process_one(data_dir, queue_store, job):
                                 on_partial=stream, section=section)
         # persist like POST /complete (import here: api_server owns the file layout)
         import api_server_helpers as helpers
-        added = helpers.append_myvideos(data_dir, clips)
+        added = helpers.append_myvideos(data_dir, clips) if job.get("store") else 0
         queue_store.update(data_dir, jid, status="done", stage="done",
                            progress=1.0, clips_ready=clips)
         print(f"[inline] job {jid}: +{added} clips (fast-path)", flush=True)

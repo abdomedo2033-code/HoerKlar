@@ -167,10 +167,12 @@ class H(BaseHTTPRequestHandler):
                     if not ok:
                         return _send(self, 429, {"error": msg})
                     max_pl = int(os.environ.get("HK_MAX_PLAYLIST_ITEMS", "15"))
+                    store = bool(payload.get("store", False))
                     job = queue_store.create(
                         DATA, video_id="", url=raw_urls[0], user=user,
                         section=section, kind="playlist",
-                        extra={"playlist_id": lid, "max_items": max_pl})
+                        extra={"playlist_id": lid, "max_items": max_pl,
+                               "store": store})
                     return _send(self, 200, {"jobs": [{"job_id": job["job_id"], "kind": "playlist",
                                                         "playlist_id": lid, "section": section,
                                                         "poll": f"/api/jobs/{job['job_id']}"}]})
@@ -195,9 +197,11 @@ class H(BaseHTTPRequestHandler):
             if queue_store.user_today_count(DATA, user) + len(good) > int(os.environ.get("HK_MAX_JOBS_PER_DAY", "5")) + 5:
                 return _send(self, 429, {"error": "that paste would exceed your daily quota"})
             jobs = []
+            store = bool(payload.get("store", False))
             for v in good:
                 job = queue_store.create(DATA, video_id=v["video_id"], url=v["url"],
-                                         user=user, section=section)
+                                         user=user, section=section,
+                                         extra={"store": store})
                 jobs.append({"job_id": job["job_id"], "kind": "video",
                              "video_id": v["video_id"], "section": section,
                              "poll": f"/api/jobs/{job['job_id']}"})
@@ -227,13 +231,16 @@ class H(BaseHTTPRequestHandler):
                 if not job:
                     return _send(self, 404, {"error": "unknown job"})
                 return _send(self, 200, job)
-            # complete: persist clips to myvideos section file (unverified)
+            # complete: clips ride home in the job response (browser stores them
+            # privately). Server-side copy ONLY when store=true (curated sharing).
             clips = payload.get("clips", [])
-            try:
-                import api_server_helpers as helpers
-                added = helpers.append_myvideos(DATA, clips)
-            except ValueError as e:
-                return _send(self, 400, {"error": str(e)})
+            added = 0
+            if payload.get("store"):
+                try:
+                    import api_server_helpers as helpers
+                    added = helpers.append_myvideos(DATA, clips)
+                except ValueError as e:
+                    return _send(self, 400, {"error": str(e)})
             job = queue_store.update(DATA, job_id, status="done", stage="done",
                                      progress=1.0, clips_ready=clips)
             return _send(self, 200, {"ok": True, "added": added, "job": job})

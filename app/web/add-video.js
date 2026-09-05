@@ -172,6 +172,21 @@
             if (j.status === 'done') {
               const sec = (window.ClientIngest ? window.ClientIngest.prettySection(j.section) : null) || '⭐ My videos';
               card.querySelector('.jc-title').textContent = `✅ ${n} quizzes ready in ${sec}${j.title ? ' — ' + j.title : ''}`;
+              // Browser-private: keep these clips on THIS device only.
+              (async () => {
+                try {
+                  const fresh = j.clips_ready || [];
+                  if (fresh.length && window.ClipLoader) {
+                    const mine = (await window.ClipLoader.cacheGet('clips_myvideos')) || [];
+                    const have = new Set(mine.map((c) => c.clip_id));
+                    for (const c of fresh) if (c.clip_id && !have.has(c.clip_id)) { mine.push(c); have.add(c.clip_id); }
+                    await window.ClipLoader.cachePut('clips_myvideos', mine);
+                  }
+                  const live = new Set(clips.map((c) => c.clip_id));
+                  for (const c of (j.clips_ready || [])) if (c.clip_id && !live.has(c.clip_id)) clips.push(c);
+                  if (window.ClientIngest && window.ClientIngest.refreshSections) window.ClientIngest.refreshSections();
+                } catch (_) {}
+              })();
               window.dispatchEvent(new CustomEvent('hk:clips-updated', { detail: { section: 'myvideos' } }));
               setTimeout(() => card.remove(), 15000);
             } else { stageEl.textContent = 'Failed: ' + (j.error || 'unknown error'); }
