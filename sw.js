@@ -5,6 +5,9 @@ self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(ks=>Promise.a
 self.addEventListener('message',e=>{ if(e.ports && e.ports[0]) e.ports[0].postMessage({}); });
 self.addEventListener('fetch',e=>{
   const url=new URL(e.request.url);
+  // Never touch API calls: non-GET or cross-origin (e.g. hoerklar-api) must
+  // go straight to the network, or POSTs fail with "Failed to fetch".
+  if(e.request.method!=='GET' || url.origin!==self.location.origin) return;
   if(e.request.mode==='navigate' || url.pathname.endsWith('.html') || url.pathname.endsWith('/') || url.pathname.includes('HörKlar') || url.pathname.includes('TaalFlix')){
     e.respondWith(fetch(e.request).catch(()=>caches.match(e.request)));
     return;

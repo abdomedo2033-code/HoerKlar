@@ -65,8 +65,9 @@ def fetch_wav(video_id, ts, dur, wav):
     try:
         subprocess.run(
             [YTDLP, "--no-warnings", "--download-sections", f"*{ts}-{ts + dur}",
-             "-x", "--audio-format", "wav", "--audio-sampling-rate", "16000",
-             "--audio-channels", "1", "-o", wav.replace(".wav", ".%(ext)s"),
+             "-x", "--audio-format", "wav",
+             "--postprocessor-args", "-ar 16000 -ac 1",
+             "-o", wav.replace(".wav", ".%(ext)s"),
              f"https://www.youtube.com/watch?v={video_id}"],
             env=ENV, capture_output=True, timeout=150)
         got = wav if os.path.exists(wav) else wav.replace(".wav", ".wav.wav")
@@ -93,7 +94,9 @@ def fetch_wav(video_id, ts, dur, wav):
 
 def transcribe_batch(wavs, lang="de"):
     from faster_whisper import WhisperModel
-    model = WhisperModel("tiny", device="cpu", compute_type="int8")
+    import os as _os
+    size = _os.environ.get("HK_WHISPER_MODEL", "tiny")  # base is more accurate, ~2x slower
+    model = WhisperModel(size, device="cpu", compute_type="int8")
     out = {}
     for wav in wavs:
         try:
