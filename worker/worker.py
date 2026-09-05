@@ -91,6 +91,11 @@ def load_vocab():
 
 
 def main():
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--once", action="store_true",
+                    help="process a single queued job then exit (testing)")
+    args = ap.parse_args()
     print(f"[worker] polling {API} every {POLL_S}s (workdir={WORKDIR})", flush=True)
     while True:
         try:
@@ -103,10 +108,17 @@ def main():
                     print(f"[worker] job {job.get('job_id')} failed: {e}", flush=True)
                     post_progress(job.get("job_id"), status="error",
                                   stage="error", progress=0.0)
+                if args.once:
+                    return
             else:
+                if args.once:
+                    print("[worker] queue empty, exiting (--once)", flush=True)
+                    return
                 time.sleep(POLL_S)
         except Exception as e:
             print(f"[worker] poll error: {e} (retry in {POLL_S}s)", flush=True)
+            if args.once:
+                raise SystemExit(1)
             time.sleep(POLL_S)
 
 

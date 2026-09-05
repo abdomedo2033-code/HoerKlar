@@ -12,17 +12,34 @@ One branch, five increments. Translation fixes stay on `main` — this branch on
 | 4 Whisper fallback + progress UI | `worker/whisper_fallback.py`, `web/add-video.js`, `web/add-video.css` | ✅ streams first 3 quizzes early |
 | 5 abuse guards + rights | `server/guards.py`, `db/migrations/001_my_videos.sql` | ✅ quotas, allowlist, unverified-by-default |
 
-## Build order (as agreed)
+## Deploy (Render) — full path
 
-1. **Phase 1 first** — run `python3 scripts/split_clips.py`, serve `server/data/` via
-   `server/api_server.py`, then apply the 6-line `index.html` patch below. This is
-   also just hygiene: kills the 6MB baked blob.
-2. **Phase 2** — deploy `server/api_server.py` to Render (or mount its routes into
-   `proxy/yt_proxy.py`; handlers are deliberately small).
-3. **Phase 3** — `systemctl --user enable --now deck-worker` on the Deck.
-4. **Phase 4** — paste the modal HTML from `web/add-video.js` header into `index.html`.
-5. **Phase 5** — `supabase db push --file db/migrations/001_my_videos.sql`; set
-   `HK_WORKER_TOKEN`, `HK_MAX_JOBS_PER_DAY`, `HK_ALLOWLIST` env vars.
+1. **API**: Render → Blueprints → New → repo `HoerKlar`, blueprint file
+   `server/render.yaml` → Apply. Service `hoerklar-api` appears (~2 min build;
+   `split_clips.py` runs at build time from tracked `app/clips_modern_fixed.json`).
+   Set `HK_WORKER_TOKEN` (any long random string) in its Environment tab.
+2. **Site**: `index.html` on this branch already contains the ＋ Add video button,
+   modal, ⭐ My videos section, and boot-merge. `HK_API_BASE` defaults to
+   `https://hoerklar-api.onrender.com`; if your URL differs, run once in console:
+   `localStorage.hk_api="https://<actual>"; location.reload()`.
+   Rebuild the APK (or sideload updated `index.html` + `web/`) to ship it.
+3. **Deck worker**: on the Deck —
+   ```
+   cat >> ~/.config/hoerklar-worker.env <<EOF
+   API_BASE=https://hoerklar-api.onrender.com
+   HK_WORKER_TOKEN=<same as Render>
+   EOF
+   systemctl --user enable --now deck-worker   # after: cp worker/deck-worker.service ~/.config/systemd/user/
+   ```
+   Without the token (default empty) the API accepts worker calls — set it.
+4. **Test**: open site → ＋ Add video → paste subtitled YouTube URL →
+   job card progresses → quizzes land in ⭐ My videos. Local drill that already
+   passed on the Deck: `api_server` + `worker --once` turned Nicos Weg ep
+   `dC6ZGLzdaTs` into 2 verified=false clips end-to-end.
+
+Known limits: Render free disk is ephemeral (back up `myvideos` before redeploy);
+movies without subs stay slow-path; auto-added clips are personal-only until a
+human glances at them (see Rights below).
 
 ## Phase 1 — index.html wiring patch (deliberately NOT applied yet)
 
