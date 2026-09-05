@@ -54,7 +54,20 @@ def handle(job):
     section = (job.get("section") or "myvideos")[:24] or "myvideos"
     title = job.get("url", vid)
     os.makedirs(WORKDIR, exist_ok=True)
-    print(f"[worker] job {jid} video {vid}", flush=True)
+    print(f"[worker] job {jid} video {vid} section={section}", flush=True)
+    try:
+        import subprocess
+        yt = os.path.expanduser(os.environ.get("HK_YTDLP", "~/whisperenv/bin/yt-dlp"))
+        env = {k: v for k, v in os.environ.items()
+               if k.lower() not in ("http_proxy", "https_proxy", "all_proxy")}
+        real = subprocess.run(
+            [yt, "--no-warnings", "--print", "%(title)s",
+             f"https://www.youtube.com/watch?v={vid}"],
+            env=env, capture_output=True, text=True, timeout=60).stdout.strip()
+        if real:
+            title = real
+    except Exception as e:
+        print(f"[worker] title lookup failed: {e}", flush=True)
 
     def stream(clips):
         post_progress(jid, status="translating", stage="streaming",
@@ -62,7 +75,8 @@ def handle(job):
                       clips_ready=clips)
 
     try:
-        post_progress(jid, status="fetching_subs", stage="subs", progress=0.1)
+        post_progress(jid, status="fetching_subs", stage="subs", progress=0.1,
+                      title=title[:160])
         clips = run_fastpath(vid, title, WORKDIR, vocab=load_vocab(),
                              on_partial=stream, cefr=CEFR, section=section)
         print(f"[worker] fast-path done: {len(clips)} clips", flush=True)
