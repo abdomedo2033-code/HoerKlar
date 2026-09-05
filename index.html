@@ -626,9 +626,10 @@ window.HK_API_BASE = (function(){ try{ return localStorage.hk_api || "https://ho
   try{
     fetch(window.HK_API_BASE + '/api/clips?section=myvideos').then(function(r){ return r.ok ? r.json() : []; }).then(function(mine){
       if(mine && mine.length){ var have={}; clips.forEach(function(c){ have[c.clip_id]=1; }); mine.forEach(function(c){ if(!have[c.clip_id]) clips.push(c); }); }
+      if(window.ClipLoader){ try{ window.ClipLoader.cacheGet('clips_myvideos').then(function(saved){ if(saved && saved.length){ var h2={}; clips.forEach(function(c){ h2[c.clip_id]=1; }); saved.forEach(function(c){ if(!h2[c.clip_id]) clips.push(c); }); } done(); }).catch(done); return; }catch(_){} }
       done();
     }).catch(done);
   }catch(_){ done(); }
 })();
 if(location.protocol!=='file:' && 'serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(()=>{});
-</script><script src="web/myvideos-baked.js"></script><script src="web/clips-loader.js"></script><script src="web/add-video.js"></script></body></html>
+</script><script src="web/myvideos-baked.js"></script><script src="web/client-ingest.js"></script><script src="web/clips-loader.js"></script><script src="web/add-video.js"></script></body></html>

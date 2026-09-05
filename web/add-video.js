@@ -51,17 +51,53 @@
       const inp = document.getElementById('addVideoUrl');
       const err = document.getElementById('addVideoErr');
       err.textContent = '';
+      const url = inp.value;
+      // Path A — Android app: device fetches subtitles natively, zero server.
+      if (window.HKNative && window.ClientIngest) {
+        const vid = window.ClientIngest.videoId(url);
+        if (!vid) { err.textContent = 'could not find a YouTube video id in that URL'; return; }
+        document.getElementById('addVideoModal').hidden = true;
+        inp.value = '';
+        const card = this.card();
+        try {
+          const res = await window.ClientIngest.ingestNative(vid, (stage, p) => card.progress(stage, p));
+          card.done('✅ ' + res.n + ' quizzes ready in My videos');
+        } catch (e) { card.done('Failed: ' + e.message, true); }
+        return;
+      }
+      // Path B — browser: hand off to the API backend (Deck/Render worker).
       try {
         const r = await fetch(this.api + '/api/ingest', {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ url: inp.value, user: this.user }),
+          body: JSON.stringify({ url, user: this.user }),
         });
         const j = await r.json();
         if (!r.ok) throw new Error(j.error || ('http ' + r.status));
         document.getElementById('addVideoModal').hidden = true;
         inp.value = '';
         this.watch(j.job_id);
-      } catch (e) { err.textContent = e.message; }
+      } catch (e) {
+        err.textContent = (window.HKNative ? e.message :
+          'no backend reachable — open this page in the HörKlar app, or set up the API backend');
+      }
+    },
+    card() {
+      const host = document.getElementById('jobCards') || document.body;
+      const card = el('div', 'jobcard');
+      card.innerHTML = '<div class="jc-title">🎬 Building quizzes…</div>' +
+        '<div class="jc-stage"></div><div class="jc-bar"><div class="jc-prog"></div></div>';
+      host.prepend(card);
+      const stageEl = card.querySelector('.jc-stage');
+      const progEl = card.querySelector('.jc-prog');
+      return {
+        progress(stage, p) { stageEl.textContent = stage; progEl.style.width = Math.round(p * 100) + '%'; },
+        done(msg, failed) {
+          card.querySelector('.jc-title').textContent = failed ? '🎬 Build failed' : msg;
+          stageEl.textContent = failed ? msg : '';
+          progEl.style.width = failed ? '0%' : '100%';
+          if (!failed) setTimeout(() => card.remove(), 15000);
+        },
+      };
     },
     watch(jobId) {
       const host = document.getElementById('jobCards') || document.body;
