@@ -57,6 +57,28 @@ def _body(h):
         return {}
 
 
+def _slug_section(raw):
+    return re.sub(r"[^a-z0-9 _-]", "", (raw or "").lower()).strip().replace(" ", "_").replace("-", "_")[:24] or "myvideos"
+
+
+def _extract_playlist_id(url):
+    """Return a playlist id from a youtube playlist/watch URL, else None."""
+    try:
+        u = urllib.parse.urlparse(url.strip())
+    except Exception:
+        return None
+    host = (u.netloc or "").lower()
+    if host in ("youtu.be", "www.youtu.be"):
+        return None
+    if not host.endswith("youtube.com"):
+        return None
+    qs = urllib.parse.parse_qs(u.query)
+    lid = (qs.get("list") or [None])[0]
+    if lid and re.fullmatch(r"[A-Za-z0-9_-]{8,64}", lid):
+        return lid
+    return None
+
+
 def _manifest():
     mp = os.path.join(DATA, "manifest.json")
     if os.path.exists(mp):
@@ -128,18 +150,65 @@ class H(BaseHTTPRequestHandler):
             payload = _body(self)
             url = (payload.get("url") or "").strip()
             user = (payload.get("user") or "local")[:64] or "local"
-            section = re.sub(r"[^a-z0-9 _-]", "", (payload.get("section") or "").lower()).strip().replace(" ", "_").replace("-", "_")[:24] or "myvideos"
-            vid, canon_or_err = guards.extract_video_id(url)
-            if not vid:
-                return _send(self, 400, {"error": canon_or_err})
+            section = _slug_section(payload.get("section"))
+            max_urls = int(os.environ.get("HK_MAX_URLS", "10"))
+            raw_urls = []
+            if isinstance(payload.get("urls"), list):
+                raw_urls = [str(u).strip() for u in payload["urls"] if str(u).strip()][:max_urls]
+            elif url:
+                raw_urls = [url]
+            if not raw_urls:
+                return _send(self, 400, {"error": "paste 1+ YouTube URLs (one per line) or a playlist link"})
+            # Playlist link? -> one expander job for the Deck (Render can't list it).
+            if len(raw_urls) == 1:
+                lid = _extract_playlist_id(raw_urls[0])
+                if lid:
+                    ok, msg = guards.check_quota(queue_store, DATA, user)
+                    if not ok:
+                        return _send(self, 429, {"error": msg})
+                    max_pl = int(os.environ.get("HK_MAX_PLAYLIST_ITEMS", "15"))
+                    job = queue_store.create(
+                        DATA, video_id="", url=raw_urls[0], user=user,
+                        section=section, kind="playlist",
+                        extra={"playlist_id": lid, "max_items": max_pl})
+                    return _send(self, 200, {"jobs": [{"job_id": job["job_id"], "kind": "playlist",
+                                                        "playlist_id": lid, "section": section,
+                                                        "poll": f"/api/jobs/{job['job_id']}"}]})
+            # Plain videos.
+            videos = []
+            for u in raw_urls:
+                if _extract_playlist_id(u):
+                    videos.append({"error": "playlists: paste one playlist link alone (not mixed with videos)", "url": u[:80]})
+                    continue
+                vid, canon_or_err = guards.extract_video_id(u)
+                if not vid:
+                    videos.append({"error": canon_or_err, "url": u[:80]})
+                else:
+                    videos.append({"video_id": vid, "url": canon_or_err})
+            good = [v for v in videos if "video_id" in v]
+            if not good:
+                return _send(self, 400, {"error": videos[0].get("error", "no valid video URLs"),
+                                         "details": videos})
             ok, msg = guards.check_quota(queue_store, DATA, user)
             if not ok:
                 return _send(self, 429, {"error": msg})
-            # Dedup: same video already queued/active for this user?
-            job = queue_store.create(DATA, video_id=vid, url=canon_or_err, user=user, section=section)
-            return _send(self, 200, {"job_id": job["job_id"], "status": "queued",
-                                     "section": section,
-                                     "poll": f"/api/jobs/{job['job_id']}"})
+            if queue_store.user_today_count(DATA, user) + len(good) > int(os.environ.get("HK_MAX_JOBS_PER_DAY", "5")) + 5:
+                return _send(self, 429, {"error": "that paste would exceed your daily quota"})
+            jobs = []
+            for v in good:
+                job = queue_store.create(DATA, video_id=v["video_id"], url=v["url"],
+                                         user=user, section=section)
+                jobs.append({"job_id": job["job_id"], "kind": "video",
+                             "video_id": v["video_id"], "section": section,
+                             "poll": f"/api/jobs/{job['job_id']}"})
+            out = {"jobs": jobs, "section": section}
+            if len(jobs) == 1:  # backward compat: single-url clients
+                out.update(job_id=jobs[0]["job_id"], status="queued",
+                           poll=jobs[0]["poll"])
+            for v in videos:
+                if "error" in v:
+                    out.setdefault("skipped", []).append(v)
+            return _send(self, 200, out)
         m = re.fullmatch(r"/api/jobs/([0-9a-f]+)/(progress|complete)", u.path)
         if m:
             if WORKER_TOKEN and self.headers.get("X-Worker-Token") != WORKER_TOKEN:

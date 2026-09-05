@@ -48,7 +48,15 @@ def title_of(video_id):
 
 def process_one(data_dir, queue_store, job):
     import pipeline_fastpath as fp
-    jid, vid = job["job_id"], job["video_id"]
+    jid = job["job_id"]
+    if job.get("kind") == "playlist":
+        # Render can't list playlists (bot-walled) — Deck expands them.
+        queue_store.update(data_dir, jid, status="queued", stage="awaiting_deck",
+                           progress=0.05, deck_only=True,
+                           error="playlist expands on the Deck")
+        print(f"[inline] job {jid}: playlist -> Deck", flush=True)
+        return
+    vid = job["video_id"]
     section = (job.get("section") or "myvideos")[:24] or "myvideos"
     workdir = os.path.join(data_dir, "tmp_inline")
     os.makedirs(workdir, exist_ok=True)

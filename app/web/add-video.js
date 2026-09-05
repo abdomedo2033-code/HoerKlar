@@ -3,7 +3,9 @@
  * HTML needed (paste into index.html near #filterBar):
  *   <button id="addVideoBtn">＋ Add video</button>
  *   <div id="addVideoModal" hidden>
- *     <input id="addVideoUrl" placeholder="Paste a YouTube URL…" inputmode="url">
+ *     <textarea id="addVideoUrls" rows="3"></textarea>
+ *     <select id="addVideoSectionSel"></select>
+ *     <input id="addVideoSection" placeholder="…or a new section name">
  *     <button id="addVideoGo">Build quizzes</button>
  *     <button id="addVideoCancel">Cancel</button>
  *     <div id="addVideoErr"></div>
@@ -42,42 +44,85 @@
       const btn = document.getElementById('addVideoBtn');
       const modal = document.getElementById('addVideoModal');
       if (!btn || !modal) return; // HTML not yet pasted — loader stays inert.
-      btn.onclick = () => { modal.hidden = false; document.getElementById('addVideoUrl').focus(); };
+      btn.onclick = () => { AddVideo.fillSections(); modal.hidden = false; const ta = document.getElementById('addVideoUrls'); if (ta) ta.focus(); };
       document.getElementById('addVideoCancel').onclick = () => { modal.hidden = true; };
       document.getElementById('addVideoGo').onclick = () => this.submit();
-      document.getElementById('addVideoUrl').addEventListener('keydown', (e) => { if (e.key === 'Enter') this.submit(); });
+    },
+    fillSections() {
+      // Section picker: existing sections first, ⭐ My videos default.
+      try {
+        const sel = document.getElementById('addVideoSectionSel');
+        if (!sel) return;
+        const secs = [...new Set((typeof clips !== 'undefined' ? clips : []).map((c) => c.section || 'movies'))]
+          .filter((s) => s !== 'all' && s !== 'playphrase');
+        const order = ['myvideos', ...secs.filter((s) => s !== 'myvideos').sort()];
+        const pretty = (window.ClientIngest && window.ClientIngest.prettySection)
+          ? window.ClientIngest.prettySection : (s) => s;
+        sel.innerHTML = '';
+        for (const s of order) {
+          const o = document.createElement('option');
+          o.value = s; o.textContent = pretty(s);
+          sel.appendChild(o);
+        }
+      } catch (_) { /* page context differs */ }
+    },
+    readSection() {
+      try {
+        const fresh = document.getElementById('addVideoSection');
+        if (fresh && fresh.value.trim()) {
+          return ((window.ClientIngest && window.ClientIngest.slugSection(fresh.value)) || 'myvideos');
+        }
+        const sel = document.getElementById('addVideoSectionSel');
+        if (sel && sel.value) return sel.value;
+      } catch (_) {}
+      return 'myvideos';
     },
     async submit() {
-      const inp = document.getElementById('addVideoUrl');
+      const inp = document.getElementById('addVideoUrls') || document.getElementById('addVideoUrl');
       const err = document.getElementById('addVideoErr');
       err.textContent = '';
-      const url = inp.value;
-      const secInput = document.getElementById('addVideoSection');
-      const section = (window.ClientIngest ? window.ClientIngest.slugSection(secInput && secInput.value) : 'myvideos') || 'myvideos';
-      // Path A — Android app: device fetches subtitles natively, zero server.
-      if (window.HKNative && window.ClientIngest) {
-        const vid = window.ClientIngest.videoId(url);
-        if (!vid) { err.textContent = 'could not find a YouTube video id in that URL'; return; }
+      const lines = inp.value.split(/\n+/).map((s) => s.trim()).filter(Boolean).slice(0, 10);
+      if (!lines.length) { err.textContent = 'paste at least one link'; return; }
+      const section = this.readSection() || 'myvideos';
+      const isPlaylist = (u) => /[?&]list=([A-Za-z0-9_-]{8,64})/.test(u);
+      // Path A — Android app: device fetches natively, one video at a time.
+      if (window.HKNative && window.ClientIngest && !lines.some(isPlaylist)) {
+        const vids = [];
+        for (const u of lines) {
+          const v = window.ClientIngest.videoId(u);
+          if (!v) { err.textContent = 'could not find a video id in: ' + u.slice(0, 60); return; }
+          vids.push(v);
+        }
         document.getElementById('addVideoModal').hidden = true;
-        inp.value = ''; if (secInput) secInput.value = '';
+        inp.value = '';
         const card = this.card();
+        let total = 0;
         try {
-          const res = await window.ClientIngest.ingestNative(vid, (stage, p) => card.progress(stage, p), section);
-          card.done('✅ ' + res.n + ' quizzes ready in ' + window.ClientIngest.prettySection(res.section) + ' — ' + res.title);
-        } catch (e) { card.done('Failed: ' + e.message, true); }
+          for (let i = 0; i < vids.length; i++) {
+            const res = await window.ClientIngest.ingestNative(
+              vids[i], (stage, p) => card.progress(`Video ${i + 1}/${vids.length}: ${stage}`, (i + p) / vids.length), section);
+            total += res.n;
+          }
+          card.done(`✅ ${total} quizzes ready in ${window.ClientIngest.prettySection(section)}`);
+        } catch (e) { card.done(`Got ${total} quizzes, then failed: ` + e.message, total === 0); }
         return;
       }
       // Path B — browser: hand off to the API backend (Deck/Render worker).
       try {
         const r = await fetch(this.api + '/api/ingest', {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ url, user: this.user, section }),
+          body: JSON.stringify({ urls: lines, user: this.user, section }),
         });
         const j = await r.json();
         if (!r.ok) throw new Error(j.error || ('http ' + r.status));
         document.getElementById('addVideoModal').hidden = true;
         inp.value = '';
-        this.watch(j.job_id);
+        for (const job of (j.jobs || [])) this.watch(job.job_id);
+        if (j.skipped && j.skipped.length) {
+          err.textContent = '';
+          const card = this.card();
+          card.done('Note: ' + j.skipped.map((s) => s.error).join('; '), true);
+        }
       } catch (e) {
         err.textContent = (window.HKNative ? e.message :
           'no backend reachable — open this page in the HörKlar app, or set up the API backend');

@@ -85,35 +85,64 @@ def write_baked(fp, clips):
 def main():
     import argparse
     ap = argparse.ArgumentParser()
-    ap.add_argument("url")
+    ap.add_argument("urls", nargs="+", help="video or playlist URLs")
     ap.add_argument("--cefr", default="A2")
     ap.add_argument("--max", type=int, default=12)
     ap.add_argument("--section", default="myvideos")
+    ap.add_argument("--playlist-max", type=int, default=15)
     args = ap.parse_args()
 
-    vid, canon_or_err = guards.extract_video_id(args.url)
-    if not vid:
-        raise SystemExit(f"Reject: {canon_or_err}")
-    title = title_of(vid) or vid
-    print(f"Video: {title}\nID: {vid}")
+    # Expand: videos stay, playlists list their items (Deck network).
+    queue = []
+    for u in args.urls:
+        lid = None
+        try:
+            import urllib.parse, re
+            q = urllib.parse.parse_qs(urllib.parse.urlparse(u).query)
+            lid = (q.get("list") or [None])[0]
+            if lid and not re.fullmatch(r"[A-Za-z0-9_-]{8,64}", lid):
+                lid = None
+        except Exception:
+            pass
+        if lid:
+            sys.path.insert(0, os.path.join(HERE, "worker"))
+            from worker import expand_playlist
+            items = expand_playlist(lid, args.playlist_max)
+            print(f"Playlist {lid}: {len(items)} videos")
+            queue.extend(items)
+        else:
+            vid, canon_or_err = guards.extract_video_id(u)
+            if not vid:
+                print(f"Skip {u[:60]}: {canon_or_err}")
+                continue
+            queue.append((vid, None))
+    if not queue:
+        raise SystemExit("Nothing usable to add.")
 
     workdir = os.path.join(HERE, "_clipcache_ingest")
     os.makedirs(workdir, exist_ok=True)
     vocab = load_vocab()
 
     from pipeline_fastpath import run_fastpath, NoSubtitles
-    try:
-        print("Fast path: subtitles…")
-        clips = run_fastpath(vid, title, workdir, vocab=vocab,
-                             cefr=args.cefr, section=args.section)[:args.max]
-    except NoSubtitles:
-        print("No subtitles — slow path: Whisper sampling (takes minutes)…")
-        from whisper_fallback import run_whisper_fallback
-        clips = run_whisper_fallback(vid, title, workdir, vocab=vocab,
-                                     cefr=args.cefr, max_new=args.max,
-                                     section=args.section)
-    if not clips:
+    from whisper_fallback import run_whisper_fallback
+    all_clips = []
+    for n, (vid, given_title) in enumerate(queue):
+        title = given_title or title_of(vid) or vid
+        print(f"\n[{n + 1}/{len(queue)}] {title} ({vid})")
+        try:
+            print("  Fast path: subtitles…")
+            clips = run_fastpath(vid, title, workdir, vocab=vocab,
+                                 cefr=args.cefr, section=args.section)[:args.max]
+        except NoSubtitles:
+            print("  No subtitles — Whisper sampling (minutes)…")
+            clips = run_whisper_fallback(vid, title, workdir, vocab=vocab,
+                                         cefr=args.cefr, max_new=args.max,
+                                         section=args.section)
+        print(f"  -> {len(clips)} clips")
+        all_clips.extend(clips)
+    if not all_clips:
         raise SystemExit("No usable clips (music/unclear audio?) — nothing added.")
+    clips = all_clips
 
     n_new = 0
     for fp in BAKED:
@@ -126,7 +155,7 @@ def main():
                 n_new += 1 if fp == BAKED[0] else 0
         write_baked(fp, have)
         print(f"  {fp}: {len(have)} clips total")
-    print(f"\nDone: +{n_new} new quizzes in My videos (unverified, personal).")
+    print(f"\nDone: +{n_new} new quizzes in section '{args.section}' (unverified, personal).")
     print("Preview one:")
     c = clips[0]
     print(f"  [{c['start_time']}-{c['end_time']}s] {c['dutch_text'][:80]}")

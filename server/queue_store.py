@@ -32,15 +32,19 @@ def _write(path, obj):
     os.rename(tmp, path)
 
 
-def create(data_dir, *, video_id, url, user="local", section="myvideos"):
+def create(data_dir, *, video_id, url, user="local", section="myvideos",
+           kind="video", extra=None):
     job = {
         "job_id": uuid.uuid4().hex[:12],
+        "kind": kind,  # video | playlist
         "video_id": video_id, "url": url, "user": user,
         "section": section, "status": "queued",
         "progress": 0.0, "stage": "queued",
         "clips_ready": [], "error": None,
         "created_at": time.time(), "updated_at": time.time(),
     }
+    if extra:
+        job.update(extra)
     _write(_fp(data_dir, job["job_id"]), job)
     return job
 

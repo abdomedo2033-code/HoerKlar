@@ -7,7 +7,7 @@ auto-ingested clips are ALWAYS unverified + personal.
 import json, os
 
 
-def append_myvideos(data_dir, clips, limit=40):
+def append_myvideos(data_dir, clips, limit=200):
     if not isinstance(clips, list) or len(clips) > limit:
         raise ValueError("clips must be a list of <=" + str(limit))
     myp = os.path.join(data_dir, "clips_myvideos.json")
