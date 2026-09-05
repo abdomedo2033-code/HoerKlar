@@ -1,0 +1,32 @@
+# HoerKlar ingest API — Render Blueprint (NEW service, does not touch hoerklar-proxy).
+#
+# Deploy (2 min, dashboard — blueprints can't self-apply):
+#   1. Render → Blueprints → New Blueprint → repo HoerKlar → blueprint file:
+#      server/render.yaml  → Apply (creates service `hoerklar-api`).
+#   2. Note the public URL, e.g. https://hoerklar-api.onrender.com
+#   3. Optional env vars on the service:
+#        HK_WORKER_TOKEN    shared secret (must match Deck worker env)
+#        HK_MAX_JOBS_PER_DAY=5   HK_MAX_ACTIVE_JOBS=2   HK_MAX_VIDEO_MIN=30
+#        HK_ALLOWLIST       (default: youtube.com, youtu.be, …)
+#   4. Point the site at it: in index.html HK_API_BASE defaults to
+#      https://hoerklar-api.onrender.com — override anytime in the browser
+#      console via localStorage.hk_api="https://<actual-url>".
+#
+# Build notes: only TRACKED files exist on Render. That means
+# app/clips_modern_fixed.json (movies/series/songs, 3360 clips). The local
+# app/clips_new_sentences.json is gitignored, so `nicos` is local-only until
+# someone commits it. split_clips.py merges whatever is present.
+#
+# KNOWN LIMIT (free tier): Render disk is ephemeral — queued jobs and
+# clips_myvideos.json vanish on restart/redeploy. Before redeploying, back up:
+#   curl https://<api>/api/clips?section=myvideos > myvideos-backup.json
+# Durable path later: persist via Supabase (db/migrations/001_my_videos.sql).
+
+services:
+  - type: web
+    name: hoerklar-api
+    env: python
+    plan: free
+    buildCommand: pip install -r server/requirements.txt && python3 scripts/split_clips.py
+    startCommand: python3 server/api_server.py $PORT
+    healthCheckPath: /api/health
