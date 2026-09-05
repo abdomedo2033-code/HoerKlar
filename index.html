@@ -321,8 +321,6 @@ async function setupPlayer(){
   async function fetchYouTubeExp(key){ return null; }
   v.onerror=()=>{
     if(cur.local_video){ v.src=cur.local_video; v.load(); v.play().then(()=>{ const ld=document.getElementById('video-loading'); if(ld) ld.classList.remove('show'); }).catch(()=>{ const ld=document.getElementById('video-loading'); if(ld) ld.classList.remove('show'); }); return; }
-    const fb=document.getElementById('feedback');
-    if(fb) fb.innerHTML=`Video failed — <a href="${cur.embed_url}" target="_blank" style="color:#b8c0ff">Watch on YouTube ↗</a>`;
     const ld=document.getElementById('video-loading'); if(ld) ld.classList.remove('show');
   };
   const seek=()=>{ try{ if(window._clipSeq!==_seq) return; v.currentTime=cur.start_time; } catch(e){} };
