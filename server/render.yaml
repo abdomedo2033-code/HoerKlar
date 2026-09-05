@@ -30,3 +30,10 @@ services:
     buildCommand: pip install -r server/requirements.txt && python3 scripts/split_clips.py
     startCommand: python3 server/api_server.py $PORT
     healthCheckPath: /api/health
+    envVars:
+      - key: HK_YTDLP
+        value: yt-dlp
+      # Optional (set in dashboard after first deploy):
+      # - key: HK_WORKER_TOKEN
+      #   sync: false
+

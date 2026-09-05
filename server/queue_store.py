@@ -65,7 +65,9 @@ def update(data_dir, job_id, **fields):
 
 
 def claim_next(data_dir, worker="deck"):
-    """FIFO claim of oldest queued job. Deck-offline-safe: unclaimed jobs just wait."""
+    """FIFO claim of oldest queued job. Deck-offline-safe: unclaimed jobs just wait.
+    The Render inline worker claims with worker='render-inline' (same mechanism);
+    deck_only jobs are skipped by the inline loop but still claimable by the Deck."""
     qd = _root(data_dir)
     cands = []
     for fn in os.listdir(qd):
@@ -75,7 +77,8 @@ def claim_next(data_dir, worker="deck"):
             j = json.load(open(os.path.join(qd, fn), encoding="utf-8"))
         except Exception:
             continue
-        if j.get("status") == "queued":
+        if j.get("status") == "queued" and not (
+                worker == "render-inline" and j.get("deck_only")):
             cands.append(j)
     cands.sort(key=lambda j: j.get("created_at", 0))
     if not cands:

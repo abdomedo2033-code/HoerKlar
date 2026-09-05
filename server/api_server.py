@@ -157,24 +157,11 @@ class H(BaseHTTPRequestHandler):
                 return _send(self, 200, job)
             # complete: persist clips to myvideos section file (unverified)
             clips = payload.get("clips", [])
-            if not isinstance(clips, list) or len(clips) > 40:
-                return _send(self, 400, {"error": "clips must be a list of <=40"})
-            myp = os.path.join(DATA, "clips_myvideos.json")
-            mine = json.load(open(myp, encoding="utf-8")) if os.path.exists(myp) else []
-            have = {c.get("clip_id") for c in mine}
-            added = 0
-            for c in clips:
-                c = dict(c)
-                c["verified"] = False
-                c["section"] = "myvideos"
-                c.setdefault("rights_status", "EMBED_ONLY")
-                if c.get("clip_id") and c["clip_id"] not in have:
-                    mine.append(c)
-                    have.add(c["clip_id"])
-                    added += 1
-            tmp = myp + ".tmp"
-            json.dump(mine, open(tmp, "w", encoding="utf-8"), ensure_ascii=False)
-            os.rename(tmp, myp)
+            try:
+                import api_server_helpers as helpers
+                added = helpers.append_myvideos(DATA, clips)
+            except ValueError as e:
+                return _send(self, 400, {"error": str(e)})
             job = queue_store.update(DATA, job_id, status="done", stage="done",
                                      progress=1.0, clips_ready=clips)
             return _send(self, 200, {"ok": True, "added": added, "job": job})
@@ -187,5 +174,12 @@ class H(BaseHTTPRequestHandler):
 if __name__ == "__main__":
     port = int(sys.argv[1] if len(sys.argv) > 1 else os.environ.get("PORT", 8788))
     os.makedirs(DATA, exist_ok=True)
+    if os.environ.get("HK_INLINE", "1") == "1":
+        try:
+            import inline_worker
+            inline_worker.start(DATA, queue_store)
+            print("inline fast-path worker: on (Deck still covers Whisper/blocked)")
+        except Exception as e:
+            print(f"inline worker disabled: {e}")
     print(f"HoerKlar API on 0.0.0.0:{port} (data={DATA})")
     ThreadingHTTPServer(("0.0.0.0", port), H).serve_forever()
