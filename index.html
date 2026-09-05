@@ -37,7 +37,7 @@ video{width:100%;aspect-ratio:16/9;min-height:220px;object-fit:cover;border-radi
 #clipProg{height:100%;width:0%;background:linear-gradient(90deg, var(--accent), #00d4ff);transition:none}
 #clipInfo:empty{display:none}#clipInfo{margin:0 16px 16px;padding:10px 14px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:12px;color:var(--muted);font-size:12px}
 @media(max-width:860px){main{grid-template-columns:1fr}h1{font-size:18px}}
-#video-loading{position:absolute;inset:16px 16px auto 16px;display:none;place-items:center;background:#000;aspect-ratio:16/9;min-height:220px;max-height:360px;z-index:3;border-radius:14px}#video-loading.show{display:grid}.spinner{width:44px;height:44px;border:3px solid rgba(255,255,255,0.15);border-top-color:#6c5cff;border-radius:50%;animation:spin 0.9s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}#ytWrap{position:relative;overflow:hidden;background:#000;border-radius:14px;height:360px}#yt{position:absolute;top:-120px;left:0;width:100%;height:calc(100% + 240px);pointer-events:none;border:0}#quality{display:none!important}</style>
+#video-loading{position:absolute;display:none;place-items:center;background:#000;z-index:3;border-radius:14px;overflow:hidden}#video-loading.show{display:grid}.spinner{width:44px;height:44px;border:3px solid rgba(255,255,255,0.15);border-top-color:#6c5cff;border-radius:50%;animation:spin 0.9s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}#ytWrap{position:relative;overflow:hidden;background:#000;border-radius:14px;height:360px}#yt{position:absolute;top:-120px;left:0;width:100%;height:calc(100% + 240px);pointer-events:none;border:0}#quality{display:none!important}</style>
 <meta name="theme-color" content="#14182e">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="icon" type="image/png" sizes="32x32" href="app/favicon-32.png"><link rel="icon" type="image/png" sizes="16x16" href="app/favicon-16.png"><link rel="icon" type="image/x-icon" href="app/favicon.ico"><link rel="icon" type="image/png" sizes="192x192" href="app/icon-192.png"><link rel="icon" type="image/png" sizes="512x512" href="app/icon-512.png"><link rel="apple-touch-icon" href="app/icon-192.png">
@@ -200,7 +200,7 @@ async function /* fetchYouTubeStream disabled: corsproxy 403 */ fetchYouTubeStre
 
 async function setupPlayer(){
   window._clipSeq=(window._clipSeq||0)+1; const _seq=window._clipSeq;
-  if(!v._bufBind){ v._bufBind=true; v.addEventListener('waiting',()=>{ try{ if(cur) document.getElementById('video-loading').classList.add('show'); }catch(e){} }); v.addEventListener('playing',()=>{ try{ document.getElementById('video-loading').classList.remove('show'); }catch(e){} }); }
+  if(!v._bufBind){ v._bufBind=true; v.addEventListener('playing',()=>{ try{ document.getElementById('video-loading').classList.remove('show'); }catch(e){} }); } if(!window._fitBind){ window._fitBind=true; window.addEventListener('resize',()=>{ try{fitLoader();}catch(e){} }); window.addEventListener('orientationchange',()=>{ setTimeout(()=>{try{fitLoader();}catch(_){}},300); }); } requestAnimationFrame(()=>{ try{fitLoader();}catch(e){} }); setTimeout(()=>{ try{fitLoader();}catch(e){} },600);
   try{ v.pause(); }catch(_){}
   try{ const _sp0=document.getElementById('segP'); if(_sp0) _sp0.pause(); }catch(_){}
   try{ if(window.segP) window.segP.pause(); }catch(_){}
@@ -338,6 +338,7 @@ async function setupPlayer(){
   v.onloadeddata=seek;
   v.addEventListener('canplay',function ap(){ v.removeEventListener('canplay',ap); const ld=document.getElementById('video-loading'); if(ld) ld.classList.remove('show'); try{ v.currentTime=cur.start_time; } catch(e){} setTimeout(()=>{ if(window._clipSeq===_seq){ try{playClip(true);}catch(e){} } },90); },{once:true}); setTimeout(seek,400); if(v.readyState>=2){ try{ v.currentTime=cur.start_time; }catch(e){} setTimeout(()=>{ if(window._clipSeq===_seq && v.paused){ try{playClip(true);}catch(e){} } },120); } setTimeout(()=>{ if(window._clipSeq===_seq && v.paused && !window._clipDragging && v.currentTime<cur.start_time+0.6){ try{ v.currentTime=cur.start_time; }catch(e){} try{playClip(true);}catch(e){} } },1600);
 }
+function fitLoader(){ try{ const w=document.getElementById('playerWrap'), ld=document.getElementById('video-loading'); if(!w||!ld) return; const ytW=document.getElementById('ytWrap'); const tgt=(ytW&&ytW.style.display!=='none')?ytW:document.getElementById('v'); if(!tgt) return; const r=tgt.getBoundingClientRect(), wr=w.getBoundingClientRect(); if(!r.width||!r.height) return; ld.style.left=(r.left-wr.left)+'px'; ld.style.top=(r.top-wr.top)+'px'; ld.style.width=r.width+'px'; ld.style.height=r.height+'px'; }catch(e){} }
 function _holdBar(prog, curTime){
   if(window._seekPct==null) return false;
   if(prog) prog.style.width=(window._seekPct*100)+'%';
