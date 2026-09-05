@@ -37,8 +37,7 @@ video{width:100%;aspect-ratio:16/9;min-height:220px;object-fit:cover;border-radi
 #clipProg{height:100%;width:0%;background:linear-gradient(90deg, var(--accent), #00d4ff);transition:none}
 #clipInfo:empty{display:none}#clipInfo{margin:0 16px 16px;padding:10px 14px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:12px;color:var(--muted);font-size:12px}
 @media(max-width:860px){main{grid-template-columns:1fr}h1{font-size:18px}}
-#video-loading{position:absolute;display:none;place-items:center;background:#000;z-index:3;border-radius:14px;overflow:hidden}#video-loading.show{display:grid}
-#video-loading{display:none!important}.spinner{width:44px;height:44px;border:3px solid rgba(255,255,255,0.15);border-top-color:#6c5cff;border-radius:50%;animation:spin 0.9s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}#ytWrap{position:relative;overflow:hidden;background:#000;border-radius:14px;height:360px}#yt{position:absolute;top:-120px;left:0;width:100%;height:calc(100% + 240px);pointer-events:none;border:0}#quality{display:none!important}</style>
+#video-loading{position:absolute;display:none;place-items:center;background:#000;z-index:3;border-radius:14px;overflow:hidden}#video-loading.show{display:grid}.spinner{width:44px;height:44px;border:3px solid rgba(255,255,255,0.15);border-top-color:#6c5cff;border-radius:50%;animation:spin 0.9s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}#ytWrap{position:relative;overflow:hidden;background:#000;border-radius:14px;height:360px}#yt{position:absolute;top:-120px;left:0;width:100%;height:calc(100% + 240px);pointer-events:none;border:0}#quality{display:none!important}</style>
 <meta name="theme-color" content="#14182e">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="icon" type="image/png" sizes="32x32" href="app/favicon-32.png"><link rel="icon" type="image/png" sizes="16x16" href="app/favicon-16.png"><link rel="icon" type="image/x-icon" href="app/favicon.ico"><link rel="icon" type="image/png" sizes="192x192" href="app/icon-192.png"><link rel="icon" type="image/png" sizes="512x512" href="app/icon-512.png"><link rel="apple-touch-icon" href="app/icon-192.png">
@@ -158,7 +157,7 @@ function applyFilter(){
   const qt=document.getElementById('qtype').value; 
   if(window._sec==='playphrase'){
     const q=(document.getElementById('phraseSearch')?.value||'').trim().toLowerCase();
-    if(!q){ filtered=[...clips]; pickRandom(); const _ci=document.getElementById('clipInfo'); if(_ci) _ci.textContent='🔍 Type a phrase and hit Search'; return; }
+    if(!q){ filtered=[...clips]; pickRandom(); const _ci=document.getElementById('clipInfo'); if(_ci) _ci.textContent=''; return; }
     filtered=clips.filter(c=> ((c.dutch_text||'')+' '+(c.correct_answer||'')).toLowerCase().includes(q));
     if(!filtered.length) filtered=clips.filter(c=> ((c.dutch_text||'')+' '+(c.correct_answer||'')).toLowerCase().split(/\s+/).some(w=>w.includes(q)));
     const _ci2=document.getElementById('clipInfo'); if(_ci2) _ci2.textContent=filtered.length?`🔍 Found ${filtered.length} clips for "${q}"`:`No matches for "${q}" — showing random`;
@@ -200,8 +199,8 @@ async function /* fetchYouTubeStream disabled: corsproxy 403 */ fetchYouTubeStre
 }
 
 async function setupPlayer(){
-  window._clipSeq=(window._clipSeq||0)+1; const _seq=window._clipSeq;
-  if(!v._bufBind){ v._bufBind=true; v.addEventListener('playing',()=>{ try{ document.getElementById('video-loading').classList.remove('show'); }catch(e){} }); } if(!window._fitBind){ window._fitBind=true; window.addEventListener('resize',()=>{ try{fitLoader();}catch(e){} }); window.addEventListener('orientationchange',()=>{ setTimeout(()=>{try{fitLoader();}catch(_){}},300); }); } requestAnimationFrame(()=>{ try{fitLoader();}catch(e){} }); setTimeout(()=>{ try{fitLoader();}catch(e){} },600);
+  window._clipSeq=(window._clipSeq||0)+1; const _seq=window._clipSeq; window._noLoad=false;
+  if(!v._bufBind){ v._bufBind=true; v.addEventListener('playing',()=>{ try{ document.getElementById('video-loading').classList.remove('show'); v.removeAttribute('poster'); }catch(e){} }); } if(!window._fitBind){ window._fitBind=true; window.addEventListener('resize',()=>{ try{fitLoader();}catch(e){} }); window.addEventListener('orientationchange',()=>{ setTimeout(()=>{try{fitLoader();}catch(_){}},300); }); } requestAnimationFrame(()=>{ try{fitLoader();}catch(e){} }); setTimeout(()=>{ try{fitLoader();}catch(e){} },600);
   try{ v.pause(); }catch(_){}
   try{ const _sp0=document.getElementById('segP'); if(_sp0) _sp0.pause(); }catch(_){}
   try{ if(window.segP) window.segP.pause(); }catch(_){}
@@ -303,7 +302,7 @@ async function setupPlayer(){
       return;
     }
   }
-  const _ld3=document.getElementById('video-loading'); if(_ld3) _ld3.classList.add('show');
+  if(!window._noLoad){ const _ld3=document.getElementById('video-loading'); if(_ld3) _ld3.classList.add('show'); }
   const isYTClip = cur.video_url && cur.video_url.includes("/yt/");
   const tiBtn=document.getElementById('toggleInfo'); if(tiBtn) tiBtn.style.display=isYTClip?'inline-block':'none';
   if(isYTClip){
@@ -317,7 +316,7 @@ async function setupPlayer(){
     const fb=document.getElementById('feedback'); if(fb) fb.textContent='';
     return;
   }
-  console.log('[HörKlar] load', cur.clip_id, cur.video_url); v.pause(); v.controls=false; v.src=cur.video_url; v.load();
+  console.log('[HörKlar] load', cur.clip_id, cur.video_url); v.pause(); v.controls=false; try{ v.setAttribute('poster','data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGNgYGAAAAAEAAH2FzhVAAAAAElFTkSuQmCC'); }catch(e){} v.src=cur.video_url; v.load();
   async function fetchYouTubeExp(key){ return null; }
   v.onerror=()=>{
     const ld=document.getElementById('video-loading'); if(ld) ld.classList.add('show');
@@ -325,8 +324,8 @@ async function setupPlayer(){
     cur._retries=(cur._retries||0)+1;
     if(cur._retries<7){
       const fb=document.getElementById('feedback');
-      if(fb) fb.textContent=`Loading… retry ${cur._retries}/7`;
-      const ld2=document.getElementById('video-loading'); if(ld2) ld2.classList.add('show');
+      if(fb && !window._noLoad) fb.textContent=`Loading… retry ${cur._retries}/7`;
+      if(!window._noLoad){ const ld2=document.getElementById('video-loading'); if(ld2) ld2.classList.add('show'); }
       setTimeout(()=>{ try{ v.load(); }catch(_){} setTimeout(()=>{ try{ v.play().catch(()=>{}); }catch(_){} },500); },3000*cur._retries);
       return;
     }
@@ -347,7 +346,7 @@ function _holdBar(prog, curTime){
   if((tgt!=null && curTime!=null && isFinite(curTime) && Math.abs(curTime-tgt)<0.5) || Date.now()>window._seekUntil){ window._seekPct=null; window._seekTarget=null; return false; }
   return true;
 }
-function autoReplay(){ try{ const _s=window._clipSeq; setTimeout(()=>{ try{ if(window._clipSeq!==_s) return; playClip(true); }catch(e){} },400); }catch(e){} }
+function autoReplay(){ try{ window._noLoad=true; setTimeout(()=>{ try{window._noLoad=false;}catch(e){} },2500); const _s=window._clipSeq; setTimeout(()=>{ try{ if(window._clipSeq!==_s) return; playClip(true); }catch(e){} },400); }catch(e){} }
 function playClip(forceSeek){
   const isYTpre = cur && (cur.provider==='youtube' || cur._fallbackYT);
   if(!forceSeek && isYTpre && ytPlayer && ytPlayer.getPlayerState){
