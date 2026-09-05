@@ -4518,7 +4518,7 @@
   "section": "series",
   "translations": {
    "en": "and after that all the little towns gradually changed",
-   "ar": "« ثم بعد ذلك » بعد كل كل الأمم « ت » ت « ت » ت « ت » ت « ت » ت « تُ « ت » ت « ت » ت « تُ بعد"
+   "ar": "ثم بعد ذلك تحولت كل البلدات الصغيرة تدريجيًا"
   },
   "translation_distractors": {
    "en": [
@@ -4533,7 +4533,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s0182",
@@ -7836,7 +7836,7 @@
   "section": "series",
   "translations": {
    "en": "- What? A bicycle dealer?",
-   "ar": "-ماذا؟"
+   "ar": "ماذا؟ تاجر دراجات؟"
   },
   "translation_distractors": {
    "en": [
@@ -7851,7 +7851,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s0331",
@@ -14639,8 +14639,8 @@
   "verified": true,
   "section": "series",
   "translations": {
-   "en": "What's that?",
-   "ar": "ما هذا؟"
+   "en": "What's that? Oh, the cheese.",
+   "ar": "ما هذا؟ آه، الجبن."
   },
   "translation_distractors": {
    "en": [
@@ -14655,7 +14655,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s0584",
@@ -14892,7 +14892,7 @@
   "section": "series",
   "translations": {
    "en": "A young man.",
-   "ar": "شاب شاب"
+   "ar": "من شاب."
   },
   "translation_distractors": {
    "en": [
@@ -14907,7 +14907,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s0590",
@@ -15647,8 +15647,8 @@
   "verified": true,
   "section": "series",
   "translations": {
-   "en": "And we shall pour out their flowers.",
-   "ar": "وسنصبّ أزهارهم"
+   "en": "And we're supposed to water their flowers.",
+   "ar": "ويجب أن نسقي أزهارهم."
   },
   "translation_distractors": {
    "en": [
@@ -15663,7 +15663,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s0613",
@@ -16236,7 +16236,7 @@
   "section": "series",
   "translations": {
    "en": "- Here, here, here's Yara's bike shop.",
-   "ar": "- هنا، هنا، هنا، هنا دكانِ yara."
+   "ar": "هنا، هنا، هنا محل دراجات يارا."
   },
   "translation_distractors": {
    "en": [
@@ -16251,7 +16251,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s0631",
@@ -16278,7 +16278,7 @@
   "section": "series",
   "translations": {
    "en": "– How do you get home now? Don't you travel by bus?",
-   "ar": "ألا تسافر بالحافلة؟"
+   "ar": "وكيف ستصلون إلى البيت الآن؟ ألا تسافرون بالحافلة؟"
   },
   "translation_distractors": {
    "en": [
@@ -16293,7 +16293,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s0632",
@@ -17160,7 +17160,7 @@
   "section": "series",
   "translations": {
    "en": "climate forecasts of researchers and experts,",
-   "ar": "والحاليـن والأخصائييـن"
+   "ar": "تحقق تنبؤات المناخ للباحثين والخبراء،"
   },
   "translation_distractors": {
    "en": [
@@ -17175,7 +17175,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s0701",
@@ -18210,7 +18210,7 @@
   "section": "series",
   "translations": {
    "en": "– By bus to Grafenplatz.",
-   "ar": "- بواسطة الحافلة إلى Grafenplatz."
+   "ar": "بواسطة الحافلة إلى غرافنبلاتز."
   },
   "translation_distractors": {
    "en": [
@@ -18225,7 +18225,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s0734",
@@ -19680,7 +19680,7 @@
   "section": "series",
   "translations": {
    "en": "And their mat.",
-   "ar": "ومؤؤاهم"
+   "ar": "ومرتبة نومهم."
   },
   "translation_distractors": {
    "en": [
@@ -19695,7 +19695,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s0797",
@@ -20058,7 +20058,7 @@
   "section": "series",
   "translations": {
    "en": "The phone number is 08007773344.",
-   "ar": "رقم الهاتف هو (08077773344)."
+   "ar": "رقم الهاتف هو (08007773344)."
   },
   "translation_distractors": {
    "en": [
@@ -20073,7 +20073,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s0808",
@@ -20184,7 +20184,7 @@
   "section": "series",
   "translations": {
    "en": "– How? – Brake!",
-   "ar": "-مبروك"
+   "ar": "كيف؟ – الفرامل!"
   },
   "translation_distractors": {
    "en": [
@@ -20199,7 +20199,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s0813",
@@ -21486,7 +21486,7 @@
   "section": "series",
   "translations": {
    "en": "- And your grandparents?",
-   "ar": "-وجدك؟"
+   "ar": "وأجدادك؟"
   },
   "translation_distractors": {
    "en": [
@@ -21501,7 +21501,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s0853",
@@ -28919,8 +28919,8 @@
   "verified": true,
   "section": "series",
   "translations": {
-   "en": "- Do you want a cookie?",
-   "ar": "-أتريدين كعكة؟"
+   "en": "Would you like a cookie? I baked it fresh this morning.",
+   "ar": "هل تريد قطعة بسكويت؟ خبزتها طازجة هذا الصباح."
   },
   "translation_distractors": {
    "en": [
@@ -28935,7 +28935,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s1124",
@@ -29340,7 +29340,7 @@
   "section": "series",
   "translations": {
    "en": "- And why? What's the problem?",
-   "ar": "-وما المشكلة؟"
+   "ar": "ولماذا؟ ما المشكلة؟"
   },
   "translation_distractors": {
    "en": [
@@ -29355,7 +29355,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s1138",
@@ -30978,7 +30978,7 @@
   "section": "series",
   "translations": {
    "en": "– Yara. August Strauss-Gasse 23.",
-   "ar": "آب/أغسطس"
+   "ar": "يارا. شارع أوغست شتراوسبرغ 23."
   },
   "translation_distractors": {
    "en": [
@@ -30993,7 +30993,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s1184",
@@ -32154,7 +32154,7 @@
   "section": "series",
   "translations": {
    "en": "– Not so good? Why not so good?",
-   "ar": "-ليس جيداً جداً؟"
+   "ar": "ليس جيدًا؟ لماذا ليس جيدًا؟"
   },
   "translation_distractors": {
    "en": [
@@ -32169,7 +32169,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s1236",
@@ -32825,8 +32825,8 @@
   "verified": true,
   "section": "series",
   "translations": {
-   "en": "- What are you gonna be called?",
-   "ar": "-ماذا ستُدعى؟"
+   "en": "I know. What do you want to be called this time? Jérôme? Rodrigo?",
+   "ar": "أعلم. ماذا تريد أن تُدعى هذه المرة؟ جيروم؟ رودريغو؟"
   },
   "translation_distractors": {
    "en": [
@@ -32841,7 +32841,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s1263",
@@ -33708,7 +33708,7 @@
   "section": "series",
   "translations": {
    "en": "- And your boss?",
-   "ar": "-ورئيسك؟"
+   "ar": "ورئيسك؟ هل هو لطيف؟"
   },
   "translation_distractors": {
    "en": [
@@ -33723,7 +33723,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s1288",
@@ -34715,8 +34715,8 @@
   "verified": true,
   "section": "series",
   "translations": {
-   "en": "==References==",
-   "ar": "== REFERS =="
+   "en": "in the west of Germany.",
+   "ar": "في غرب ألمانيا."
   },
   "translation_distractors": {
    "en": [
@@ -34731,7 +34731,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s1316",
@@ -34758,7 +34758,7 @@
   "section": "series",
   "translations": {
    "en": "first peel potatoes,",
-   "ar": "أولاً:"
+   "ar": "أولاً تُقشَّر البطاطس،"
   },
   "translation_distractors": {
    "en": [
@@ -34773,7 +34773,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s1318",
@@ -35052,7 +35052,7 @@
   "section": "series",
   "translations": {
    "en": "but by now they are naturally available in every greenhouse",
-   "ar": "« حتى الآن » أي في كل شيء من كل شيء من كل شيء من كل شيء من شيء كثير لا لا لا في خلق كل خلق كل خلق كل شيء من خ كل خلق كل شيء ، وفي كل"
+   "ar": "لكنها موجودة الآن بالطبع في كل صوبة زجاجية"
   },
   "translation_distractors": {
    "en": [
@@ -35067,7 +35067,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s1327",
@@ -36732,7 +36732,7 @@
   "section": "series",
   "translations": {
    "en": "and learn together. Why?",
-   "ar": "لماذا؟"
+   "ar": "ويتعلمان معًا. لماذا؟"
   },
   "translation_distractors": {
    "en": [
@@ -36747,7 +36747,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s1372",
@@ -37614,7 +37614,7 @@
   "section": "series",
   "translations": {
    "en": "- I like it.",
-   "ar": "-أحبه"
+   "ar": "يعجبني."
   },
   "translation_distractors": {
    "en": [
@@ -37629,7 +37629,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s1394",
@@ -40386,7 +40386,7 @@
   "section": "series",
   "translations": {
    "en": "- Hey, did you happen to see Nico?",
-   "ar": "-هل رأيت (نيكو)؟"
+   "ar": "مهلاً، هل رأيتم نيكو مصادفة؟ لقد قال،"
   },
   "translation_distractors": {
    "en": [
@@ -40401,7 +40401,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s1501",
@@ -44880,7 +44880,7 @@
   "section": "series",
   "translations": {
    "en": "– In a month? What good is that for?",
-   "ar": "-في شهر؟"
+   "ar": "في شهر؟ وما فائدة ذلك؟"
   },
   "translation_distractors": {
    "en": [
@@ -44895,7 +44895,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s1634",
@@ -45678,7 +45678,7 @@
   "section": "series",
   "translations": {
    "en": "- Really? Wow! – Yes!",
-   "ar": "نعم نعم نعم نعم نعم نعم نعم نعم نعم نعم نعم نعم نعم نعم نعم نعم نعم نعم نعم نعم نعم نعم نعم نعم نعم نعم نعم نعم نعم نعم نعم نعم نعم نعم نعم نعم نعم نعم نعم نعم"
+   "ar": "أحقًا؟ واو! – نعم!"
   },
   "translation_distractors": {
    "en": [
@@ -45693,7 +45693,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s1657",
@@ -46433,8 +46433,8 @@
   "verified": true,
   "section": "series",
   "translations": {
-   "en": "– I don't think that \"Jan im Sack\" is a court from Baden-Württemberg.",
-   "ar": "- لا أعتقد أن \"جان إم ساك\" محكمة من بادن-ورتمبرغ."
+   "en": "I don't think that 'Jan im Sack' is a dish from Baden-Württemberg.",
+   "ar": "لا أعتقد أن «يان إم زاك» طبق من بادن فورتمبرغ."
   },
   "translation_distractors": {
    "en": [
@@ -46449,7 +46449,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s1679",
@@ -46517,8 +46517,8 @@
   "verified": true,
   "section": "series",
   "translations": {
-   "en": "– Ach and Oldenburg is located in Baden-Württemberg?",
-   "ar": "-أتش واولدنبيرغ يقعان في بادن-فورتمبرغ؟"
+   "en": "Oh, and Oldenburg is in Baden-Württemberg?",
+   "ar": "آه، وهل تقع أولدنبورغ في بادن فورتمبرغ؟"
   },
   "translation_distractors": {
    "en": [
@@ -46533,7 +46533,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s1681",
@@ -47358,7 +47358,7 @@
   "section": "series",
   "translations": {
    "en": "- And he knows his way around. This is the opportunity for my idea.",
-   "ar": "هذه فرصة لفكرتي"
+   "ar": "وهو خبير بالمنطقة. هذه فرصة لفكرتي."
   },
   "translation_distractors": {
    "en": [
@@ -47373,7 +47373,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s1712",
@@ -50424,7 +50424,7 @@
   "section": "series",
   "translations": {
    "en": "- Where do you live now?",
-   "ar": "أين تعيشين؟"
+   "ar": "أين تسكن الآن؟"
   },
   "translation_distractors": {
    "en": [
@@ -50439,7 +50439,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s1813",
@@ -53448,7 +53448,7 @@
   "section": "series",
   "translations": {
    "en": "- Hey!",
-   "ar": "-أنت!"
+   "ar": "مهلاً! – تفضل."
   },
   "translation_distractors": {
    "en": [
@@ -53463,7 +53463,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s1939",
@@ -54162,7 +54162,7 @@
   "section": "series",
   "translations": {
    "en": "Oh, Nico.",
-   "ar": "(نيكو)"
+   "ar": "أوه! آه، نيكو."
   },
   "translation_distractors": {
    "en": [
@@ -54177,7 +54177,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s1963",
@@ -55842,7 +55842,7 @@
   "section": "series",
   "translations": {
    "en": "And I thought,",
-   "ar": "وفكرت"
+   "ar": "وكنت أظن،"
   },
   "translation_distractors": {
    "en": [
@@ -55857,7 +55857,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s2012",
@@ -57648,7 +57648,7 @@
   "section": "series",
   "translations": {
    "en": "– Where does Yara live? Do you have an address?",
-   "ar": "-أين تعيش (يارا)؟"
+   "ar": "أين تسكن يارا؟ هل لديك عنوان؟"
   },
   "translation_distractors": {
    "en": [
@@ -57663,7 +57663,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s2096",
@@ -58152,7 +58152,7 @@
   "section": "series",
   "translations": {
    "en": "- But where is that? Do you know Yara's bicycle shop?",
-   "ar": "هل تعرف دراجات (يارا)؟"
+   "ar": "لكن أين ذلك؟ هل تعرفون محل دراجات يارا؟"
   },
   "translation_distractors": {
    "en": [
@@ -58167,7 +58167,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s2114",
@@ -61008,7 +61008,7 @@
   "section": "series",
   "translations": {
    "en": "– What are you doing in your spare time? Do you like to jog?",
-   "ar": "-ماذا تفعل في وقت فراغك؟"
+   "ar": "ماذا تفعل في وقت فراغك؟ هل تحب الركض؟"
   },
   "translation_distractors": {
    "en": [
@@ -61023,7 +61023,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s2269",
@@ -66216,7 +66216,7 @@
   "section": "series",
   "translations": {
    "en": "Maybe your room soon?",
-   "ar": "هل من الممكن أن تكون غرفتك في هذا الوقت؟"
+   "ar": "ربما غرفتك قريبًا؟"
   },
   "translation_distractors": {
    "en": [
@@ -66231,7 +66231,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s2509",
@@ -67013,8 +67013,8 @@
   "verified": true,
   "section": "series",
   "translations": {
-   "en": "- Great.",
-   "ar": "-عظيم."
+   "en": "Great. And you?",
+   "ar": "عظيم. وأنت؟"
   },
   "translation_distractors": {
    "en": [
@@ -67029,7 +67029,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s2535",
@@ -67097,8 +67097,8 @@
   "verified": true,
   "section": "series",
   "translations": {
-   "en": "- And you?",
-   "ar": "-وأنت؟"
+   "en": "And you? Who are you?",
+   "ar": "وأنت؟ من أنت؟"
   },
   "translation_distractors": {
    "en": [
@@ -67113,7 +67113,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s2539",
@@ -75918,7 +75918,7 @@
   "section": "series",
   "translations": {
    "en": "- You'll be surprised!",
-   "ar": "-ستفاجأين"
+   "ar": "سوف تندهش!"
   },
   "translation_distractors": {
    "en": [
@@ -75933,7 +75933,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s2947",
@@ -77178,7 +77178,7 @@
   "section": "series",
   "translations": {
    "en": "Thank you! – Welcome!",
-   "ar": "شكراً لكم - مرحباً بكم - مرحباً بكم - مرحباً بكم - مرحباً بكم - مرحباً بكم - مرحباً بكم - مرحباً بكم - مرحباً بكم - مرحباً بكم -"
+   "ar": "شكرًا لك! – أهلاً وسهلاً!"
   },
   "translation_distractors": {
    "en": [
@@ -77193,7 +77193,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s2980",
@@ -83561,8 +83561,8 @@
   "verified": true,
   "section": "series",
   "translations": {
-   "en": "- And back!",
-   "ar": "-وظهراً"
+   "en": "And back! Come on, run, boys!",
+   "ar": "والعودة! هيا، اركضوا يا شباب!"
   },
   "translation_distractors": {
    "en": [
@@ -83577,7 +83577,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s3339",
@@ -87888,7 +87888,7 @@
   "section": "series",
   "translations": {
    "en": "- You mean a used one?",
-   "ar": "-تقصدين مستعملاً؟"
+   "ar": "أتقصد مستعملًا؟"
   },
   "translation_distractors": {
    "en": [
@@ -87903,7 +87903,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s3501",
@@ -88518,7 +88518,7 @@
   "section": "series",
   "translations": {
    "en": "– Together. How much does it cost?",
-   "ar": "-كم تكلفته؟"
+   "ar": "معًا. كم ثمن ذلك؟"
   },
   "translation_distractors": {
    "en": [
@@ -88533,7 +88533,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s3520",
@@ -89400,7 +89400,7 @@
   "section": "series",
   "translations": {
    "en": "– Why should she not agree with me?",
-   "ar": "-لماذا لا توافقني؟"
+   "ar": "لماذا قد تعترض عليّ؟"
   },
   "translation_distractors": {
    "en": [
@@ -89415,7 +89415,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s3552",
@@ -93978,7 +93978,7 @@
   "section": "series",
   "translations": {
    "en": "– Yes. In our family, there was often roulade for lunch at Easter.",
-   "ar": "- نعم، في عائلتنا، كان هناك في أغلب الأحيان roulad لتناول الغداء في عيد الفصح."
+   "ar": "نعم، في عائلتنا كانوا يقدمون الرولاد على الغداء في عيد الفصح غالبًا."
   },
   "translation_distractors": {
    "en": [
@@ -93993,7 +93993,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s3733",
@@ -101496,7 +101496,7 @@
   "section": "series",
   "translations": {
    "en": "– Is Nico's bag in your taxi? – Nico's bag? No. The bag is not in the taxi.",
-   "ar": "-هل حقيبة (نيكو) في سيّارتك الأجرة؟"
+   "ar": "هل حقيبة نيكو في سيارة الأجرة؟ – حقيبة نيكو؟ لا. الحقيبة ليست في السيارة."
   },
   "translation_distractors": {
    "en": [
@@ -101511,7 +101511,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s3974",
@@ -102209,8 +102209,8 @@
   "verified": true,
   "section": "series",
   "translations": {
-   "en": "- I'm going to get cleaned up.",
-   "ar": "-سأنظف نفسي"
+   "en": "I'm going to freshen up quickly.",
+   "ar": "سأنتعش سريعًا."
   },
   "translation_distractors": {
    "en": [
@@ -102225,7 +102225,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s4091",
@@ -103680,7 +103680,7 @@
   "section": "series",
   "translations": {
    "en": "- What are you talking about?",
-   "ar": "-عم تتحدث؟"
+   "ar": "عن ماذا تتحدثون؟"
   },
   "translation_distractors": {
    "en": [
@@ -103695,7 +103695,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s4197",
@@ -106200,7 +106200,7 @@
   "section": "series",
   "translations": {
    "en": "– How did you come up with the idea for the flea market?",
-   "ar": "-كيف توصلت إلى فكرة السوق؟"
+   "ar": "كيف خطرت لك فكرة سوق السلع المستعملة؟"
   },
   "translation_distractors": {
    "en": [
@@ -106215,7 +106215,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s4287",
@@ -107292,7 +107292,7 @@
   "section": "series",
   "translations": {
    "en": "- I'm very pleased. Thank you for the invitation.",
-   "ar": "-شكراً على الدعوة"
+   "ar": "سعدت بلقائك. شكرًا على الدعوة."
   },
   "translation_distractors": {
    "en": [
@@ -107307,7 +107307,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s4320",
@@ -109350,7 +109350,7 @@
   "section": "series",
   "translations": {
    "en": "– Selma – is she... refugee? – Yes, she is a refugee.",
-   "ar": "-هل هي لاجئة؟"
+   "ar": "سلمى – هل هي… لاجئة؟ – نعم، إنها لاجئة."
   },
   "translation_distractors": {
    "en": [
@@ -109365,7 +109365,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s4382",
@@ -113423,8 +113423,8 @@
   "verified": true,
   "section": "series",
   "translations": {
-   "en": "– Hm...",
-   "ar": "-..."
+   "en": "Hm... sorry,",
+   "ar": "هم… عذرًا،"
   },
   "translation_distractors": {
    "en": [
@@ -113439,7 +113439,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s4535",
@@ -113550,7 +113550,7 @@
   "section": "series",
   "translations": {
    "en": "– I just started with B1 level. – That sounds good. – Mm. Did you take the A2 exam?",
-   "ar": "هذا يبدو جيداً هل قمت بامتحان A2؟"
+   "ar": "لقد بدأت للتو بمستوى B1. – هذا يبدو جيدًا. – همم. هل أجريت امتحان A2؟"
   },
   "translation_distractors": {
    "en": [
@@ -113565,7 +113565,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s4542",
@@ -115734,7 +115734,7 @@
   "section": "series",
   "translations": {
    "en": "In the evening it may still rain",
-   "ar": "« في المساء إذا س س س س س س س س س س س س س س س س س س س س س س س س س س س س س س س س س س س س"
+   "ar": "ربما تمطر في المساء"
   },
   "translation_distractors": {
    "en": [
@@ -115749,7 +115749,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s4770",
@@ -117288,7 +117288,7 @@
   "section": "series",
   "translations": {
    "en": "On the territory of a former open pit in the Ruhr area",
-   "ar": "في منطقة الرهون"
+   "ar": "في منطقة منجم مكشوف سابق في منطقة الرور"
   },
   "translation_distractors": {
    "en": [
@@ -117303,7 +117303,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s4843",
@@ -118212,7 +118212,7 @@
   "section": "series",
   "translations": {
    "en": "– What is your profession? Don't you work as a teacher?",
-   "ar": "ألا تعمل كمدرس؟"
+   "ar": "ما هي مهنتك؟ ألا تعملين كمعلمة؟"
   },
   "translation_distractors": {
    "en": [
@@ -118227,7 +118227,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s4867",
@@ -121698,7 +121698,7 @@
   "section": "series",
   "translations": {
    "en": "- I ran away.",
-   "ar": "-أدّرتُ."
+   "ar": "لقد هربت."
   },
   "translation_distractors": {
    "en": [
@@ -121713,7 +121713,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s5027",
@@ -124722,7 +124722,7 @@
   "section": "series",
   "translations": {
    "en": "- You'll get it all back!",
-   "ar": "-ستستعيده كله"
+   "ar": "ستستعيد كل شيء!"
   },
   "translation_distractors": {
    "en": [
@@ -124737,7 +124737,7 @@
    ]
   },
   "transcript_source": "dw_manual_subs",
-  "translation_source": "opus-mt-local (de-en direct; ar via en pivot)"
+  "translation_source": "opus-mt-local (de-en direct; ar via en pivot) + hand-fixed"
  },
  {
   "clip_id": "de_nico_s5185",
