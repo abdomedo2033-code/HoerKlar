@@ -109,7 +109,8 @@ def transcribe_batch(wavs, lang="de"):
 
 
 def run_whisper_fallback(video_id, title, workdir, vocab=(), seed=41,
-                         on_partial=None, cefr="A2", max_new=12):
+                         on_partial=None, cefr="A2", max_new=12,
+                         section="myvideos"):
     """Returns clips. Streams first quizzes via on_partial as soon as ready."""
     import sys
     sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),
@@ -145,7 +146,7 @@ def run_whisper_fallback(video_id, title, workdir, vocab=(), seed=41,
             "dutch_text": txt, "correct_answer": txt,
             "wrong_answers": make_distractors(txt, vocab, rng),
             "cefr": cefr, "difficulty": 2,
-            "verified": False, "section": "myvideos",
+            "verified": False, "section": section,
             "transcript_source": "whisper_tiny_sample",
             "rights_status": "EMBED_ONLY",
         })

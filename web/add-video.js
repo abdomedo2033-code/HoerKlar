@@ -52,16 +52,18 @@
       const err = document.getElementById('addVideoErr');
       err.textContent = '';
       const url = inp.value;
+      const secInput = document.getElementById('addVideoSection');
+      const section = (window.ClientIngest ? window.ClientIngest.slugSection(secInput && secInput.value) : 'myvideos') || 'myvideos';
       // Path A — Android app: device fetches subtitles natively, zero server.
       if (window.HKNative && window.ClientIngest) {
         const vid = window.ClientIngest.videoId(url);
         if (!vid) { err.textContent = 'could not find a YouTube video id in that URL'; return; }
         document.getElementById('addVideoModal').hidden = true;
-        inp.value = '';
+        inp.value = ''; if (secInput) secInput.value = '';
         const card = this.card();
         try {
-          const res = await window.ClientIngest.ingestNative(vid, (stage, p) => card.progress(stage, p));
-          card.done('✅ ' + res.n + ' quizzes ready in My videos');
+          const res = await window.ClientIngest.ingestNative(vid, (stage, p) => card.progress(stage, p), section);
+          card.done('✅ ' + res.n + ' quizzes ready in ' + window.ClientIngest.prettySection(res.section) + ' — ' + res.title);
         } catch (e) { card.done('Failed: ' + e.message, true); }
         return;
       }
@@ -69,7 +71,7 @@
       try {
         const r = await fetch(this.api + '/api/ingest', {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ url, user: this.user }),
+          body: JSON.stringify({ url, user: this.user, section }),
         });
         const j = await r.json();
         if (!r.ok) throw new Error(j.error || ('http ' + r.status));
@@ -111,7 +113,8 @@
       const tick = async () => {
         try {
           const j = await (await fetch(this.api + '/api/jobs/' + jobId)).json();
-          stageEl.textContent = STAGE_LABEL[j.stage] || STAGE_LABEL[j.status] || j.status;
+          const vtitle = j.title ? ' — ' + j.title : '';
+          stageEl.textContent = (STAGE_LABEL[j.stage] || STAGE_LABEL[j.status] || j.status) + vtitle;
           progEl.style.width = Math.round((j.progress || 0) * 100) + '%';
           const n = (j.clips_ready || []).length;
           if (n > seen) {
@@ -122,7 +125,8 @@
           if (j.status === 'done' || j.status === 'error') {
             clearInterval(t);
             if (j.status === 'done') {
-              card.querySelector('.jc-title').textContent = `✅ ${n} quizzes ready in My videos`;
+              const sec = (window.ClientIngest ? window.ClientIngest.prettySection(j.section) : null) || '⭐ My videos';
+              card.querySelector('.jc-title').textContent = `✅ ${n} quizzes ready in ${sec}${j.title ? ' — ' + j.title : ''}`;
               window.dispatchEvent(new CustomEvent('hk:clips-updated', { detail: { section: 'myvideos' } }));
               setTimeout(() => card.remove(), 15000);
             } else { stageEl.textContent = 'Failed: ' + (j.error || 'unknown error'); }

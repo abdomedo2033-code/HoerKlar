@@ -141,7 +141,8 @@
     return outs.slice(0, 3);
   }
 
-  function makeClips(vid, title, wins, trCues) {
+  function makeClips(vid, title, wins, trCues, section) {
+    section = section || 'myvideos';
     return wins.map(([s, e, txt]) => {
       const c = {
         clip_id: 'yt_' + vid + '_' + s, provider: 'youtube', video_id: vid,
@@ -149,7 +150,7 @@
         title: title + ' — ' + s + '-' + e + 's',
         start_time: s, end_time: e, dutch_text: txt, correct_answer: txt,
         wrong_answers: distractors(txt), cefr: 'A2', difficulty: 2,
-        verified: false, section: 'myvideos',
+        verified: false, section: section,
         transcript_source: window.HKNative ? 'app_native_subs' : 'client_subs',
         rights_status: 'EMBED_ONLY',
       };
@@ -177,6 +178,7 @@
       if (typeof applyFilter === 'function') applyFilter();
     } catch (_) { /* page context differs — clips are still cached */ }
     try { window.dispatchEvent(new CustomEvent('hk:clips-updated', { detail: { section: 'myvideos' } })); } catch (_) {}
+    try { if (typeof refreshSections === 'function') refreshSections(); } catch (_) {}
     return newClips.length;
   }
 
@@ -192,7 +194,8 @@
   }
 
   // PATH A — Android app, native subtitles, zero server.
-  async function ingestNative(vid, onStage) {
+  async function ingestNative(vid, onStage, section) {
+    section = slugSection(section);
     onStage('Reading subtitles on device…', 0.15);
     const raw = window.HKNative.getSubtitles('https://www.youtube.com/watch?v=' + vid);
     const info = JSON.parse(raw);
@@ -213,9 +216,40 @@
     }
     const title = info.title || 'YouTube video';
     onStage('Saving ' + wins.length + ' quizzes…', 0.8);
-    const n = await persistAndShow(makeClips(vid, title, wins, trCues));
-    return { n, title, source: 'device' };
+    const n = await persistAndShow(makeClips(vid, title, wins, trCues, section));
+    return { n, title, section, source: 'device' };
   }
 
-  window.ClientIngest = { videoId, ingestNative, parseCues, buildWindows, distractors };
+  function slugSection(s) {
+    s = String(s || '').toLowerCase().replace(/[^a-z0-9 _-]/g, '').trim().replace(/[\s-]+/g, '_').slice(0, 24);
+    return s || 'myvideos';
+  }
+  function prettySection(s) {
+    if (s === 'myvideos') return '⭐ My videos';
+    return '📁 ' + s.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+  }
+
+  // Add filter buttons for any personal sections present in clips.
+  function refreshSections() {
+    try {
+      const bar = document.getElementById('filters');
+      if (!bar || typeof clips === 'undefined') return;
+      const known = new Set();
+      bar.querySelectorAll('.secbtn').forEach((b) => known.add(b.dataset.sec));
+      const secs = [...new Set(clips.map((c) => c.section || 'movies'))]
+        .filter((s) => !known.has(s) && s !== 'all' && s !== 'playphrase');
+      for (const s of secs) {
+        const b = document.createElement('button');
+        b.className = 'secbtn'; b.dataset.sec = s; b.textContent = prettySection(s);
+        b.onclick = () => {
+          window._sec = s;
+          bar.querySelectorAll('.secbtn').forEach((x) => x.classList.toggle('active', x === b));
+          if (typeof applyFilter === 'function') applyFilter();
+        };
+        bar.appendChild(b);
+      }
+    } catch (_) { /* page context differs */ }
+  }
+
+  window.ClientIngest = { videoId, ingestNative, parseCues, buildWindows, distractors, refreshSections, slugSection, prettySection };
 })();

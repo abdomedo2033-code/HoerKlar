@@ -236,7 +236,7 @@ def attach_translations(base, windows):
 
 
 def run_fastpath(video_id, title, workdir, vocab=(), seed=41,
-                 on_partial=None, cefr="A2"):
+                 on_partial=None, cefr="A2", section="myvideos"):
     """Full fast path. on_partial(list_of_clips) streams early quizzes (Phase 4)."""
     rng = random.Random(seed)
     vocab = sorted(set(vocab)) or ["Wasser", "Zeit", "Leute"]
@@ -263,7 +263,7 @@ def run_fastpath(video_id, title, workdir, vocab=(), seed=41,
             "dutch_text": txt, "correct_answer": txt,
             "wrong_answers": make_distractors(txt, vocab, rng),
             "cefr": cefr, "difficulty": {"A1": 1, "A2": 2, "B1": 3}.get(cefr, 2),
-            "verified": False, "section": "myvideos",
+            "verified": False, "section": section,
             "transcript_source": "youtube_subs",
             "rights_status": "EMBED_ONLY",
         }

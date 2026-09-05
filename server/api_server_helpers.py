@@ -17,7 +17,8 @@ def append_myvideos(data_dir, clips, limit=40):
     for c in clips:
         c = dict(c)
         c["verified"] = False
-        c["section"] = "myvideos"
+        # Keep the user's custom section (e.g. nicos2); default to myvideos.
+        c["section"] = (c.get("section") or "myvideos")[:24] or "myvideos"
         c.setdefault("rights_status", "EMBED_ONLY")
         if c.get("clip_id") and c["clip_id"] not in have:
             mine.append(c)

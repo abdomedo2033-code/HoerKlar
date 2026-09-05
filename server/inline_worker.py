@@ -49,6 +49,7 @@ def title_of(video_id):
 def process_one(data_dir, queue_store, job):
     import pipeline_fastpath as fp
     jid, vid = job["job_id"], job["video_id"]
+    section = (job.get("section") or "myvideos")[:24] or "myvideos"
     workdir = os.path.join(data_dir, "tmp_inline")
     os.makedirs(workdir, exist_ok=True)
     vocab = load_vocab(data_dir)
@@ -61,8 +62,9 @@ def process_one(data_dir, queue_store, job):
         queue_store.update(data_dir, jid, status="fetching_subs",
                            stage="subs", progress=0.1)
         title = title_of(vid) or job.get("url", vid)
+        queue_store.update(data_dir, jid, title=title[:160])
         clips = fp.run_fastpath(vid, title, workdir, vocab=vocab,
-                                on_partial=stream)
+                                on_partial=stream, section=section)
         # persist like POST /complete (import here: api_server owns the file layout)
         import api_server_helpers as helpers
         added = helpers.append_myvideos(data_dir, clips)

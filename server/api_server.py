@@ -128,6 +128,7 @@ class H(BaseHTTPRequestHandler):
             payload = _body(self)
             url = (payload.get("url") or "").strip()
             user = (payload.get("user") or "local")[:64] or "local"
+            section = re.sub(r"[^a-z0-9 _-]", "", (payload.get("section") or "").lower()).strip().replace(" ", "_").replace("-", "_")[:24] or "myvideos"
             vid, canon_or_err = guards.extract_video_id(url)
             if not vid:
                 return _send(self, 400, {"error": canon_or_err})
@@ -135,8 +136,9 @@ class H(BaseHTTPRequestHandler):
             if not ok:
                 return _send(self, 429, {"error": msg})
             # Dedup: same video already queued/active for this user?
-            job = queue_store.create(DATA, video_id=vid, url=canon_or_err, user=user)
+            job = queue_store.create(DATA, video_id=vid, url=canon_or_err, user=user, section=section)
             return _send(self, 200, {"job_id": job["job_id"], "status": "queued",
+                                     "section": section,
                                      "poll": f"/api/jobs/{job['job_id']}"})
         m = re.fullmatch(r"/api/jobs/([0-9a-f]+)/(progress|complete)", u.path)
         if m:
@@ -145,13 +147,14 @@ class H(BaseHTTPRequestHandler):
             job_id, action = m.group(1), m.group(2)
             payload = _body(self)
             if action == "progress":
-                job = queue_store.update(
-                    DATA, job_id,
-                    status=payload.get("status", "fetching_subs"),
-                    stage=payload.get("stage", ""),
-                    progress=float(payload.get("progress", 0) or 0),
-                    clips_ready=payload.get("clips_ready", []) or
-                    (queue_store.get(DATA, job_id) or {}).get("clips_ready", []))
+                fields = dict(status=payload.get("status", "fetching_subs"),
+                              stage=payload.get("stage", ""),
+                              progress=float(payload.get("progress", 0) or 0),
+                              clips_ready=payload.get("clips_ready", []) or
+                              (queue_store.get(DATA, job_id) or {}).get("clips_ready", []))
+                if payload.get("title"):
+                    fields["title"] = str(payload["title"])[:160]
+                job = queue_store.update(DATA, job_id, **fields)
                 if not job:
                     return _send(self, 404, {"error": "unknown job"})
                 return _send(self, 200, job)

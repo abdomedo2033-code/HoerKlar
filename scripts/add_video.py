@@ -88,6 +88,7 @@ def main():
     ap.add_argument("url")
     ap.add_argument("--cefr", default="A2")
     ap.add_argument("--max", type=int, default=12)
+    ap.add_argument("--section", default="myvideos")
     args = ap.parse_args()
 
     vid, canon_or_err = guards.extract_video_id(args.url)
@@ -104,12 +105,13 @@ def main():
     try:
         print("Fast path: subtitles…")
         clips = run_fastpath(vid, title, workdir, vocab=vocab,
-                             cefr=args.cefr)[:args.max]
+                             cefr=args.cefr, section=args.section)[:args.max]
     except NoSubtitles:
         print("No subtitles — slow path: Whisper sampling (takes minutes)…")
         from whisper_fallback import run_whisper_fallback
         clips = run_whisper_fallback(vid, title, workdir, vocab=vocab,
-                                     cefr=args.cefr, max_new=args.max)
+                                     cefr=args.cefr, max_new=args.max,
+                                     section=args.section)
     if not clips:
         raise SystemExit("No usable clips (music/unclear audio?) — nothing added.")
 

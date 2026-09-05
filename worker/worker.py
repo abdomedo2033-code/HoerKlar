@@ -51,6 +51,7 @@ def post_progress(job_id, **fields):
 def handle(job):
     from pipeline_fastpath import run_fastpath, NoSubtitles
     jid, vid = job["job_id"], job["video_id"]
+    section = (job.get("section") or "myvideos")[:24] or "myvideos"
     title = job.get("url", vid)
     os.makedirs(WORKDIR, exist_ok=True)
     print(f"[worker] job {jid} video {vid}", flush=True)
@@ -63,14 +64,15 @@ def handle(job):
     try:
         post_progress(jid, status="fetching_subs", stage="subs", progress=0.1)
         clips = run_fastpath(vid, title, WORKDIR, vocab=load_vocab(),
-                             on_partial=stream, cefr=CEFR)
+                             on_partial=stream, cefr=CEFR, section=section)
         print(f"[worker] fast-path done: {len(clips)} clips", flush=True)
     except NoSubtitles:
         from whisper_fallback import run_whisper_fallback
         print("[worker] no subs -> Whisper sampling fallback", flush=True)
         post_progress(jid, status="transcribing", stage="whisper", progress=0.2)
         clips = run_whisper_fallback(vid, title, WORKDIR, vocab=load_vocab(),
-                                     on_partial=stream, cefr=CEFR)
+                                     on_partial=stream, cefr=CEFR,
+                                     section=section)
         print(f"[worker] whisper done: {len(clips)} clips", flush=True)
     res = _req("POST", f"/api/jobs/{jid}/complete", {"clips": clips})
     print(f"[worker] completed: +{res.get('added', 0)} clips", flush=True)
