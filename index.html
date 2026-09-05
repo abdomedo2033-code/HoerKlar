@@ -622,6 +622,7 @@ window.browserWhisper = async function(){
 window.HK_API_BASE = (function(){ try{ return localStorage.hk_api || "https://hoerklar-api.onrender.com"; }catch(_){ return "https://hoerklar-api.onrender.com"; } })();
 (function bootHK(){
   var done=function(){ try{ if(window.AddVideo) AddVideo.init({}); }catch(_){} load(); };
+  try{ var seed=window.__SEED_MYVIDEOS||[]; if(seed.length){ var h0={}; clips.forEach(function(c){ h0[c.clip_id]=1; }); seed.forEach(function(c){ if(!h0[c.clip_id]) clips.push(c); }); } }catch(_){}
   try{
     fetch(window.HK_API_BASE + '/api/clips?section=myvideos').then(function(r){ return r.ok ? r.json() : []; }).then(function(mine){
       if(mine && mine.length){ var have={}; clips.forEach(function(c){ have[c.clip_id]=1; }); mine.forEach(function(c){ if(!have[c.clip_id]) clips.push(c); }); }
@@ -630,4 +631,4 @@ window.HK_API_BASE = (function(){ try{ return localStorage.hk_api || "https://ho
   }catch(_){ done(); }
 })();
 if(location.protocol!=='file:' && 'serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(()=>{});
-</script><script src="web/clips-loader.js"></script><script src="web/add-video.js"></script></body></html>
+</script><script src="web/myvideos-baked.js"></script><script src="web/clips-loader.js"></script><script src="web/add-video.js"></script></body></html>
