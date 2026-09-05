@@ -82,15 +82,29 @@ def parse_vtt(path):
 
 
 def fetch_subs(video_id, workdir, langs=("de.*", "en-de", "ar-de")):
+    """Two attempts: default clients, then mobile clients (android/ios/tv are
+    far less bot-checked than datacenter 'web' requests). Full log kept."""
     base = os.path.join(workdir, f"subs_{video_id}")
-    proc = subprocess.run(
-        [YTDLP, "--no-warnings", "--skip-download",
-         "--write-subs", "--write-auto-subs",
-         "--sub-langs", ",".join(langs), "--sub-format", "vtt/best",
-         "-o", base, f"https://www.youtube.com/watch?v={video_id}"],
-        env=ENV, capture_output=True, timeout=120)
-    open(base + ".fetch.log", "w", encoding="utf-8").write(
-        f"rc={proc.returncode}\nSTDERR:\n{_tail(proc.stderr)}\nSTDOUT:\n{_tail(proc.stdout)}")
+    attempts = [
+        [],
+        ["--extractor-args", "youtube:player_client=android,ios,tv"],
+    ]
+    last = None
+    for extra in attempts:
+        proc = subprocess.run(
+            [YTDLP, "--no-warnings", "--skip-download",
+             "--write-subs", "--write-auto-subs",
+             "--sub-langs", ",".join(langs), "--sub-format", "vtt/best",
+             ] + extra + ["-o", base,
+                          f"https://www.youtube.com/watch?v={video_id}"],
+            env=ENV, capture_output=True, timeout=120)
+        last = proc
+        open(base + ".fetch.log", "w", encoding="utf-8").write(
+            f"rc={proc.returncode}\nEXTRA={extra}\nSTDERR:\n"
+            + proc.stderr.decode("utf-8", "ignore")
+            + "\nSTDOUT:\n" + proc.stdout.decode("utf-8", "ignore"))
+        if glob.glob(base + "*.vtt"):
+            break
     return base
 
 
@@ -230,7 +244,7 @@ def run_fastpath(video_id, title, workdir, vocab=(), seed=41,
     cues, used = pick_de_cues(base)
     if not cues:
         try:
-            log = open(base + ".fetch.log", encoding="utf-8").read()[-400:]
+            log = open(base + ".fetch.log", encoding="utf-8").read()[-800:]
         except Exception:
             log = "no fetch log"
         raise NoSubtitles(f"no German subtitles for {video_id} | {log}")
