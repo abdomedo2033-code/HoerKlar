@@ -257,15 +257,7 @@ async function setupPlayer(){
       v.onloadeddata=seek;
       v.addEventListener('canplay',function ap(){ v.removeEventListener('canplay',ap); const ld=document.getElementById('video-loading'); if(ld) ld.classList.remove('show'); try{ v.currentTime=cur.start_time; }catch(e){} setTimeout(()=>{ if(window._clipSeq===_seq){ try{playClip(true);}catch(e){} } },90); },{once:true}); setTimeout(seek,400); if(v.readyState>=2){ try{ v.currentTime=cur.start_time; }catch(e){} setTimeout(()=>{ if(window._clipSeq===_seq && v.paused){ try{playClip(true);}catch(e){} } },120); } setTimeout(()=>{ if(window._clipSeq===_seq && v.paused && !window._clipDragging && v.currentTime<cur.start_time+0.6){ try{ v.currentTime=cur.start_time; }catch(e){} try{playClip(true);}catch(e){} } },1600);
       v.onerror=()=>{
-        const ld=document.getElementById('video-loading'); if(ld) ld.classList.add('show');
-        if(cur.local_video){ v.src=cur.local_video; v.load(); v.play().then(()=>{ if(ld) ld.classList.remove('show'); }).catch(()=>{ if(ld) ld.classList.remove('show'); }); return; }
-        cur._retries=(cur._retries||0)+1;
-        if(cur._retries<7){
-          const fb=document.getElementById('feedback');
-          if(fb) fb.textContent=`Loading… retry ${cur._retries}/7 — tap player to retry now`;
-          setTimeout(()=>{ try{ v.load(); }catch(_){} setTimeout(()=>{ try{ v.play().catch(()=>{}); }catch(_){} },500); },3000*cur._retries);
-          return;
-        }
+if(cur.local_video){ v.src=cur.local_video; v.load(); v.play().then(()=>{ if(ld) ld.classList.remove('show'); }).catch(()=>{ if(ld) ld.classList.remove('show'); }); return; }
         const fb=document.getElementById('feedback');
         if(fb) fb.innerHTML=`Video failed — <a href="${cur.embed_url}" target="_blank" style="color:#b8c0ff">Watch on YouTube ↗</a>`;
         if(ld) ld.classList.remove('show');
@@ -292,9 +284,9 @@ async function setupPlayer(){
     const ld=document.getElementById('video-loading'); if(ld) ld.classList.remove('show');
     if(cur.video_url && cur.video_url.includes("/yt/") && cur.video_id){
       const u=await fetchYouTubeExp(cur.video_id);
-      if(u){ v.src=u; v.load(); v.play().then(()=>{ if(ld) ld.classList.remove('show'); }).catch(()=>{}); return; }
+      if(u){ v.src=u; v.load(); v.play().then(()=>{ const ld=document.getElementById('video-loading'); if(ld) ld.classList.remove('show'); }).catch(()=>{ const ld=document.getElementById('video-loading'); if(ld) ld.classList.remove('show'); }); return; }
     }
-    if(cur.local_video){ v.src=cur.local_video; v.load(); v.play().then(()=>{ if(ld) ld.classList.remove('show'); }).catch(()=>{}); return; }
+    if(cur.local_video){ v.src=cur.local_video; v.load(); v.play().then(()=>{ const ld=document.getElementById('video-loading'); if(ld) ld.classList.remove('show'); }).catch(()=>{ const ld=document.getElementById('video-loading'); if(ld) ld.classList.remove('show'); }); return; }
     const fb=document.getElementById('feedback');
     if(fb) fb.innerHTML=`Video failed — <a href="${cur.embed_url}" target="_blank" style="color:#b8c0ff">Watch on YouTube ↗</a>`;
   };

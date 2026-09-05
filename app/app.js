@@ -191,15 +191,7 @@ function setupPlayer(){
 
   const _ld3=document.getElementById('video-loading'); if(_ld3) _ld3.classList.add('show');
   v.onerror=()=>{
-    const ld=document.getElementById('video-loading'); if(ld) ld.classList.add('show');
-    if(cur.local_video){ v.src=cur.local_video; v.load(); v.play().then(()=>{ if(ld) ld.classList.remove('show'); }).catch(()=>{ if(ld) ld.classList.remove('show'); }); return; }
-    cur._retries=(cur._retries||0)+1;
-    if(cur._retries<7){
-      const fb=document.getElementById('feedback');
-      if(fb) fb.textContent=`Loading… retry ${cur._retries}/7 — tap player to retry now`;
-      setTimeout(()=>{ try{ v.load(); }catch(_){} setTimeout(()=>{ try{ v.play().catch(()=>{}); }catch(_){} },500); },3000*cur._retries);
-      return;
-    }
+ const ld=document.getElementById('video-loading'); if(cur.local_video){ v.src=cur.local_video; v.load(); v.play().then(()=>{ if(ld) ld.classList.remove('show'); }).catch(()=>{ if(ld) ld.classList.remove('show'); }); return; }
     const fb=document.getElementById('feedback');
     if(fb) fb.innerHTML=`Video failed — <a href="${cur.embed_url}" target="_blank" style="color:#b8c0ff">Watch on YouTube ↗</a>`;
     if(ld) ld.classList.remove('show');
