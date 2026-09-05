@@ -508,15 +508,21 @@ window.browserWhisper = async function(){
 // Paste-URL automation: merge personal My videos from API, then boot as before.
 window.HK_API_BASE = (function(){ try{ return localStorage.hk_api || "https://hoerklar-api.onrender.com"; }catch(_){ return "https://hoerklar-api.onrender.com"; } })();
 (function bootHK(){
-  var done=function(){ try{ if(window.AddVideo) AddVideo.init({}); }catch(_){} load(); try{ if(window.ClientIngest&&ClientIngest.refreshSections) ClientIngest.refreshSections(); }catch(_){} };
-  try{ var seed=window.__SEED_MYVIDEOS||[]; if(seed.length){ var h0={}; clips.forEach(function(c){ h0[c.clip_id]=1; }); seed.forEach(function(c){ if(!h0[c.clip_id]) clips.push(c); }); } }catch(_){}
-  try{
-    fetch(window.HK_API_BASE + '/api/clips?section=myvideos').then(function(r){ return r.ok ? r.json() : []; }).then(function(mine){
-      if(mine && mine.length){ var have={}; clips.forEach(function(c){ have[c.clip_id]=1; }); mine.forEach(function(c){ if(!have[c.clip_id]) clips.push(c); }); }
-      if(window.ClipLoader){ try{ window.ClipLoader.cacheGet('clips_myvideos').then(function(saved){ if(saved && saved.length){ var h2={}; clips.forEach(function(c){ h2[c.clip_id]=1; }); saved.forEach(function(c){ if(!h2[c.clip_id]) clips.push(c); }); } done(); }).catch(done); return; }catch(_){} }
-      done();
-    }).catch(done);
-  }catch(_){ done(); }
+  function merge(arr){ if(!arr || !arr.length) return; var h={}; clips.forEach(function(c){ h[c.clip_id]=1; }); arr.forEach(function(c){ if(c && c.clip_id && !h[c.clip_id]) clips.push(c); }); }
+  function done(){ try{ if(window.AddVideo) AddVideo.init({}); }catch(_){} load(); try{ if(window.ClientIngest&&ClientIngest.refreshSections) ClientIngest.refreshSections(); }catch(_){} }
+  try{ merge(window.__SEED_MYVIDEOS); }catch(_){}
+  var apiP = null;
+  try{ apiP = fetch(window.HK_API_BASE + '/api/clips?section=myvideos').then(function(r){ return r.ok ? r.json() : []; }); }
+  catch(_){ apiP = null; }
+  function withIDB(mine){
+    merge(mine);
+    // Mirror server clips into this browser, so My sections survive server wipes/sleep.
+    try{ if(window.ClipLoader) window.ClipLoader.cachePut('clips_myvideos', clips.filter(function(c){ return (c.section||'') !== 'movies' && (c.section||'') !== 'series' && (c.section||'') !== 'songs' && (c.section||'') !== 'nicos'; })); }catch(_){}
+    if(window.ClipLoader){ try{ window.ClipLoader.cacheGet('clips_myvideos').then(function(saved){ merge(saved); done(); }).catch(done); return; }catch(_){} }
+    done();
+  }
+  if(apiP){ apiP.then(withIDB).catch(function(){ withIDB([]); }); }
+  else { withIDB([]); }
 })();
 if(location.protocol!=='file:' && 'serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(()=>{});
 </script><script src="web/myvideos-baked.js"></script><script src="web/client-ingest.js"></script><script src="web/clips-loader.js"></script><script src="web/add-video.js"></script></body></html>
