@@ -161,6 +161,9 @@ def run_whisper_fallback(video_id, title, workdir, vocab=(), seed=41,
                                         "..", "server"))
         import mt_ar
         n_ar = mt_ar.fill_ar(clips)
+        n_wt = mt_ar.fill_ar_word_traps(clips, vocab)
+        if n_wt:
+            print(f"[whisper] +{n_wt} AR word-trap meanings", flush=True)
         if n_ar:
             print(f"[whisper] +{n_ar} local AR translations", flush=True)
         n_tr = mt_ar.fill_ar_traps(clips)

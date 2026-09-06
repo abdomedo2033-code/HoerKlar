@@ -159,3 +159,58 @@ def fill_ar(clips):
                                             "opus-mt-local (de-ar)") + "+mt-ar"
             n += 1
     return n
+
+
+def _diff_words(correct, wrong):
+    """Words in the wrong sentence that aren't in the right one (the actual
+    confusables the trap swapped in), longest first."""
+    strip = ".,!?…:;«»()\"'"
+    have = set(x.strip(strip) for x in correct.lower().split())
+    out = [w.strip(strip) for w in wrong.split()
+           if w.lower().strip(strip) not in have and len(w.strip(strip)) >= 3]
+    return sorted(set(out), key=len, reverse=True)
+
+
+def fill_ar_word_traps(clips, vocab=()):
+    """Word-level trap meanings (the Tische/Teppich/Tasche model): for each
+    German trap sentence, find the swapped-in similar-sounding word and look
+    up its TRUE Arabic meaning for the Arabic wrong options. Falls back to
+    phonetic neighbors of the longest word. Skips clips that already have
+    Arabic distractors. Returns number of clips enriched."""
+    import difflib
+    from glossary import lookup
+    n = 0
+    for c in clips:
+        if not (c.get("translations") or {}).get("ar"):
+            continue
+        if (c.get("translation_distractors") or {}).get("ar"):
+            continue
+        correct = c.get("correct_answer", "")
+        ar_ok = c["translations"]["ar"]
+        hol = []
+        for w in c.get("wrong_answers", []):
+            for dw in _diff_words(correct, w)[:2]:
+                a = lookup(dw)
+                if (a and a != ar_ok and a not in hol
+                        and abs(len(a) - len(ar_ok)) <= 40):
+                    hol.append(a)
+                    break
+            if len(hol) >= 3:
+                break
+        if len(hol) < 2 and vocab:
+            key = max((x.strip(".,!?…:;«»()\"'") for x in correct.split()),
+                      key=len, default="")
+            if len(key) >= 4:
+                cands = [v for v in vocab
+                         if v.lower() != key.lower()
+                         and abs(len(v) - len(key)) <= 2]
+                for nb in difflib.get_close_matches(key, cands, n=8, cutoff=0.55):
+                    a = lookup(nb)
+                    if a and a != ar_ok and a not in hol:
+                        hol.append(a)
+                    if len(hol) >= 3:
+                        break
+        if hol:
+            c.setdefault("translation_distractors", {})["ar"] = hol[:3]
+            n += 1
+    return n
