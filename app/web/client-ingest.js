@@ -229,7 +229,40 @@
     return '📁 ' + s.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
   }
 
-  // Add filter buttons for any personal sections present in clips.
+  // Personal-section management: list + delete (browser-private data only).
+  const CURATED = new Set(['movies', 'series', 'songs', 'nicos', 'all', 'playphrase', '']);
+  function listCustomSections() {
+    try {
+      if (typeof clips === 'undefined') return [];
+      return [...new Set(clips.map((c) => c.section || ''))].filter((s) => !CURATED.has(s)).sort();
+    } catch (_) { return []; }
+  }
+  async function deleteSection(sec) {
+    if (CURATED.has(sec)) return 0;
+    if (!window.confirm || !window.confirm(`Delete section "${prettySection(sec)}" and all its quizzes on this device?`)) return -1;
+    let n = 0;
+    try {
+      for (let i = clips.length - 1; i >= 0; i--) {
+        if ((clips[i].section || '') === sec) { clips.splice(i, 1); n++; }
+      }
+      if (window.ClipLoader) {
+        const mine = ((await window.ClipLoader.cacheGet('clips_myvideos')) || [])
+          .filter((c) => (c.section || '') !== sec);
+        await window.ClipLoader.cachePut('clips_myvideos', mine);
+      }
+      try {
+        document.querySelectorAll('.secbtn').forEach((b) => { if (b.dataset.sec === sec) b.remove(); });
+      } catch (_) {}
+      if ((window._sec || '') === sec) {
+        window._sec = 'movies';
+        try {
+          document.querySelectorAll('.secbtn').forEach((x) => x.classList.toggle('active', x.dataset.sec === 'movies'));
+        } catch (_) {}
+        if (typeof applyFilter === 'function') applyFilter();
+      }
+    } catch (_) {}
+    return n;
+  }
   function refreshSections() {
     try {
       const bar = document.getElementById('filters');
@@ -251,5 +284,5 @@
     } catch (_) { /* page context differs */ }
   }
 
-  window.ClientIngest = { videoId, ingestNative, parseCues, buildWindows, distractors, refreshSections, slugSection, prettySection };
+  window.ClientIngest = { videoId, ingestNative, parseCues, buildWindows, distractors, refreshSections, slugSection, prettySection, listCustomSections, deleteSection };
 })();

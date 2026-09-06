@@ -44,7 +44,7 @@
       const btn = document.getElementById('addVideoBtn');
       const modal = document.getElementById('addVideoModal');
       if (!btn || !modal) return; // HTML not yet pasted — loader stays inert.
-      btn.onclick = () => { AddVideo.fillSections(); modal.hidden = false; const ta = document.getElementById('addVideoUrls'); if (ta) ta.focus(); };
+      btn.onclick = () => { AddVideo.fillSections(); AddVideo.renderManage(); modal.hidden = false; const ta = document.getElementById('addVideoUrls'); if (ta) ta.focus(); };
       document.getElementById('addVideoCancel').onclick = () => { modal.hidden = true; };
       document.getElementById('addVideoGo').onclick = () => this.submit();
     },
@@ -69,6 +69,34 @@
           sel.appendChild(o);
         }
       } catch (_) { /* page context differs */ }
+    },
+    renderManage() {
+      // "Your sections" list with delete buttons (browser-private data only).
+      try {
+        const host = document.getElementById('addVideoManage');
+        if (!host || !window.ClientIngest) return;
+        host.innerHTML = '';
+        const secs = window.ClientIngest.listCustomSections();
+        if (!secs.length) return;
+        const title = document.createElement('div');
+        title.style.cssText = 'font-size:12px;color:#9aa3c7;margin:6px 0 4px';
+        title.textContent = 'Your sections (tap Delete to remove with all its quizzes):';
+        host.appendChild(title);
+        for (const s of secs) {
+          const row = document.createElement('div');
+          row.className = 'secrow';
+          const name = document.createElement('span');
+          name.textContent = window.ClientIngest.prettySection(s);
+          const del = document.createElement('button');
+          del.className = 'secdel'; del.textContent = '✕ Delete';
+          del.onclick = async () => {
+            const n = await window.ClientIngest.deleteSection(s);
+            if (n >= 0) { AddVideo.fillSections(); AddVideo.renderManage(); }
+          };
+          row.appendChild(name); row.appendChild(del);
+          host.appendChild(row);
+        }
+      } catch (_) {}
     },
     readSection() {
       try {
