@@ -115,7 +115,8 @@ class H(BaseHTTPRequestHandler):
                 return _send(self, 400, {"error": "bad section"})
             fp = os.path.join(DATA, f"clips_{sec}.json")
             if not os.path.exists(fp):
-                return _send(self, 404, {"error": f"no data for section {sec}"})
+                # No stored clips for this section (yet) — valid empty state.
+                return _send(self, 200, [])
             self.send_response(200)
             self.send_header("Content-Type", "application/json; charset=utf-8")
             self.send_header("Access-Control-Allow-Origin", "*")
