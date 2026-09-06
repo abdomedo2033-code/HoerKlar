@@ -624,23 +624,24 @@ window.HK_API_BASE = (function(){ try{ return localStorage.hk_api || "https://ho
 (function bootHK(){
   function merge(arr){ if(!arr || !arr.length) return; var h={}; clips.forEach(function(c){ h[c.clip_id]=1; }); arr.forEach(function(c){ if(c && c.clip_id && !h[c.clip_id]) clips.push(c); }); }
   function done(){ try{ if(window.AddVideo){ AddVideo.init({}); } }catch(_){} try{ var pj=JSON.parse(localStorage.hk_jobs||'[]'); pj.forEach(function(id){ AddVideo.watch(id); }); }catch(_){} load(); try{ if(window.ClientIngest&&ClientIngest.refreshSections) ClientIngest.refreshSections(); }catch(_){} }
+  function armed(){ try{ if(window.TrapMeanings){ window.TrapMeanings.apply(clips).then(done).catch(done); return; } }catch(_){} done(); }
   try{ merge(window.__SEED_MYVIDEOS); }catch(_){}
   var apiP = null;
   try{ apiP = fetch(window.HK_API_BASE + '/api/clips?section=myvideos').then(function(r){ return r.ok ? r.json() : []; }); }
   catch(_){ apiP = null; }
   function withIDB(mine){
     merge(mine);
-    if(!window.ClipLoader){ done(); return; }
+    if(!window.ClipLoader){ armed(); return; }
     try{
       window.ClipLoader.cacheGet('clips_myvideos').then(function(saved){
         merge(saved);
         try{ window.ClipLoader.cachePut('clips_myvideos', clips.filter(function(c){ var s=c.section||''; return s && s!=='movies' && s!=='series' && s!=='songs' && s!=='nicos'; })); }catch(_){}
-        done();
-      }).catch(done);
-    }catch(_){ done(); }
+        armed();
+      }).catch(armed);
+    }catch(_){ armed(); }
   }
   if(apiP){ apiP.then(withIDB).catch(function(){ withIDB([]); }); }
   else { withIDB([]); }
 })();
 if(location.protocol!=='file:' && 'serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(()=>{});
-</script><script src="web/myvideos-baked.js?v=6"></script><script src="web/client-ingest.js?v=6"></script><script src="web/clips-loader.js?v=6"></script><script src="web/add-video.js?v=6"></script></body></html>
+</script><script src="web/myvideos-baked.js?v=6"></script><script src="web/trap-meanings.js?v=7"></script><script src="web/client-ingest.js?v=6"></script><script src="web/clips-loader.js?v=6"></script><script src="web/add-video.js?v=6"></script></body></html>

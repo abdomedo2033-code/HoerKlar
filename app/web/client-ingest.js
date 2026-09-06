@@ -169,6 +169,7 @@
     } catch (_) { mine = []; }
     const have = new Set(mine.map((c) => c.clip_id));
     for (const c of newClips) if (!have.has(c.clip_id)) { mine.push(c); have.add(c.clip_id); }
+    try { if (window.TrapMeanings) await window.TrapMeanings.enrichWithGlossary(mine); } catch (_) {}
     try { if (window.ClipLoader) await window.ClipLoader.cachePut('clips_myvideos', mine); } catch (_) {}
     try {
       const live = new Set(clips.map((c) => c.clip_id));
