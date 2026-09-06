@@ -6,6 +6,9 @@ export API_BASE="${API_BASE:-https://hoerklar-api.onrender.com}"
 export HK_WORKDIR="${HK_WORKDIR:-/home/deck/Downloads/Dutch_App/_clipcache_ingest}"
 export HK_DEFAULT_CEFR="${HK_DEFAULT_CEFR:-A2}"
 # Whisper model cache + proxy-safe env (see scripts/add_video.py)
+# NOTE: proxies must be fully unset — direct connection works, and any
+# in-process lib (httpx/urllib) chokes on the SOCKS proxy without socksio.
+unset ALL_PROXY all_proxy http_proxy https_proxy HTTP_PROXY HTTPS_PROXY
 export HF_HOME=/var/cache/huggingface
 export HF_HUB_OFFLINE=1
 mkdir -p "$HK_WORKDIR"

@@ -191,7 +191,8 @@ def main():
                 except Exception as e:
                     print(f"[worker] job {job.get('job_id')} failed: {e}", flush=True)
                     post_progress(job.get("job_id"), status="error",
-                                  stage="error", progress=0.0)
+                                  stage="error", progress=0.0,
+                                  error=str(e)[:300] or type(e).__name__)
                 if args.once:
                     return
             else:

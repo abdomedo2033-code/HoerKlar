@@ -228,6 +228,8 @@ class H(BaseHTTPRequestHandler):
                               (queue_store.get(DATA, job_id) or {}).get("clips_ready", []))
                 if payload.get("title"):
                     fields["title"] = str(payload["title"])[:160]
+                if payload.get("error"):
+                    fields["error"] = str(payload["error"])[:300]
                 job = queue_store.update(DATA, job_id, **fields)
                 if not job:
                     return _send(self, 404, {"error": "unknown job"})
