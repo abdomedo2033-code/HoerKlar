@@ -163,6 +163,9 @@ def run_whisper_fallback(video_id, title, workdir, vocab=(), seed=41,
         n_ar = mt_ar.fill_ar(clips)
         if n_ar:
             print(f"[whisper] +{n_ar} local AR translations", flush=True)
+        n_tr = mt_ar.fill_ar_traps(clips)
+        if n_tr:
+            print(f"[whisper] +{n_tr} AR trap-meaning distractors", flush=True)
     except Exception as e:
         print(f"[whisper] mt_ar skipped ({e})", flush=True)
     return clips

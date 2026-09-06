@@ -115,6 +115,34 @@ def translate(texts):
     return {t: cache[t] for t in texts if t in cache}
 
 
+def fill_ar_traps(clips):
+    """Trap-meaning Arabic distractors: translate the clip's OWN German
+    wrong answers (they carry full sentence context, unlike lone words).
+    Result: each Arabic wrong option is literally what a similar-sounding
+    German sentence would mean. Only for clips that already have a correct
+    Arabic answer to contrast against. Returns number of clips enriched."""
+    cands = [c for c in clips
+             if (c.get("translations") or {}).get("ar")
+             and not (c.get("translation_distractors") or {}).get("ar")
+             and c.get("wrong_answers")]
+    if not cands:
+        return 0
+    texts = [w for c in cands for w in c["wrong_answers"]]
+    got = translate(texts)
+    n = 0
+    for c in cands:
+        hol = []
+        for w in c["wrong_answers"]:
+            a = got.get(w)
+            if (a and a != c["translations"]["ar"] and a not in hol
+                    and abs(len(a) - len(c["translations"]["ar"])) <= 40):
+                hol.append(a)
+        if hol:
+            c.setdefault("translation_distractors", {})["ar"] = hol[:3]
+            n += 1
+    return n
+
+
 def fill_ar(clips):
     """Fill missing translations.ar in place. Returns number filled."""
     need = [c.get("dutch_text", "") for c in clips
