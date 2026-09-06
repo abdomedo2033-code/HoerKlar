@@ -19,8 +19,7 @@ import os, re, subprocess, tempfile
 ENV = {k: v for k, v in os.environ.items()
        if k.lower() not in ("http_proxy", "https_proxy", "all_proxy")}
 YTDLP = os.path.expanduser(os.environ.get("HK_YTDLP", "~/whisperenv/bin/yt-dlp"))
-BAD = ["Copyright", "Untertitel", "Untertitlung", "B.K.", "G.M.", "Applaus",
-       "Untertitelung"]
+BAD = ["B.K.", "G.M.", "Applaus"]
 ENG = {"the", "and", "lets", "let", "have", "look", "at", "next", "one",
        "with", "you", "for", "this", "is", "are", "subtitles", "subscribe",
        "like", "video"}
