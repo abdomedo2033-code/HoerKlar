@@ -80,16 +80,25 @@ def process_one(data_dir, queue_store, job):
                            progress=1.0, clips_ready=clips)
         print(f"[inline] job {jid}: +{added} clips (fast-path)", flush=True)
     except fp.NoSubtitles as e:
-        detail = str(e)[:300]
+        detail = str(e)
+        # Kitchen-sink yt-dlp logs are scary — show a human line.
+        if "Failed to extract any player response" in detail or "Sign in to confirm" in detail:
+            why = "YouTube blocked this request from the server (Deck will retry — leave the card open)"
+        elif "no German subtitles" in detail:
+            why = "no German subtitles — waiting for Deck (Whisper on-device)"
+        else:
+            why = detail[:220]
         queue_store.update(data_dir, jid, status="queued", stage="awaiting_deck",
-                           progress=0.1, deck_only=True,
-                           error=f"inline: {detail}")
-        print(f"[inline] job {jid}: {detail} -> Deck", flush=True)
+                           progress=0.12, deck_only=True,
+                           error=why)
+        print(f"[inline] job {jid}: {why} -> Deck", flush=True)
     except Exception as e:
-        traceback.print_exc()
+        import traceback as _tb
+        print(f"[inline] job {jid} crashed: {e}\n{_tb.format_exc()}", flush=True)
+        why = "server error (" + str(e)[:120] + ") — waiting for Deck"
         queue_store.update(data_dir, jid, status="queued", stage="awaiting_deck",
                            progress=0.0, deck_only=True,
-                           error=f"inline failed ({e}) — waiting for Deck")
+                           error=why)
 
 
 def loop_forever(data_dir, queue_store, interval=10):
