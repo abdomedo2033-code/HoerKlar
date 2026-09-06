@@ -156,4 +156,13 @@ def run_whisper_fallback(video_id, title, workdir, vocab=(), seed=41,
             break
     if on_partial and clips:
         on_partial(list(clips))
+    try:
+        sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                        "..", "server"))
+        import mt_ar
+        n_ar = mt_ar.fill_ar(clips)
+        if n_ar:
+            print(f"[whisper] +{n_ar} local AR translations", flush=True)
+    except Exception as e:
+        print(f"[whisper] mt_ar skipped ({e})", flush=True)
     return clips

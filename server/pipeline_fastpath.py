@@ -283,4 +283,12 @@ def run_fastpath(video_id, title, workdir, vocab=(), seed=41,
             on_partial(list(clips))
     if on_partial and clips:
         on_partial(list(clips))
+    # Arabic: fill whatever YouTube didn't ship (local OPUS-MT, may no-op).
+    try:
+        import mt_ar
+        n_ar = mt_ar.fill_ar(clips)
+        if n_ar:
+            print(f"[fastpath] +{n_ar} local AR translations", flush=True)
+    except Exception as e:
+        print(f"[fastpath] mt_ar skipped ({e})", flush=True)
     return clips
