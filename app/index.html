@@ -149,17 +149,21 @@ window.browserWhisper = async function(){
 window.HK_API_BASE = (function(){ try{ return localStorage.hk_api || "https://hoerklar-api.onrender.com"; }catch(_){ return "https://hoerklar-api.onrender.com"; } })();
 (function bootHK(){
   function merge(arr){ if(!arr || !arr.length) return; var h={}; clips.forEach(function(c){ h[c.clip_id]=1; }); arr.forEach(function(c){ if(c && c.clip_id && !h[c.clip_id]) clips.push(c); }); }
-  function done(){ try{ if(window.AddVideo){ AddVideo.init({}); try{ var pj=JSON.parse(localStorage.hk_jobs||'[]'); pj.forEach(function(id){ AddVideo.watch(id); }); }catch(_){} }catch(_){} load(); try{ if(window.ClientIngest&&ClientIngest.refreshSections) ClientIngest.refreshSections(); }catch(_){} }
+  function done(){ try{ if(window.AddVideo){ AddVideo.init({}); } }catch(_){} try{ var pj=JSON.parse(localStorage.hk_jobs||'[]'); pj.forEach(function(id){ AddVideo.watch(id); }); }catch(_){} load(); try{ if(window.ClientIngest&&ClientIngest.refreshSections) ClientIngest.refreshSections(); }catch(_){} }
   try{ merge(window.__SEED_MYVIDEOS); }catch(_){}
   var apiP = null;
   try{ apiP = fetch(window.HK_API_BASE + '/api/clips?section=myvideos').then(function(r){ return r.ok ? r.json() : []; }); }
   catch(_){ apiP = null; }
   function withIDB(mine){
     merge(mine);
-    // Mirror server clips into this browser, so My sections survive server wipes/sleep.
-    try{ if(window.ClipLoader) window.ClipLoader.cachePut('clips_myvideos', clips.filter(function(c){ return (c.section||'') !== 'movies' && (c.section||'') !== 'series' && (c.section||'') !== 'songs' && (c.section||'') !== 'nicos'; })); }catch(_){}
-    if(window.ClipLoader){ try{ window.ClipLoader.cacheGet('clips_myvideos').then(function(saved){ merge(saved); done(); }).catch(done); return; }catch(_){} }
-    done();
+    if(!window.ClipLoader){ done(); return; }
+    try{
+      window.ClipLoader.cacheGet('clips_myvideos').then(function(saved){
+        merge(saved);
+        try{ window.ClipLoader.cachePut('clips_myvideos', clips.filter(function(c){ var s=c.section||''; return s && s!=='movies' && s!=='series' && s!=='songs' && s!=='nicos'; })); }catch(_){}
+        done();
+      }).catch(done);
+    }catch(_){ done(); }
   }
   if(apiP){ apiP.then(withIDB).catch(function(){ withIDB([]); }); }
   else { withIDB([]); }
