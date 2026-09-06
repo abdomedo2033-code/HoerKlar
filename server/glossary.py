@@ -80,6 +80,9 @@ def lookup(word, pair="de|ar"):
     try:
         url = ("https://api.mymemory.translated.net/get?q="
                + urllib.parse.quote(w) + "&langpair=" + pair)
+        _mm_email = os.environ.get("HK_MYMEMORY_EMAIL", "")
+        if _mm_email and "@" in _mm_email:
+            url += "&de=" + urllib.parse.quote(_mm_email)
         req = urllib.request.Request(url, headers={"User-Agent": "HoerKlar/1.0"})
         d = json.load(urllib.request.urlopen(req, timeout=20))
         transport_ok = True
