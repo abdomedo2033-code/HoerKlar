@@ -63,7 +63,7 @@ public class MainActivity extends Activity {
             try {
                 StreamInfo info = StreamInfo.getInfo(videoUrl);
                 StringBuilder sb = new StringBuilder("{\"title\":");
-                sb.append(jq(info.getName())).append(",\"tracks\":[");
+                sb.append(jq(info.getName())).append(",\"duration\":").append(info.getDuration()).append(",\"tracks\":[");
                 boolean first = true;
                 for (SubtitlesStream st : info.getSubtitles()) {
                     if (!first) sb.append(",");
@@ -93,6 +93,41 @@ public class MainActivity extends Activity {
                 if (b == null) return "";
                 if (b.length() > 300000) b = b.substring(0, 300000);
                 return b;
+            } catch (Exception e) {
+                return "";
+            }
+        }
+
+        @JavascriptInterface public String fetchAudioB64(String videoUrl) {
+            // Whole-track audio (opus) as base64 for on-device Whisper in
+            // the page: JS decodes + slices windows itself. Capped ~12MB.
+            try {
+                StreamInfo info = StreamInfo.getInfo(videoUrl);
+                java.util.List<org.schabi.newpipe.extractor.stream.AudioStream> aud = info.getAudioStreams();
+                if (aud == null || aud.isEmpty()) return "";
+                org.schabi.newpipe.extractor.stream.AudioStream best = aud.get(0);
+                for (org.schabi.newpipe.extractor.stream.AudioStream a : aud) {
+                    if (a.getAverageBitrate() > 0 && (best.getAverageBitrate() <= 0
+                            || a.getAverageBitrate() < best.getAverageBitrate())) best = a;
+                }
+                java.net.URL u = new java.net.URL(best.getContent());
+                HttpsURLConnection c = (HttpsURLConnection) u.openConnection();
+                c.setRequestProperty("User-Agent", "Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 Chrome/124.0.0.0 Mobile Safari/537.36");
+                c.setConnectTimeout(20000);
+                c.setReadTimeout(60000);
+                c.connect();
+                java.io.InputStream in = c.getInputStream();
+                java.io.ByteArrayOutputStream bos = new java.io.ByteArrayOutputStream();
+                byte[] buf = new byte[65536];
+                int n, total = 0;
+                while ((n = in.read(buf)) > 0) {
+                    total += n;
+                    if (total > 12 * 1024 * 1024) break;
+                    bos.write(buf, 0, n);
+                }
+                in.close();
+                if (total < 20000) return "";
+                return android.util.Base64.encodeToString(bos.toByteArray(), android.util.Base64.NO_WRAP);
             } catch (Exception e) {
                 return "";
             }

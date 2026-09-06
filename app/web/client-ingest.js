@@ -303,7 +303,12 @@
     const info = JSON.parse(raw);
     if (info.error) throw new Error('no subtitles: ' + info.error);
     const de = pickTrack(info.tracks, 'de');
-    if (!de) throw new Error('this video has no German subtitles');
+    if (!de) {
+      // No subtitles anywhere: fall back to the on-device ear (slow, offline).
+      if (!window.HKNative.fetchAudioB64) throw new Error('this video has no German subtitles');
+      onStage('No subtitles — switching to on-device ear…', 0.12);
+      return ingestWhisperOnDevice(vid, info.title || 'YouTube video', onStage, section, info.duration || 0);
+    }
     onStage('Building clips…', 0.45);
     const vtt = window.HKNative.fetchText(de.url);
     if (!vtt || vtt.length < 50) throw new Error('subtitle download came back empty — try again');
@@ -322,6 +327,113 @@
     return { n, title, section, source: 'device' };
   }
 
+  // PATH A2 — Android app, on-device Whisper (no subtitles anywhere).
+  // Audio arrives via the native bridge (base64 opus); decode + slice with
+  // Web Audio, transcribe each window with an in-page Whisper model.
+  // Slow (minutes on phones) but 100% on-device. Needs internet once for
+  // the ~40MB model, then cached by the browser.
+  let _whisperPipe = null, _whisperLoading = null;
+  async function whisperPipe(onStage) {
+    if (_whisperPipe) return _whisperPipe;
+    if (!_whisperLoading) {
+      _whisperLoading = (async () => {
+        if (!window.transformers) {
+          onStage && onStage('Loading on-device ear (~40MB, once)…', 0.05);
+          await new Promise((res, rej) => {
+            const s = document.createElement('script');
+            s.src = 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2';
+            s.onload = res; s.onerror = () => rej(new Error('could not load AI ear'));
+            document.head.appendChild(s);
+          });
+        }
+        const { pipeline, env } = window.transformers;
+        if (env && env.allowLocalModels !== undefined) env.allowLocalModels = false;
+        onStage && onStage('Warming up on-device ear…', 0.1);
+        _whisperPipe = await pipeline('automatic-speech-recognition', 'Xenova/whisper-tiny', {
+          progress_callback: (p) => {
+            if (p && p.status === 'progress' && onStage) {
+              onStage('Loading on-device ear (~40MB, once) ' + Math.round((p.progress || 0)) + '%…', 0.05);
+            }
+          },
+        });
+        return _whisperPipe;
+      })();
+    }
+    return _whisperLoading;
+  }
+  function b64ToBytes(b64) {
+    const bin = atob(b64);
+    const u8 = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
+    return u8;
+  }
+  async function decodeAudio(u8) {
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) throw new Error('no Web Audio on this device');
+    const ac = new AC({ sampleRate: 16000 });
+    const buf = await ac.decodeAudioData(u8.buffer.slice(0));
+    const ch0 = buf.getChannelData(0);
+    let mono = ch0;
+    if (buf.numberOfChannels > 1) {
+      mono = new Float32Array(ch0.length);
+      for (let c = 0; c < buf.numberOfChannels; c++) {
+        const ch = buf.getChannelData(c);
+        for (let i = 0; i < ch.length; i++) mono[i] += ch[i] / buf.numberOfChannels;
+      }
+    }
+    // resample to 16k if needed
+    if (Math.abs(buf.sampleRate - 16000) > 1) {
+      const ratio = buf.sampleRate / 16000;
+      const out = new Float32Array(Math.floor(mono.length / ratio));
+      for (let i = 0; i < out.length; i++) out[i] = mono[Math.floor(i * ratio)];
+      mono = out;
+    }
+    try { await ac.close(); } catch (_) {}
+    return mono;
+  }
+  const WH_BAD = ['Copyright', 'Untertitel', 'B.K.', 'G.M.', 'Applaus'];
+  function okSpoken(t) {
+    if (!t) return false;
+    const toks = t.split(/\s+/);
+    if (toks.length < 4 || t.length < 15 || t.length > 160) return false;
+    if (WH_BAD.some((b) => t.indexOf(b) >= 0)) return false;
+    if ((t.slice(0, -1).match(/[.!?…]/g) || []).length > 1) return false;
+    return true;
+  }
+  async function ingestWhisperOnDevice(vid, title, onStage, section, durationSec) {
+    section = slugSection(section);
+    const b64 = window.HKNative.fetchAudioB64('https://www.youtube.com/watch?v=' + vid);
+    if (!b64 || b64.length < 30000) throw new Error('could not grab audio on device');
+    onStage('Decoding audio on device…', 0.15);
+    const pcm = await decodeAudio(b64ToBytes(b64));
+    const dur = durationSec || Math.floor(pcm.length / 16000) || 240;
+    const tss = [];
+    const lo = Math.max(30, Math.floor(dur * 0.05)), hi = Math.min(Math.floor(dur * 0.95), 2400);
+    for (let t = lo, k = 0; t < hi && tss.length < 9; t += 45, k++) tss.push(t);
+    if (!tss.length) tss.push(30);
+    const pipe = await whisperPipe(onStage);
+    const wins = [];
+    for (let i = 0; i < tss.length; i++) {
+      const t = tss[i];
+      onStage(`Listening on device ${i + 1}/${tss.length}…`, 0.15 + 0.6 * (i / tss.length));
+      const slice = pcm.slice(t * 16000, (t + 8) * 16000);
+      if (!slice.length) continue;
+      let txt = '';
+      try {
+        const out = await pipe(slice, { language: 'german', task: 'transcribe' });
+        txt = ((out && out.text) || '').trim();
+      } catch (_) {}
+      if (okSpoken(txt)) wins.push([t, t + 8, txt]);
+      if (wins.length >= 12) break;
+    }
+    if (!wins.length) throw new Error('on-device ear heard nothing usable');
+    onStage('Saving ' + wins.length + ' quizzes…', 0.85);
+    const clips = makeClips(vid, title || 'YouTube video', wins, [], section);
+    clips.forEach((c) => { c.transcript_source = 'app_ondevice_whisper'; });
+    await enrichWithGlossary(clips);
+    const n = await persistAndShow(clips);
+    return { n, title, section, source: 'device-whisper' };
+  }
   function slugSection(s) {
     s = String(s || '').toLowerCase().replace(/[^a-z0-9 _-]/g, '').trim().replace(/[\s-]+/g, '_').slice(0, 24);
     return s || 'general';
