@@ -140,7 +140,37 @@
         } catch (e) { card.done(e.message && !/^Failed:/.test(e.message) ? 'Failed: ' + String(e.message).slice(0, 160) : String(e.message).slice(0, 180), e.message); }
         return;
       }
-      // Path B — browser: hand off to the API backend (Deck/Render worker).
+      // Path B — plain browser: mirrors on YOUR device, zero Deck, zero server.
+      if (window.ClientIngest && !lines.some(isPlaylist)) {
+        const vids = [];
+        let bad = null;
+        for (const u of lines) {
+          const v = window.ClientIngest.videoId(u);
+          if (!v) { bad = u; break; }
+          vids.push(v);
+        }
+        if (!bad) {
+          document.getElementById('addVideoModal').hidden = true;
+          inp.value = '';
+          const card = this.card();
+          let total = 0, mirrorFailed = null;
+          try {
+            for (let i = 0; i < vids.length; i++) {
+              const res = await window.ClientIngest.ingestViaMirrors(
+                vids[i], (stage, p) => card.progress(`Video ${i + 1}/${vids.length}: ${stage}`, (i + p) / vids.length), section);
+              total += res.n;
+            }
+            card.done(`✅ ${total} quizzes ready in ${window.ClientIngest.prettySection(section)} (built on your device)`);
+          } catch (e) { mirrorFailed = e.message; }
+          if (!mirrorFailed) return;
+          // Mirrors failed — fall through to the backend below (needs Deck).
+          card.done('Mirrors busy (' + String(mirrorFailed).slice(0, 120) + ') — trying backend…', true);
+        } else {
+          err.textContent = 'could not find a video id in: ' + bad.slice(0, 60);
+          return;
+        }
+      }
+      // Path C — browser via API backend (Deck worker builds it).
       const DEFAULT_API = 'https://hoerklar-api.onrender.com';
       const tryIngest = (base) => fetch(base + '/api/ingest', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
