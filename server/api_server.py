@@ -245,7 +245,7 @@ class H(BaseHTTPRequestHandler):
                 except ValueError as e:
                     return _send(self, 400, {"error": str(e)})
             job = queue_store.update(DATA, job_id, status="done", stage="done",
-                                     progress=1.0, clips_ready=clips)
+                                     progress=1.0, clips_ready=clips, error=None)
             return _send(self, 200, {"ok": True, "added": added, "job": job})
         return _send(self, 404, {"error": "not found"})
 
