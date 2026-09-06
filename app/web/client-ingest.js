@@ -142,7 +142,7 @@
   }
 
   function makeClips(vid, title, wins, trCues, section) {
-    section = section || 'myvideos';
+    section = slugSection(section);
     return wins.map(([s, e, txt]) => {
       const c = {
         clip_id: 'yt_' + vid + '_' + s, provider: 'youtube', video_id: vid,
@@ -173,11 +173,12 @@
     try {
       const live = new Set(clips.map((c) => c.clip_id));
       for (const c of newClips) if (!live.has(c.clip_id)) clips.push(c);
-      window._sec = 'myvideos';
-      document.querySelectorAll('.secbtn').forEach((x) => x.classList.toggle('active', x.dataset.sec === 'myvideos'));
+      const sec = (newClips[0] && newClips[0].section) || 'general';
+      window._sec = sec;
+      document.querySelectorAll('.secbtn').forEach((x) => x.classList.toggle('active', x.dataset.sec === sec));
       if (typeof applyFilter === 'function') applyFilter();
     } catch (_) { /* page context differs — clips are still cached */ }
-    try { window.dispatchEvent(new CustomEvent('hk:clips-updated', { detail: { section: 'myvideos' } })); } catch (_) {}
+    try { window.dispatchEvent(new CustomEvent('hk:clips-updated', { detail: { section: (newClips[0] && newClips[0].section) || 'general' } })); } catch (_) {}
     try { if (typeof refreshSections === 'function') refreshSections(); } catch (_) {}
     return newClips.length;
   }
@@ -222,11 +223,26 @@
 
   function slugSection(s) {
     s = String(s || '').toLowerCase().replace(/[^a-z0-9 _-]/g, '').trim().replace(/[\s-]+/g, '_').slice(0, 24);
-    return s || 'myvideos';
+    return s || 'general';
   }
   function prettySection(s) {
-    if (s === 'myvideos') return '⭐ My videos';
-    return '📁 ' + s.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+    return '📁 ' + String(s || '').replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+  }
+
+  // One-time migration: the retired 'myvideos' bucket becomes a normal
+  // 'general' section (deletable like any other). Nothing hidden or lost.
+  function migrateLegacyBucket() {
+    try {
+      if (typeof clips === 'undefined') return;
+      let moved = false;
+      for (const c of clips) {
+        if ((c.section || '') === 'myvideos') { c.section = 'general'; moved = true; }
+      }
+      if (moved && window.ClipLoader) {
+        window.ClipLoader.cachePut('clips_myvideos',
+          clips.filter((c) => !CURATED.has(c.section || ''))).catch(() => {});
+      }
+    } catch (_) {}
   }
 
   // Personal-section management: list + delete (browser-private data only).
@@ -264,6 +280,7 @@
     return n;
   }
   function refreshSections() {
+    migrateLegacyBucket();
     try {
       const bar = document.getElementById('filters');
       if (!bar || typeof clips === 'undefined') return;

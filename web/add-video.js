@@ -224,7 +224,7 @@
             clearInterval(t);
             AddVideo.forgetJob(jobId);
             if (j.status === 'done') {
-              const sec = (window.ClientIngest ? window.ClientIngest.prettySection(j.section) : null) || '⭐ My videos';
+              const sec = (window.ClientIngest ? window.ClientIngest.prettySection(j.section) : null) || '📁 General';
               card.querySelector('.jc-title').textContent = `✅ ${n} quizzes ready in ${sec}${j.title ? ' — ' + j.title : ''}`;
               // Browser-private: keep these clips on THIS device only.
               (async () => {
