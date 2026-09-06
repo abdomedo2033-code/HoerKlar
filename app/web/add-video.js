@@ -212,7 +212,7 @@
         try {
           const j = await (await fetch(this.api + '/api/jobs/' + jobId)).json();
           const vtitle = j.title ? ' — ' + j.title : '';
-          stageEl.textContent = (STAGE_LABEL[j.stage] || STAGE_LABEL[j.status] || j.status) + vtitle;
+          stageEl.textContent = (STAGE_LABEL[j.stage] || STAGE_LABEL[j.status] || j.status) + vtitle + ' ' + Math.round((j.progress || 0) * 100) + '%';
           progEl.style.width = Math.round((j.progress || 0) * 100) + '%';
           const n = (j.clips_ready || []).length;
           if (n > seen) {
@@ -223,7 +223,10 @@
           if (j.status === 'done' || j.status === 'error') {
             clearInterval(t);
             AddVideo.forgetJob(jobId);
-            if (j.status === 'done') {
+            if (j.status === 'error') {
+              const why = j.error ? String(j.error).slice(0, 220) : 'unknown error';
+              stageEl.textContent = 'Failed: ' + why + (j.progress ? ' (' + Math.round(j.progress * 100) + '%)' : '');
+            } else if (j.status === 'done') {
               const sec = (window.ClientIngest ? window.ClientIngest.prettySection(j.section) : null) || '📁 General';
               card.querySelector('.jc-title').textContent = `✅ ${n} quizzes ready in ${sec}${j.title ? ' — ' + j.title : ''}`;
               // Browser-private: keep these clips on THIS device only.
