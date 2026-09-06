@@ -150,6 +150,11 @@
         if (!r.ok) throw new Error(j.error || ('http ' + r.status));
         document.getElementById('addVideoModal').hidden = true;
         inp.value = '';
+        const ids = (j.jobs || []).map((job) => job.job_id);
+        try {
+          const prev = JSON.parse(localStorage.hk_jobs || '[]');
+          localStorage.hk_jobs = JSON.stringify([...new Set([...prev, ...ids])].slice(-20));
+        } catch (_) {}
         for (const job of (j.jobs || [])) this.watch(job.job_id);
         if (j.skipped && j.skipped.length) {
           err.textContent = '';
@@ -160,6 +165,12 @@
         err.textContent = (window.HKNative ? e.message :
           'no backend reachable — open this page in the HörKlar app, or set up the API backend');
       }
+    },
+    forgetJob(jobId) {
+      try {
+        const prev = JSON.parse(localStorage.hk_jobs || '[]');
+        localStorage.hk_jobs = JSON.stringify(prev.filter((id) => id !== jobId));
+      } catch (_) {}
     },
     card() {
       const host = document.getElementById('jobCards') || document.body;
@@ -202,6 +213,7 @@
           }
           if (j.status === 'done' || j.status === 'error') {
             clearInterval(t);
+            AddVideo.forgetJob(jobId);
             if (j.status === 'done') {
               const sec = (window.ClientIngest ? window.ClientIngest.prettySection(j.section) : null) || '⭐ My videos';
               card.querySelector('.jc-title').textContent = `✅ ${n} quizzes ready in ${sec}${j.title ? ' — ' + j.title : ''}`;

@@ -509,7 +509,7 @@ window.browserWhisper = async function(){
 window.HK_API_BASE = (function(){ try{ return localStorage.hk_api || "https://hoerklar-api.onrender.com"; }catch(_){ return "https://hoerklar-api.onrender.com"; } })();
 (function bootHK(){
   function merge(arr){ if(!arr || !arr.length) return; var h={}; clips.forEach(function(c){ h[c.clip_id]=1; }); arr.forEach(function(c){ if(c && c.clip_id && !h[c.clip_id]) clips.push(c); }); }
-  function done(){ try{ if(window.AddVideo) AddVideo.init({}); }catch(_){} load(); try{ if(window.ClientIngest&&ClientIngest.refreshSections) ClientIngest.refreshSections(); }catch(_){} }
+  function done(){ try{ if(window.AddVideo){ AddVideo.init({}); try{ var pj=JSON.parse(localStorage.hk_jobs||'[]'); pj.forEach(function(id){ AddVideo.watch(id); }); }catch(_){} }catch(_){} load(); try{ if(window.ClientIngest&&ClientIngest.refreshSections) ClientIngest.refreshSections(); }catch(_){} }
   try{ merge(window.__SEED_MYVIDEOS); }catch(_){}
   var apiP = null;
   try{ apiP = fetch(window.HK_API_BASE + '/api/clips?section=myvideos').then(function(r){ return r.ok ? r.json() : []; }); }
@@ -525,4 +525,4 @@ window.HK_API_BASE = (function(){ try{ return localStorage.hk_api || "https://ho
   else { withIDB([]); }
 })();
 if(location.protocol!=='file:' && 'serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(()=>{});
-</script><script src="web/myvideos-baked.js"></script><script src="web/client-ingest.js"></script><script src="web/clips-loader.js"></script><script src="web/add-video.js"></script></body></html>
+</script><script src="web/myvideos-baked.js?v=5"></script><script src="web/client-ingest.js?v=5"></script><script src="web/clips-loader.js?v=5"></script><script src="web/add-video.js?v=5"></script></body></html>
