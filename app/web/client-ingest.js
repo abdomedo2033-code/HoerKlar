@@ -400,17 +400,17 @@
     if ((t.slice(0, -1).match(/[.!?…]/g) || []).length > 1) return false;
     return true;
   }
-  async function ingestWhisperOnDevice(vid, title, onStage, section, durationSec) {
-    section = slugSection(section);
-    const b64 = window.HKNative.fetchAudioB64('https://www.youtube.com/watch?v=' + vid);
-    if (!b64 || b64.length < 30000) throw new Error('could not grab audio on device');
-    onStage('Decoding audio on device…', 0.15);
-    const pcm = await decodeAudio(b64ToBytes(b64));
-    const dur = durationSec || Math.floor(pcm.length / 16000) || 240;
+  function planTimes(dur) {
+    dur = dur || 240;
     const tss = [];
     const lo = Math.max(30, Math.floor(dur * 0.05)), hi = Math.min(Math.floor(dur * 0.95), 2400);
-    for (let t = lo, k = 0; t < hi && tss.length < 9; t += 45, k++) tss.push(t);
+    for (let t = lo; t < hi && tss.length < 9; t += 45) tss.push(t);
     if (!tss.length) tss.push(30);
+    return tss;
+  }
+  // Shared core: transcribe 8s windows of 16kHz mono PCM in-page.
+  async function transcribeWindows(pcm, durSec, onStage) {
+    const tss = planTimes(durSec || Math.floor(pcm.length / 16000) || 240);
     const pipe = await whisperPipe(onStage);
     const wins = [];
     for (let i = 0; i < tss.length; i++) {
@@ -426,6 +426,15 @@
       if (okSpoken(txt)) wins.push([t, t + 8, txt]);
       if (wins.length >= 12) break;
     }
+    return wins;
+  }
+  async function ingestWhisperOnDevice(vid, title, onStage, section, durationSec) {
+    section = slugSection(section);
+    const b64 = window.HKNative.fetchAudioB64('https://www.youtube.com/watch?v=' + vid);
+    if (!b64 || b64.length < 30000) throw new Error('could not grab audio on device');
+    onStage('Decoding audio on device…', 0.15);
+    const pcm = await decodeAudio(b64ToBytes(b64));
+    const wins = await transcribeWindows(pcm, durationSec, onStage);
     if (!wins.length) throw new Error('on-device ear heard nothing usable');
     onStage('Saving ' + wins.length + ' quizzes…', 0.85);
     const clips = makeClips(vid, title || 'YouTube video', wins, [], section);
@@ -433,6 +442,58 @@
     await enrichWithGlossary(clips);
     const n = await persistAndShow(clips);
     return { n, title, section, source: 'device-whisper' };
+  }
+  // PATH D — desktop Chrome + HörKlar importer extension (user's pc, no server).
+  // Subtitles come straight through the extension; if none exist, the
+  // extension drops the audio track in Downloads and the user picks it
+  // (one click) for fully local in-page transcription.
+  function pickExtTrack(tracks, want) {
+    const norm = (tracks || []).map((t) => ({
+      lang: String(t.lang || '').toLowerCase().replace('_', '-'),
+      text: t.text || '', auto: !!t.auto,
+    })).filter((t) => t.text && t.text.length > 50 &&
+      (t.lang === want || t.lang.indexOf(want + '-') === 0));
+    norm.sort((a, b) => (a.auto ? 1 : 0) - (b.auto ? 1 : 0));
+    return norm[0] || null;
+  }
+  async function ingestViaExtension(vid, onStage, section, askFile) {
+    section = slugSection(section);
+    onStage('Reading via extension…', 0.08);
+    const info = await window.HKExt.subtitles(vid);
+    const de = pickExtTrack(info.tracks, 'de');
+    if (de) {
+      const cues = parseCues(de.text);
+      if (cues.length >= 2) {
+        const wins = buildWindows(cues);
+        if (wins.length) {
+          const enT = pickExtTrack(info.tracks, 'en');
+          const trCues = enT ? parseCues(enT.text) : [];
+          const title = info.title || 'YouTube video';
+          onStage('Saving ' + wins.length + ' quizzes…', 0.8);
+          const clips = makeClips(vid, title, wins, trCues, section);
+          clips.forEach((c) => { c.transcript_source = 'ext_subs'; });
+          await enrichWithGlossary(clips);
+          const n = await persistAndShow(clips);
+          return { n, title, section, source: 'extension' };
+        }
+      }
+    }
+    // No usable subtitles: local ear via a picked audio file.
+    onStage('No subtitles — saving audio to Downloads…', 0.12);
+    const dl = await window.HKExt.audioFile(vid);
+    onStage('Pick the audio file to transcribe on your pc…', 0.16);
+    const file = await askFile(dl.filename);
+    onStage('Decoding audio on your pc…', 0.2);
+    const ab = await file.arrayBuffer();
+    const pcm = await decodeAudio(new Uint8Array(ab));
+    const wins = await transcribeWindows(pcm, info.duration || 0, onStage);
+    if (!wins.length) throw new Error('on-device ear heard nothing usable');
+    onStage('Saving ' + wins.length + ' quizzes…', 0.85);
+    const clips = makeClips(vid, info.title || 'YouTube video', wins, [], section);
+    clips.forEach((c) => { c.transcript_source = 'ext_whisper'; });
+    await enrichWithGlossary(clips);
+    const n = await persistAndShow(clips);
+    return { n, title: info.title, section, source: 'extension-whisper' };
   }
   function slugSection(s) {
     s = String(s || '').toLowerCase().replace(/[^a-z0-9 _-]/g, '').trim().replace(/[\s-]+/g, '_').slice(0, 24);
@@ -514,5 +575,5 @@
     } catch (_) { /* page context differs */ }
   }
 
-  window.ClientIngest = { videoId, ingestNative, ingestViaMirrors, parseCues, buildWindows, distractors, refreshSections, slugSection, prettySection, listCustomSections, deleteSection };
+  window.ClientIngest = { videoId, ingestNative, ingestViaMirrors, ingestViaExtension, parseCues, buildWindows, distractors, refreshSections, slugSection, prettySection, listCustomSections, deleteSection };
 })();

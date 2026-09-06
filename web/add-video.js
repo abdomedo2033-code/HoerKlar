@@ -140,6 +140,38 @@
         } catch (e) { card.done(e.message && !/^Failed:/.test(e.message) ? 'Failed: ' + String(e.message).slice(0, 160) : String(e.message).slice(0, 180), e.message); }
         return;
       }
+      // Path B2 — desktop Chrome + HörKlar importer extension (user's pc).
+      if (window.HKExt && window.HKExt.available && window.ClientIngest && !lines.some(isPlaylist)) {
+        const vids = [];
+        let bad = null;
+        for (const u of lines) {
+          const v = window.ClientIngest.videoId(u);
+          if (!v) { bad = u; break; }
+          vids.push(v);
+        }
+        if (!bad) {
+          document.getElementById('addVideoModal').hidden = true;
+          inp.value = '';
+          const card = this.card();
+          const askFile = (filename) => new Promise((resolve, reject) => {
+            card.filePick(filename, resolve, reject);
+          });
+          let total = 0, extFailed = null;
+          try {
+            for (let i = 0; i < vids.length; i++) {
+              const res = await window.ClientIngest.ingestViaExtension(
+                vids[i], (stage, p) => card.progress(`Video ${i + 1}/${vids.length}: ${stage}`, (i + p) / vids.length), section, askFile);
+              total += res.n;
+            }
+            card.done(`✅ ${total} quizzes ready in ${window.ClientIngest.prettySection(section)} (built on your pc)`);
+          } catch (e) { extFailed = e.message; }
+          if (!extFailed) return;
+          card.done('Extension could not finish (' + String(extFailed).slice(0, 120) + ') — trying mirrors…', true);
+        } else if (!window.HKNative) {
+          err.textContent = 'could not find a video id in: ' + bad.slice(0, 60);
+          return;
+        }
+      }
       // Path B — plain browser: mirrors on YOUR device, zero Deck, zero server.
       if (window.ClientIngest && !lines.some(isPlaylist)) {
         const vids = [];
@@ -221,6 +253,25 @@
       const progEl = card.querySelector('.jc-prog');
       return {
         progress(stage, p) { stageEl.textContent = stage; progEl.style.width = Math.round(p * 100) + '%'; },
+        filePick(filename, resolve, reject) {
+          stageEl.innerHTML = '';
+          const note = document.createElement('div');
+          note.style.cssText = 'font-size:13px;color:#9aa3c7;margin:6px 0';
+          note.textContent = 'Saved audio as ' + filename + ' — pick it to transcribe on your pc:';
+          const inp2 = document.createElement('input');
+          inp2.type = 'file'; inp2.accept = 'audio/*,.webm,.m4a,.mp3,.opus';
+          inp2.style.cssText = 'margin:4px 0;color:#eef0ff';
+          const cancel = document.createElement('button');
+          cancel.textContent = 'Skip';
+          cancel.className = 'secdel';
+          cancel.style.marginLeft = '8px';
+          cancel.onclick = () => reject(new Error('skipped by user'));
+          inp2.onchange = () => {
+            if (inp2.files && inp2.files[0]) resolve(inp2.files[0]);
+            else reject(new Error('no file picked'));
+          };
+          stageEl.appendChild(note); stageEl.appendChild(inp2); stageEl.appendChild(cancel);
+        },
         done(msg, failed) {
           card.querySelector('.jc-title').textContent = msg;
           if (failed) { stageEl.textContent = failed === true ? '' : String(failed).slice(0, 200); progEl.style.width = '0%'; }

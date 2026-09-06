@@ -1,0 +1,26 @@
+{
+  "manifest_version": 3,
+  "name": "HörKlar importer",
+  "version": "1.0",
+  "description": "Lets your HörKlar site read YouTube subtitles and audio on YOUR pc — no server, no Deck.",
+  "permissions": ["tabs", "storage", "downloads"],
+  "host_permissions": [
+    "https://www.youtube.com/*",
+    "https://*.googlevideo.com/*",
+    "https://abdomedo2033-code.github.io/*"
+  ],
+  "background": { "service_worker": "background.js" },
+  "content_scripts": [
+    {
+      "matches": ["https://abdomedo2033-code.github.io/HoerKlar/*"],
+      "js": ["hoerklar-bridge.js"],
+      "run_at": "document_start"
+    },
+    {
+      "matches": ["https://www.youtube.com/watch*"],
+      "js": ["youtube-import.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": { "default_title": "HörKlar importer" }
+}
