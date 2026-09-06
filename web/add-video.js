@@ -141,11 +141,19 @@
         return;
       }
       // Path B — browser: hand off to the API backend (Deck/Render worker).
+      const DEFAULT_API = 'https://hoerklar-api.onrender.com';
+      const tryIngest = (base) => fetch(base + '/api/ingest', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ urls: lines, user: this.user, section }),
+      });
       try {
-        const r = await fetch(this.api + '/api/ingest', {
-          method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ urls: lines, user: this.user, section }),
-        });
+        let r = null, used = this.api;
+        try {
+          r = await tryIngest(this.api);
+        } catch (e1) {
+          if (this.api !== DEFAULT_API) { used = DEFAULT_API; r = await tryIngest(DEFAULT_API); }
+          else throw e1;
+        }
         const j = await r.json();
         if (!r.ok) throw new Error(j.error || ('http ' + r.status));
         document.getElementById('addVideoModal').hidden = true;
@@ -162,8 +170,9 @@
           card.done('Note: ' + j.skipped.map((s) => s.error).join('; '), true);
         }
       } catch (e) {
-        err.textContent = (window.HKNative ? e.message :
-          'no backend reachable — open this page in the HörKlar app, or set up the API backend');
+        err.textContent = 'backend not reachable (' + (typeof used !== 'undefined' ? used : this.api) + '). ' +
+          (window.HKNative ? e.message :
+          'Check connection/ad-blocker, or open this page in the HörKlar app.');
       }
     },
     forgetJob(jobId) {
