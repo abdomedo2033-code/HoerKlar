@@ -137,7 +137,7 @@
             total += res.n;
           }
           card.done(`✅ ${total} quizzes ready in ${window.ClientIngest.prettySection(section)}`);
-        } catch (e) { card.done(`Got ${total} quizzes, then failed: ` + e.message, total === 0); }
+        } catch (e) { card.done(e.message && !/^Failed:/.test(e.message) ? 'Failed: ' + String(e.message).slice(0, 160) : String(e.message).slice(0, 180), e.message); }
         return;
       }
       // Path B — browser: hand off to the API backend (Deck/Render worker).
@@ -192,9 +192,9 @@
       return {
         progress(stage, p) { stageEl.textContent = stage; progEl.style.width = Math.round(p * 100) + '%'; },
         done(msg, failed) {
-          card.querySelector('.jc-title').textContent = failed ? '🎬 Build failed' : msg;
-          stageEl.textContent = failed ? msg : '';
-          progEl.style.width = failed ? '0%' : '100%';
+          card.querySelector('.jc-title').textContent = msg;
+          if (failed) { stageEl.textContent = failed === true ? '' : String(failed).slice(0, 200); progEl.style.width = '0%'; }
+          else { stageEl.textContent = ''; progEl.style.width = '100%'; }
           if (!failed) setTimeout(() => card.remove(), 15000);
         },
       };
@@ -230,12 +230,11 @@
               (async () => {
                 try {
                   const fresh = j.clips_ready || [];
-                  if (fresh.length && window.ClipLoader) {
-                    const mine = (await window.ClipLoader.cacheGet('clips_myvideos')) || [];
-                    const have = new Set(mine.map((c) => c.clip_id));
-                    for (const c of fresh) if (c.clip_id && !have.has(c.clip_id)) { mine.push(c); have.add(c.clip_id); }
-                    await window.ClipLoader.cachePut('clips_myvideos', mine);
-                  }
+                  const mine = (await window.ClipLoader.cacheGet('clips_myvideos')) || [];
+                  const have = new Set(mine.map((c) => c.clip_id));
+                  for (const c of fresh) if (c.clip_id && !have.has(c.clip_id)) { mine.push(c); have.add(c.clip_id); }
+                  try { if (window.TrapMeanings) await window.TrapMeanings.enrichWithGlossary(mine); } catch (_) {}
+                  await window.ClipLoader.cachePut('clips_myvideos', mine);
                   const live = new Set(clips.map((c) => c.clip_id));
                   for (const c of (j.clips_ready || [])) if (c.clip_id && !live.has(c.clip_id)) clips.push(c);
                   if (window.ClientIngest && window.ClientIngest.refreshSections) window.ClientIngest.refreshSections();
@@ -243,7 +242,7 @@
               })();
               window.dispatchEvent(new CustomEvent('hk:clips-updated', { detail: { section: 'myvideos' } }));
               setTimeout(() => card.remove(), 15000);
-            } else { stageEl.textContent = 'Failed: ' + (j.error || 'unknown error'); }
+            } else { stageEl.textContent = 'Failed: ' + (j.error || 'no details — try again, or send me the video link and I will build it by hand'); }
           }
         } catch (_) { /* transient — keep polling */ }
       };
