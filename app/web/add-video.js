@@ -49,17 +49,21 @@
       document.getElementById('addVideoGo').onclick = () => this.submit();
     },
     fillSections() {
-      // Section picker: existing sections first, ⭐ My videos default.
+      // Section picker: your existing sections only — no default bucket.
+      // Pick one, or type a brand-new name beside it.
       try {
         const sel = document.getElementById('addVideoSectionSel');
         if (!sel) return;
-        const secs = [...new Set((typeof clips !== 'undefined' ? clips : []).map((c) => c.section || 'movies'))]
-          .filter((s) => s !== 'all' && s !== 'playphrase');
-        const order = ['myvideos', ...secs.filter((s) => s !== 'myvideos').sort()];
+        const secs = [...new Set((typeof clips !== 'undefined' ? clips : []).map((c) => c.section || ''))]
+          .filter((s) => s && s !== 'all' && s !== 'playphrase' && s !== 'myvideos' &&
+            !['movies', 'series', 'songs', 'nicos'].includes(s)).sort();
         const pretty = (window.ClientIngest && window.ClientIngest.prettySection)
           ? window.ClientIngest.prettySection : (s) => s;
         sel.innerHTML = '';
-        for (const s of order) {
+        const ph = document.createElement('option');
+        ph.value = ''; ph.textContent = secs.length ? 'Choose a section…' : 'No sections yet — name one →';
+        sel.appendChild(ph);
+        for (const s of secs) {
           const o = document.createElement('option');
           o.value = s; o.textContent = pretty(s);
           sel.appendChild(o);
@@ -70,12 +74,12 @@
       try {
         const fresh = document.getElementById('addVideoSection');
         if (fresh && fresh.value.trim()) {
-          return ((window.ClientIngest && window.ClientIngest.slugSection(fresh.value)) || 'myvideos');
+          return ((window.ClientIngest && window.ClientIngest.slugSection(fresh.value)) || '');
         }
         const sel = document.getElementById('addVideoSectionSel');
         if (sel && sel.value) return sel.value;
       } catch (_) {}
-      return 'myvideos';
+      return '';
     },
     async submit() {
       const inp = document.getElementById('addVideoUrls') || document.getElementById('addVideoUrl');
@@ -83,7 +87,8 @@
       err.textContent = '';
       const lines = inp.value.split(/\n+/).map((s) => s.trim()).filter(Boolean).slice(0, 10);
       if (!lines.length) { err.textContent = 'paste at least one link'; return; }
-      const section = this.readSection() || 'myvideos';
+      const section = this.readSection();
+      if (!section) { err.textContent = 'pick a section above, or type a new name'; return; }
       const isPlaylist = (u) => /[?&]list=([A-Za-z0-9_-]{8,64})/.test(u);
       // Path A — Android app: device fetches natively, one video at a time.
       if (window.HKNative && window.ClientIngest && !lines.some(isPlaylist)) {
