@@ -157,19 +157,10 @@ def run_whisper_fallback(video_id, title, workdir, vocab=(), seed=41,
             break
     if on_partial and clips:
         on_partial(list(clips))
-    try:
-        sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                        "..", "server"))
-        import mt_ar
-        n_ar = mt_ar.fill_ar(clips)
-        n_wt = mt_ar.fill_ar_word_traps(clips, vocab)
-        if n_wt:
-            print(f"[whisper] +{n_wt} AR word-trap meanings", flush=True)
-        if n_ar:
-            print(f"[whisper] +{n_ar} local AR translations", flush=True)
-        n_tr = mt_ar.fill_ar_traps(clips)
-        if n_tr:
-            print(f"[whisper] +{n_tr} AR trap-meaning distractors", flush=True)
-    except Exception as e:
-        print(f"[whisper] mt_ar skipped ({e})", flush=True)
+    # NOTE: no translations on whisper clips by design — sung/mumbled audio
+    # mistranslates, and wrong Arabic is worse than listening/cloze only.
+    # The page falls back to listening+cloze automatically.
+    for _c in clips:
+        _c.pop('translations', None)
+        _c.pop('translation_distractors', None)
     return clips

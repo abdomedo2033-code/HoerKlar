@@ -513,6 +513,7 @@ window.HK_API_BASE = (function(){ try{ return localStorage.hk_api || "https://ho
   function done(){ try{ if(window.AddVideo){ AddVideo.init({}); } }catch(_){} try{ var pj=JSON.parse(localStorage.hk_jobs||'[]'); pj.forEach(function(id){ AddVideo.watch(id); }); }catch(_){} load(); try{ if(window.ClientIngest&&ClientIngest.refreshSections) ClientIngest.refreshSections(); }catch(_){} }
   function armed(){ try{ if(window.TrapMeanings){ window.TrapMeanings.apply(clips).then(done).catch(done); return; } }catch(_){} done(); }
   try{ merge(window.__SEED_MYVIDEOS); }catch(_){}
+  try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persist().then(function(p){ try{ console.log('[HörKlar] storage persisted:', p); }catch(_){} }); }catch(_){}
   var apiP = null;
   try{ apiP = fetch(window.HK_API_BASE + '/api/clips?section=myvideos').then(function(r){ return r.ok ? r.json() : []; }); }
   catch(_){ apiP = null; }
@@ -521,8 +522,49 @@ window.HK_API_BASE = (function(){ try{ return localStorage.hk_api || "https://ho
     if(!window.ClipLoader){ armed(); return; }
     try{
       window.ClipLoader.cacheGet('clips_myvideos').then(function(saved){
+        var before = clips.length;
         merge(saved);
-        try{ window.ClipLoader.cachePut('clips_myvideos', clips.filter(function(c){ var s=c.section||''; return s && s!=='movies' && s!=='series' && s!=='songs' && s!=='nicos'; })); }catch(_){}
+        function finish(){
+        var mine = clips.filter(function(c){ var s=c.section||''; return s && s!=='movies' && s!=='series' && s!=='songs' && s!=='nicos'; });
+        try{
+          window.ClipLoader.cachePut('clips_myvideos', mine).then(function(){
+            // rotating backups: yesterday's save rescues any future clobber
+            try{ window.ClipLoader.cacheGet('clips_myvideos_bak').then(function(b){
+              window.ClipLoader.cachePut('clips_myvideos_bak2', b || []);
+              window.ClipLoader.cachePut('clips_myvideos_bak', mine);
+            }).catch(function(){}); }catch(_){}
+          }).catch(function(){});
+        }catch(_){}
+        try{ console.log('[HörKlar] clips:', before, '->', clips.length, '(personal:', mine.length + ')'); }catch(_){}
+        armed();
+        }
+        if ((!saved || !saved.length)) {
+          // primary empty but backups may hold yesterday's sections: rescue
+          try{
+            window.ClipLoader.cacheGet('clips_myvideos_bak').then(function(b){
+              if (b && b.length) { merge(b); }
+              else {
+                window.ClipLoader.cacheGet('clips_myvideos_bak2').then(function(b2){
+                  if (b2 && b2.length) merge(b2);
+                  finish();
+                }).catch(finish);
+                return;
+              }
+              finish();
+            }).catch(finish);
+          }catch(_){ finish(); }
+        } else { finish(); }
+        var mine = clips.filter(function(c){ var s=c.section||''; return s && s!=='movies' && s!=='series' && s!=='songs' && s!=='nicos'; });
+        try{
+          window.ClipLoader.cachePut('clips_myvideos', mine).then(function(){
+            // rotating backups: yesterday's save rescues any future clobber
+            try{ window.ClipLoader.cacheGet('clips_myvideos_bak').then(function(b){
+              window.ClipLoader.cachePut('clips_myvideos_bak2', b || []);
+              window.ClipLoader.cachePut('clips_myvideos_bak', mine);
+            }).catch(function(){}); }catch(_){}
+          }).catch(function(){});
+        }catch(_){}
+        try{ console.log('[HörKlar] clips:', before, '->', clips.length, '(personal:', mine.length + ')'); }catch(_){}
         armed();
       }).catch(armed);
     }catch(_){ armed(); }
