@@ -63,7 +63,7 @@ function setupPlayer(){
   if(isArch){ archF.style.display='block'; archF.src=cur.video_url; } else { archF.style.display='none'; archF.src=''; }
   if(isYT){
     ensureYT();
-    const init=()=>{ if(window.YT && window.YT.Player){ try{ if(ytPlayer) ytPlayer.destroy(); }catch(e){}; ytPlayer=new window.YT.Player('yt',{videoId:cur.video_id.split('?')[0].split('/') .pop(), playerVars:{modestbranding:1,rel:0,playsinline:1,controls:0,disablekb:1,fs:0,iv_load_policy:3,cc_load_policy:0}, events:{onReady:(e)=>{ try{ e.target.setPlaybackRate(slow?0.75:1); }catch(_){} setTimeout(function(){ try{playClip(true);}catch(e){} },400);, onError:(e)=>{ document.getElementById('attribution').innerHTML+=` <br><span style='color:#FF8A8A'>⚠️ تضمين محظور — <a href="${cur.embed_url}" target="_blank" style="color:#b8c0ff">شاهد على YouTube ↗</a></span>`; }}}); } else setTimeout(init,500); };
+    const init=()=>{ if(window.YT && window.YT.Player){ try{ if(ytPlayer) ytPlayer.destroy(); }catch(e){}; ytPlayer=new window.YT.Player('yt',{videoId:cur.video_id.split('?')[0].split('/') .pop(), playerVars:{modestbranding:1,rel:0,playsinline:1,controls:0,disablekb:1,fs:0,iv_load_policy:3,cc_load_policy:0}, events:{onReady:(e)=>{ try{ e.target.setPlaybackRate(slow?0.75:1); }catch(_){} setTimeout(function(){ try{playClip(true);}catch(e){} },400); }, onError:(e)=>{ document.getElementById('attribution').innerHTML+=` <br><span style='color:#FF8A8A'>⚠️ تضمين محظور — <a href="${cur.embed_url}" target="_blank" style="color:#b8c0ff">شاهد على YouTube ↗</a></span>`; }}}); } else setTimeout(init,500); };
     init();
     document.getElementById('time').textContent=`Clip ${cur.start_time}–${cur.end_time}s (YouTube clip-only)`;
     return;
