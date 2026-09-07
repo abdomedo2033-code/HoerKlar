@@ -149,13 +149,19 @@
   async function mmLookup(words, pair, isRefused, setRefused, sent) {
     const out = {};
     const queue = [...new Set((words || []).map((w) => String(w || '').trim()).filter((w) => w.length >= 3))].slice(0, 24);
+    // Optional quota key: set localStorage.hk_mymemory_email to raise limits.
+    let extra = '';
+    try { const em = localStorage.hk_mymemory_email || ''; if (em) extra = '&de=' + encodeURIComponent(em); } catch (_) {}
+    // Consecutive-failure breaker: quota refusals arrive CORS-blocked (they
+    // never resolve, so status 429 is never seen) — stop the batch fast.
+    let fails = 0;
     for (const q of queue) {
       if (isRefused && isRefused()) break;
       try {
         const r = await fetch('https://api.mymemory.translated.net/get?q=' +
-          encodeURIComponent(q.slice(0, sent ? 500 : 60)) + '&langpair=' + pair);
+          encodeURIComponent(q.slice(0, sent ? 500 : 60)) + '&langpair=' + pair + extra);
         if (r.status === 429) { if (setRefused) setRefused(true); break; }
-        if (!r.ok) continue;
+        if (!r.ok) throw new Error('http ' + r.status);
         const d = await r.json();
         let best = (((d.responseData || {}).translatedText) || '').trim();
         if (/MYMEMORY WARNING|QUERY LENGTH LIMIT|429/i.test(best)) continue;
@@ -163,8 +169,11 @@
         best = best.replace(/\s*\(.*?\)\s*/g, ' ').replace(/[.،;!؟?]+$/, '').replace(/\s+/g, ' ').trim();
         const ok = sent ? wantsent_check(best, wantAr) : wantar_check(best, wantAr);
         if (ok && best.toLowerCase() !== q.toLowerCase()) out[q.toLowerCase()] = best;
-      } catch (_) {}
-      await new Promise((res) => setTimeout(res, 350));
+        fails = 0;
+      } catch (_) {
+        if (++fails >= 3) { if (setRefused) setRefused(true); break; }
+      }
+      await new Promise((res) => setTimeout(res, 500));
     }
     return out;
   }
@@ -215,9 +224,9 @@
       if (td[lang] && td[lang].length) continue;
       if (!looksGerman(c.correct_answer || c.dutch_text || '')) continue;
       for (const w of (c.wrong_answers || []).slice(0, 3)) {
-        if (w && w !== c.correct_answer && jobs.length < 12) jobs.push({ c, w });
+        if (w && w !== c.correct_answer && jobs.length < 8) jobs.push({ c, w });
       }
-      if (jobs.length >= 12) break;
+      if (jobs.length >= 8) break;
     }
     if (!jobs.length) return 0;
     const got = await mmLookup(jobs.map((j) => j.w), pair, isRefused, setRefused, true);
@@ -258,7 +267,7 @@
     let n = 0;
     // 429 circuit breaker shared across this call: first refusal stops the batch.
     let refused = false;
-    const needAr = clips.filter((c) => !((c.translations || {}).ar) && looksGerman(c.dutch_text)).slice(0, 6);
+    const needAr = clips.filter((c) => !((c.translations || {}).ar) && looksGerman(c.dutch_text)).slice(0, 5);
     if (needAr.length) {
       const got = await mmLookup(needAr.map((c) => c.dutch_text.trim()), 'de|ar', () => refused, (v) => { refused = v; }, true);
       for (const c of needAr) {
@@ -267,7 +276,7 @@
         if (a) { (c.translations = c.translations || {}).ar = a; n++; }
       }
     }
-    const needEn = clips.filter((c) => !((c.translations || {}).en) && looksGerman(c.dutch_text)).slice(0, 6);
+    const needEn = clips.filter((c) => !((c.translations || {}).en) && looksGerman(c.dutch_text)).slice(0, 5);
     if (needEn.length && !refused) {
       const got = await mmLookup(needEn.map((c) => c.dutch_text.trim()), 'de|en', () => refused, (v) => { refused = v; }, true);
       for (const c of needEn) {
