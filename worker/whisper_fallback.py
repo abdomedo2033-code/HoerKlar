@@ -95,7 +95,17 @@ def transcribe_batch(wavs, lang="de"):
     from faster_whisper import WhisperModel
     import os as _os
     size = _os.environ.get("HK_WHISPER_MODEL", "tiny")  # base is more accurate, ~2x slower
-    model = WhisperModel(size, device="cpu", compute_type="int8")
+    try:
+        model = WhisperModel(size, device="cpu", compute_type="int8")
+    except Exception as e:
+        msg = str(e) or type(e).__name__
+        if "snapshot" in msg or "offline" in msg.lower() or "HF_HUB_OFFLINE" in msg:
+            raise RuntimeError(
+                f"Deck Whisper model '{size}' is not in the HF cache "
+                f"({_os.environ.get('HF_HOME', '~/.cache/huggingface')}) — warm it up on the Deck with network ON: "
+                f" ~/whisperenv/bin/python -c \"from faster_whisper import WhisperModel; "
+                f"WhisperModel('{size}', device='cpu', compute_type='int8')\"") from e
+        raise
     out = {}
     for wav in wavs:
         try:

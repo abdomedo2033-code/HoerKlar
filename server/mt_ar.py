@@ -68,8 +68,16 @@ def _get_pipe():
             # Local files only: never stall a job on a download.
             os.environ.setdefault("HF_HUB_OFFLINE", "1")
             from transformers import MarianMTModel, MarianTokenizer
-            tok = MarianTokenizer.from_pretrained(_MODEL_ID, local_files_only=True)
-            mdl = MarianMTModel.from_pretrained(_MODEL_ID, local_files_only=True)
+            try:
+                # transformers>=5 mishandles local_files_only with a bare
+                # model id — resolve the snapshot dir via huggingface_hub
+                # first, then load from the explicit local path.
+                from huggingface_hub import snapshot_download
+                local_id = snapshot_download(_MODEL_ID, local_files_only=True)
+            except Exception:
+                local_id = _MODEL_ID
+            tok = MarianTokenizer.from_pretrained(local_id, local_files_only=True)
+            mdl = MarianMTModel.from_pretrained(local_id, local_files_only=True)
             mdl.eval()
             _mt = (tok, mdl)
             return _mt

@@ -41,6 +41,29 @@ def _req(method, path, payload=None):
         return json.loads(r.read().decode())
 
 
+def _selfcheck():
+    """Startup diagnostics: log exactly which local models work, so a future
+    'snapshot/offline' job failure is already explained in worker.log."""
+    import os
+    print(f"[worker] env HF_HOME={os.environ.get('HF_HOME', '(default ~/.cache/huggingface)')} "
+          f"HF_HUB_OFFLINE={os.environ.get('HF_HUB_OFFLINE', '(unset)')} "
+          f"HK_WHISPER_MODEL={os.environ.get('HK_WHISPER_MODEL', 'tiny')}", flush=True)
+    try:
+        from faster_whisper import WhisperModel
+        WhisperModel(os.environ.get("HK_WHISPER_MODEL", "tiny"),
+                     device="cpu", compute_type="int8")
+        print("[worker] whisper model: OK", flush=True)
+    except Exception as e:
+        print(f"[worker] whisper model: MISSING ({str(e)[:150]})", flush=True)
+    try:
+        import sys
+        sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "server"))
+        import mt_ar
+        print(f"[worker] opus-mt-de-ar: {'OK' if mt_ar.available() else 'not cached'}", flush=True)
+    except Exception as e:
+        print(f"[worker] opus-mt-de-ar: unavailable ({str(e)[:120]})", flush=True)
+
+
 def _human_error(e):
     """Raw tracebacks (e.g. CalledProcessError 'Command [...]') scare users
     and leak local paths — translate the known ones into plain language."""
@@ -53,6 +76,11 @@ def _human_error(e):
     if "Sign in to confirm" in s or "Failed to extract any player response" in s:
         return ("YouTube blocked this request from the server "
                 "(the Deck retries on its own network — leave the card open)")
+    if ("snapshot" in s or "HF_HUB_OFFLINE" in s
+            or "offline mode is enabled" in s.lower()):
+        return ("Deck speech model not ready — it repairs itself on the next "
+                "Deck restart (warmup runs at boot), or whisper is skipped "
+                "for videos that already have subtitles")
     return s[:220]
 
 
@@ -196,6 +224,7 @@ def main():
                     help="process a single queued job then exit (testing)")
     args = ap.parse_args()
     print(f"[worker] polling {API} every {POLL_S}s (workdir={WORKDIR})", flush=True)
+    _selfcheck()
     while True:
         try:
             nxt = _req("GET", "/api/jobs/next?worker=deck")
