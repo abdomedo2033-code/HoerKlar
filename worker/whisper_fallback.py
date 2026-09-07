@@ -91,12 +91,24 @@ def fetch_wav(video_id, ts, dur, wav):
         return False
 
 
-def transcribe_batch(wavs, lang="de"):
+def _load_model(size):
     from faster_whisper import WhisperModel
+    kw = dict(device="cpu", compute_type="int8")
+    try:
+        return WhisperModel(size, **kw)
+    except Exception as e:
+        if "snapshot" not in str(e) and "offline" not in str(e).lower():
+            raise
+        import time as _t
+        _t.sleep(3)  # transient cache/lock flake — one retry
+        return WhisperModel(size, **kw)
+
+
+def transcribe_batch(wavs, lang="de"):
     import os as _os
     size = _os.environ.get("HK_WHISPER_MODEL", "tiny")  # base is more accurate, ~2x slower
     try:
-        model = WhisperModel(size, device="cpu", compute_type="int8")
+        model = _load_model(size)
     except Exception as e:
         msg = str(e) or type(e).__name__
         if "snapshot" in msg or "offline" in msg.lower() or "HF_HUB_OFFLINE" in msg:

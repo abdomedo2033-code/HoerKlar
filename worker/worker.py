@@ -233,7 +233,8 @@ def main():
                 try:
                     handle(job)
                 except Exception as e:
-                    print(f"[worker] job {job.get('job_id')} failed: {e}", flush=True)
+                    import traceback as _tb
+                    print(f"[worker] job {job.get('job_id')} failed: {e}\n{_tb.format_exc()}", flush=True)
                     post_progress(job.get("job_id"), status="error",
                                   stage="error", progress=0.0,
                                   error=_human_error(e))
