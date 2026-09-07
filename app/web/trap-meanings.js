@@ -66,13 +66,15 @@
 
   // Live dictionary lookup from the visitor's own browser (CORS-open API,
   // no key). Fills whatever the offline glossary missed. Never throws.
-  async function mmLookup(words, pair) {
+  async function mmLookup(words, pair, isRefused, setRefused) {
     const out = {};
     const queue = [...new Set((words || []).map((w) => String(w || '').trim()).filter((w) => w.length >= 3))].slice(0, 24);
     for (const q of queue) {
+      if (isRefused && isRefused()) break;
       try {
         const r = await fetch('https://api.mymemory.translated.net/get?q=' +
           encodeURIComponent(q.slice(0, 60)) + '&langpair=' + pair);
+        if (r.status === 429) { if (setRefused) setRefused(true); break; }
         if (!r.ok) continue;
         const d = await r.json();
         let best = (((d.responseData || {}).translatedText) || '').trim();
@@ -91,13 +93,29 @@
     return wantAr ? /[ء-غف-ي]/.test(s) : /^[A-Za-z][A-Za-z '’\-]*$/.test(s);
   }
 
+  // Looks-German gate: only translate text that is plausibly German.
+  // (Song lyrics in French etc. must never be sent to the de->ar endpoint.)
+  const DE_HINT = /\b(der|die|das|den|dem|und|ist|nicht|ich|du|er|sie|wir|mit|für|auf|ein|eine|einer|auch|nur|schon|noch|wie|was|wo|wenn|dass|weil|sich|uns|euch|ihnen|kein|keine|mein|meine|dein|deine|sein|seine|ihr|ihre|unser|euer|wird|werden|bin|bist|sind|war|waren|hat|haben|wird|kann|muss|soll|will|darf|mag|möchte|vom|zum|beim|nach|über|unter|zwischen|durch|gegen|ohne|gegenüber|heute|morgen|jetzt|hier|dort|sehr|mehr|alle|viele|jede|jeder|jedes|welche|dieser|diese|dieses|jener|alle|beide)\b/i;
+  function looksGerman(t) {
+    t = String(t || '');
+    if (t.length < 10 || t.length > 170) return false;
+    if (/[äöüß]/.test(t)) return true;
+    const words = t.toLowerCase().replace(/[^a-zäöüß ]/g, ' ').split(/\s+/).filter(Boolean);
+    if (words.length < 3) return false;
+    let hits = 0;
+    for (const w of words) { DE_HINT.lastIndex = 0; if (DE_HINT.test(' ' + w + ' ')) hits++; }
+    return hits >= 2 || (hits >= 1 && /[äöüß]/.test(t));
+  }
+
   async function enrichWithGlossary(clips) {
     // Offline glossary first, live dictionary for the gaps — all on-device.
     const g = await getGlossary();
     let n = 0;
-    const needAr = clips.filter((c) => !((c.translations || {}).ar) && ((c.dutch_text || '').trim().length >= 10));
+    // 429 circuit breaker shared across this call: first refusal stops the batch.
+    let refused = false;
+    const needAr = clips.filter((c) => !((c.translations || {}).ar) && looksGerman(c.dutch_text)).slice(0, 6);
     if (needAr.length) {
-      const got = await mmLookup(needAr.map((c) => c.dutch_text.trim()), 'de|ar');
+      const got = await mmLookup(needAr.map((c) => c.dutch_text.trim()), 'de|ar', () => refused, (v) => { refused = v; });
       for (const c of needAr) {
         const key = c.dutch_text.trim();
         const a = got[key.toLowerCase()] || got[key];
@@ -124,8 +142,8 @@
           }
           if (hol.length >= 3) break;
         }
-        if (hol.length < 2 && missing.length) {
-          const got = await mmLookup(missing, lang === 'ar' ? 'de|ar' : 'de|en');
+        if (hol.length < 2 && missing.length && !refused) {
+          const got = await mmLookup(missing, lang === 'ar' ? 'de|ar' : 'de|en', () => refused, (v) => { refused = v; });
           for (const dw of missing) {
             const m = (got[dw.toLowerCase()] || '').trim();
             if (m && m.toLowerCase() !== String(tr[lang]).toLowerCase() && hol.indexOf(m) < 0 &&

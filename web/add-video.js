@@ -317,7 +317,7 @@
                   const mine = (await window.ClipLoader.cacheGet('clips_myvideos')) || [];
                   const have = new Set(mine.map((c) => c.clip_id));
                   for (const c of fresh) if (c.clip_id && !have.has(c.clip_id)) { mine.push(c); have.add(c.clip_id); }
-                  try { if (window.TrapMeanings) await window.TrapMeanings.enrichWithGlossary(mine); } catch (_) {}
+                  try { if (window.TrapMeanings) await window.TrapMeanings.enrichWithGlossary(fresh); } catch (_) {}
                   await window.ClipLoader.cachePut('clips_myvideos', mine);
                   const live = new Set(clips.map((c) => c.clip_id));
                   for (const c of (j.clips_ready || [])) if (c.clip_id && !live.has(c.clip_id)) clips.push(c);

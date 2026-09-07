@@ -198,7 +198,7 @@
     } catch (_) { mine = []; }
     const have = new Set(mine.map((c) => c.clip_id));
     for (const c of newClips) if (!have.has(c.clip_id)) { mine.push(c); have.add(c.clip_id); }
-    try { if (window.TrapMeanings) await window.TrapMeanings.enrichWithGlossary(mine); } catch (_) {}
+    try { if (window.TrapMeanings) await window.TrapMeanings.enrichWithGlossary(newClips); } catch (_) {}
     try { if (window.ClipLoader) await window.ClipLoader.cachePut('clips_myvideos', mine); } catch (_) {}
     try {
       const live = new Set(clips.map((c) => c.clip_id));
@@ -227,11 +227,24 @@
   // PATH B — plain browser: public subtitle mirrors, zero server, zero Deck.
   // Tries several mirrors with short timeouts; any one success is enough.
   // (Availability varies by network/day — caller falls back to the backend.)
-  const PIPED = ['https://pipedapi.kavin.rocks', 'https://pipedapi.adminforge.de',
-    'https://pipedapi.leptons.xyz', 'https://pipedapi.reallyaweso.me'];
-  const INVIDIOUS = ['https://inv.nadeko.net', 'https://invidious.nerdvpn.de',
-    'https://iv.melmac.space', 'https://invidious.privacydev.net',
-    'https://yewtu.be', 'https://inv.tux.pizza'];
+  // Mirror sources: the OFFICIAL live instance directory (self-healing —
+  // dead mirrors disappear by themselves) plus two hardcoded fallbacks.
+  const INVIDIOUS_FALLBACK = ['https://inv.nadeko.net', 'https://inv.tux.pizza'];
+  let invCache = null, invCacheAt = 0;
+  async function invidiousBases() {
+    if (invCache && Date.now() - invCacheAt < 3600000) return invCache;
+    try {
+      const raw = await getJSON('https://api.invidious.io/instances.json', 10000);
+      const list = (Array.isArray(raw) ? raw : []).map((e) => Array.isArray(e) ? { uri: e[0], info: e[1] } : e)
+        .filter((e) => e && e.uri && e.uri.indexOf('https://') === 0 && e.info && e.info.api === true)
+        .map((e) => ({ uri: e.uri.replace(/\/$/, ''), up: (e.info.monitor && e.info.monitor.uptime) || 0 }))
+        .sort((a, b) => b.up - a.up)
+        .slice(0, 6)
+        .map((e) => e.uri);
+      if (list.length) { invCache = list; invCacheAt = Date.now(); return list; }
+    } catch (_) {}
+    return INVIDIOUS_FALLBACK;
+  }
 
   async function getJSON(url, ms) {
     const ctl = new AbortController();
@@ -266,40 +279,12 @@
   async function ingestViaMirrors(vid, onStage, section) {
     section = slugSection(section);
     const errs = [];
-    // 1) Piped instances (one call gives title + subtitle list).
-    for (const base of PIPED) {
+    onStage('Finding a live mirror…', 0.08);
+    const bases = await invidiousBases();
+    // Invidious instances (captions list, then track text).
+    for (const base of bases) {
       try {
-        onStage('Asking a subtitle mirror…', 0.1);
-        const d = await getJSON(base + '/streams/' + vid, 9000);
-        const subs = d.subtitles || d.subtitlesList || [];
-        const de = pickSub(subs, 'de');
-        if (!de) { errs.push(base + ': no German track'); continue; }
-        onStage('Reading subtitles on your device…', 0.3);
-        const vtt = await getText(de.url.indexOf('http') === 0 ? de.url : base + de.url, 15000);
-        const cues = parseCues(vtt);
-        if (cues.length < 2) { errs.push(base + ': unreadable track'); continue; }
-        const wins = buildWindows(cues);
-        if (!wins.length) { errs.push(base + ': no clip-length lines'); continue; }
-        let trCues = [];
-        const en = pickSub(subs, 'en');
-        if (en && en.url !== de.url) {
-          try {
-            const t = await getText(en.url.indexOf('http') === 0 ? en.url : base + en.url, 12000);
-            if (t && t.length > 50) trCues = parseCues(t);
-          } catch (_) {}
-        }
-        const title = d.title || 'YouTube video';
-        onStage('Saving ' + wins.length + ' quizzes…', 0.8);
-        const clips = makeClips(vid, title, wins, trCues, section);
-        clips.forEach((c) => { c.transcript_source = 'public_mirror_subs'; });
-        const n = await persistAndShow(clips);
-        return { n, title, section, source: 'mirrors' };
-      } catch (e) { errs.push(base + ': ' + (e.message || e)); }
-    }
-    // 2) Invidious instances (captions list, then track text).
-    for (const base of INVIDIOUS) {
-      try {
-        onStage('Trying another mirror…', 0.15);
+        onStage('Asking a subtitle mirror…', 0.12);
         const caps = await getJSON(base + '/api/v1/captions/' + vid, 9000);
         const list = Array.isArray(caps) ? caps : (caps.captions || []);
         const de = pickSub(list, 'de');
