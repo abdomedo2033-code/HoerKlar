@@ -520,15 +520,12 @@
   // One-time migration: the retired 'myvideos' bucket becomes a normal
   // 'general' section (deletable like any other). Nothing hidden or lost.
   function migrateLegacyBucket() {
+    // Live-array only — persistence happens in the boot write-back, which
+    // always reads first. (Never write here: a stale tab would clobber.)
     try {
       if (typeof clips === 'undefined') return;
-      let moved = false;
       for (const c of clips) {
-        if ((c.section || '') === 'myvideos') { c.section = 'general'; moved = true; }
-      }
-      if (moved && window.ClipLoader) {
-        window.ClipLoader.cachePut('clips_myvideos',
-          clips.filter((c) => !CURATED.has(c.section || ''))).catch(() => {});
+        if ((c.section || '') === 'myvideos') { c.section = 'general'; }
       }
     } catch (_) {}
   }

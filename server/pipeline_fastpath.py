@@ -278,6 +278,8 @@ def run_fastpath(video_id, title, workdir, vocab=(), seed=41,
             "wrong_answers": make_distractors(txt, vocab, rng),
             "cefr": cefr, "difficulty": {"A1": 1, "A2": 2, "B1": 3}.get(cefr, 2),
             "verified": False, "section": section,
+            "license": "YouTube — educational quiz use, video not hosted",
+            "license_url": f"https://www.youtube.com/watch?v={video_id}",
             "transcript_source": "youtube_subs",
             "rights_status": "EMBED_ONLY",
         }

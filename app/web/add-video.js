@@ -47,6 +47,37 @@
       btn.onclick = () => { AddVideo.fillSections(); AddVideo.renderManage(); modal.hidden = false; const ta = document.getElementById('addVideoUrls'); if (ta) ta.focus(); };
       document.getElementById('addVideoCancel').onclick = () => { modal.hidden = true; };
       document.getElementById('addVideoGo').onclick = () => this.submit();
+      const impBtn = document.getElementById('addVideoImportBtn');
+      const impFile = document.getElementById('addVideoImport');
+      if (impBtn && impFile) {
+        impBtn.onclick = () => impFile.click();
+        impFile.onchange = () => AddVideo.importFile(impFile.files && impFile.files[0]);
+      }
+    },
+    async importFile(file) {
+      const err = document.getElementById('addVideoErr');
+      if (!file) return;
+      try {
+        const arr = JSON.parse(await file.text());
+        if (!Array.isArray(arr) || !arr.length) throw new Error('empty');
+        const mine = (window.ClipLoader && await window.ClipLoader.cacheGet('clips_myvideos')) || [];
+        const have = new Set(mine.map((c) => c.clip_id));
+        let n = 0;
+        for (const c of arr) {
+          if (c && c.clip_id && c.dutch_text && !have.has(c.clip_id)) { mine.push(c); have.add(c.clip_id); n++; }
+        }
+        try { if (window.TrapMeanings) await window.TrapMeanings.enrichWithGlossary(mine.slice(-n || 1)); } catch (_) {}
+        if (window.ClipLoader) await window.ClipLoader.cachePut('clips_myvideos', mine);
+        try {
+          const live = new Set(clips.map((c) => c.clip_id));
+          for (const c of mine) if (!live.has(c.clip_id)) clips.push(c);
+          if (window.ClientIngest && window.ClientIngest.refreshSections) window.ClientIngest.refreshSections();
+        } catch (_) {}
+        err.textContent = '';
+        document.getElementById('addVideoModal').hidden = true;
+        const card = this.card();
+        card.done(`✅ Imported ${n} quizzes — pick the section in filters`);
+      } catch (e) { if (err) err.textContent = 'could not read that file'; }
     },
     fillSections() {
       // Section picker: your existing sections only — no default bucket.
@@ -94,6 +125,22 @@
             if (n >= 0) { AddVideo.fillSections(); AddVideo.renderManage(); }
           };
           row.appendChild(name); row.appendChild(del);
+          const exp = document.createElement('button');
+          exp.className = 'secdel'; exp.textContent = '⬇';
+          exp.title = 'Download a backup of this section (move to another device)';
+          exp.onclick = async () => {
+            try {
+              const all = (window.ClipLoader && await window.ClipLoader.cacheGet('clips_myvideos')) || [];
+              const mine = all.filter((c) => (c.section || '') === s);
+              const blob = new Blob([JSON.stringify(mine)], { type: 'application/json' });
+              const a = document.createElement('a');
+              a.href = URL.createObjectURL(blob);
+              a.download = 'hoerklar-' + s + '.json';
+              a.click();
+              setTimeout(() => URL.revokeObjectURL(a.href), 10000);
+            } catch (_) {}
+          };
+          row.appendChild(exp); row.appendChild(del);
           host.appendChild(row);
         }
       } catch (_) {}

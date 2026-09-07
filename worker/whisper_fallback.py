@@ -146,6 +146,8 @@ def run_whisper_fallback(video_id, title, workdir, vocab=(), seed=41,
             "wrong_answers": make_distractors(txt, vocab, rng),
             "cefr": cefr, "difficulty": 2,
             "verified": False, "section": section,
+            "license": "YouTube — educational quiz use, video not hosted",
+            "license_url": f"https://www.youtube.com/watch?v={video_id}",
             "transcript_source": "whisper_tiny_sample",
             "rights_status": "EMBED_ONLY",
         })
