@@ -194,22 +194,10 @@ window.HK_API_BASE = (function(){ try{ return localStorage.hk_api || "https://ho
             }).catch(finish);
           }catch(_){ finish(); }
         } else { finish(); }
-        var mine = clips.filter(function(c){ var s=c.section||''; return s && s!=='movies' && s!=='series' && s!=='songs' && s!=='nicos'; });
-        try{
-          window.ClipLoader.cachePut('clips_myvideos', mine).then(function(){
-            // rotating backups: yesterday's save rescues any future clobber
-            try{ window.ClipLoader.cacheGet('clips_myvideos_bak').then(function(b){
-              window.ClipLoader.cachePut('clips_myvideos_bak2', b || []);
-              window.ClipLoader.cachePut('clips_myvideos_bak', mine);
-            }).catch(function(){}); }catch(_){}
-          }).catch(function(){});
-        }catch(_){}
-        try{ console.log('[HörKlar] clips:', before, '->', clips.length, '(personal:', mine.length + ')'); }catch(_){}
-        armed();
       }).catch(armed);
     }catch(_){ armed(); }
   }
   if(apiP){ apiP.then(withIDB).catch(function(){ withIDB([]); }); }
   else { withIDB([]); }
 })();
-</script><script src="web/myvideos-baked.js?v=6"></script><script src="web/trap-meanings.js?v=7"></script><script src="web/client-ingest.js?v=6"></script><script src="web/clips-loader.js?v=6"></script><script src="web/add-video.js?v=6"></script></body></html>
+</script><script src="web/myvideos-baked.js?v=6"></script><script src="web/trap-meanings.js?v=8"></script><script src="web/client-ingest.js?v=7"></script><script src="web/clips-loader.js?v=6"></script><script src="web/add-video.js?v=6"></script></body></html>

@@ -46,6 +46,15 @@ def title_of(video_id):
         return video_id
 
 
+def _human_error(e):
+    s = str(e) or type(e).__name__
+    if (s.startswith("Command ") or "yt-dlp" in s
+            or "CalledProcessError" in type(e).__name__):
+        return ("YouTube refused this request from the server (bot check) "
+                "— waiting for the Deck")
+    return "server error (" + s[:120] + ") — waiting for Deck"
+
+
 def process_one(data_dir, queue_store, job):
     import pipeline_fastpath as fp
     jid = job["job_id"]
@@ -95,7 +104,7 @@ def process_one(data_dir, queue_store, job):
     except Exception as e:
         import traceback as _tb
         print(f"[inline] job {jid} crashed: {e}\n{_tb.format_exc()}", flush=True)
-        why = "server error (" + str(e)[:120] + ") — waiting for Deck"
+        why = _human_error(e)
         queue_store.update(data_dir, jid, status="queued", stage="awaiting_deck",
                            progress=0.0, deck_only=True,
                            error=why)

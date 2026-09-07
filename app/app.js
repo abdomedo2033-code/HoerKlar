@@ -350,25 +350,39 @@ function renderQuiz(){
       if(cur.translation_distractors && cur.translation_distractors[langPick]){
         o3=cur.translation_distractors[langPick].slice(0,3);
       } else {
+        // Sentence-first fallback: real full-sentence translations from other
+        // clips — never scattered lone words. Ranked by shared words with the
+        // right answer (topically close), then by similar length, so options
+        // read like proper translation quizzes. A single-word swap inside the
+        // TRUE sentence is a last resort only (options stay full sentences).
         const others=[];
         for(const cc of clips){ if(cc.clip_id!==cur.clip_id&&cc.translations&&cc.translations[langPick]) others.push(cc.translations[langPick]); }
-        const pool=[...new Set(clips.flatMap(c=> (c.translations&&c.translations[langPick] ? c.translations[langPick].split(/\s+/) : [])).map(w=>w.replace(/[.,!?\u061F\u060C]/g,'')).filter(w=>w.length>=3))];
-        function arNear(w,ex){ let c=pool.filter(x=>!ex.has(x)); if(!c.length) return w+'\u0640'; c.sort((a,b)=>Math.abs(a.length-w.length)-Math.abs(b.length-w.length)); return c[Math.floor(Math.random()*Math.min(8,c.length))]; }
-        const words=correctT.split(/\s+/);
         const seenT=new Set([correctT]);
-        let guard=0;
-        while(o3.length<3 && guard++<30){
-          let w2=words.slice();
-          let idxs=w2.map((w,i)=> w.replace(/[.,!?\u061F\u060C]/g,'').length>=3 ? i : -1).filter(i=>i>=0);
-          let idx= idxs.length? idxs[Math.floor(Math.random()*idxs.length)] : Math.floor(Math.random()*w2.length);
-          let bare=w2[idx].replace(/[.,!?\u061F\u060C]/g,'');
-          if(!bare) continue;
-          let rep=arNear(bare, new Set([bare]));
-          w2[idx]=rep + w2[idx].slice(bare.length);
-          let cand=w2.join(' ');
-          if(!seenT.has(cand)){ seenT.add(cand); o3.push(cand); }
+        const contentW=(s)=>new Set(s.split(/\s+/).map((w)=>w.replace(/[.,!?\u061F\u060C]/g,'').toLowerCase()).filter((w)=>w.length>=3));
+        const cw=contentW(correctT), cwLen=correctT.split(/\s+/).length;
+        const ranked=[...new Set(others)].filter((t)=>!seenT.has(t)).map((t)=>{
+          let shared=0; for(const w of contentW(t)) if(cw.has(w)) shared++;
+          return {t, shared, dl:Math.abs(t.split(/\s+/).length-cwLen)};
+        }).sort((a,b)=>b.shared-a.shared||a.dl-b.dl);
+        for(const r of ranked){ if(o3.length>=3) break; seenT.add(r.t); o3.push(r.t); }
+        if(o3.length<3){
+          const pool=[...new Set(clips.flatMap(c=> (c.translations&&c.translations[langPick] ? c.translations[langPick].split(/\s+/) : [])).map(w=>w.replace(/[.,!?\u061F\u060C]/g,'')).filter(w=>w.length>=3))];
+          function arNear(w,ex){ let c=pool.filter(x=>!ex.has(x)); if(!c.length) return w+'\u0640'; c.sort((a,b)=>Math.abs(a.length-w.length)-Math.abs(b.length-w.length)); return c[Math.floor(Math.random()*Math.min(8,c.length))]; }
+          const words=correctT.split(/\s+/);
+          let guard=0;
+          while(o3.length<3 && guard++<30){
+            let w2=words.slice();
+            let idxs=w2.map((w,i)=> w.replace(/[.,!?\u061F\u060C]/g,'').length>=3 ? i : -1).filter(i=>i>=0);
+            let idx= idxs.length? idxs[Math.floor(Math.random()*idxs.length)] : Math.floor(Math.random()*w2.length);
+            let bare=w2[idx].replace(/[.,!?\u061F\u060C]/g,'');
+            if(!bare) continue;
+            let rep=arNear(bare, new Set([bare]));
+            w2[idx]=rep + w2[idx].slice(bare.length);
+            let cand=w2.join(' ');
+            if(!seenT.has(cand)){ seenT.add(cand); o3.push(cand); }
+          }
+          while(o3.length<3) o3.push(correctT+' \u0640');
         }
-        while(o3.length<3) o3.push(correctT+' \u0640');
       }
       opts=[correctT,...o3].sort(()=>Math.random()-0.5);
     } else { mode='listening'; }

@@ -249,6 +249,48 @@ def attach_translations(base, windows):
     return ce, ca
 
 
+def make_en_traps(correct_de, wrongs_de, correct_en, en_vocab, rng):
+    """Sentence-level EN distractors that mirror the German trap position.
+
+    Each German wrong answer swaps one same-sound word; find that position
+    and swap the aligned word in the EN sentence. Result: full-sentence EN
+    options whose trap sits where the ear-trap sits — never scattered words.
+    Needs a real EN vocab (>=20 words from the en track); else [] and the
+    page falls back to other real sentences.
+    """
+    traps, seen = [], {correct_en}
+    de_toks = correct_de.split()
+    en_toks = correct_en.split()
+    if not en_toks or len(en_vocab) < 20:
+        return []
+    for w in wrongs_de or []:
+        wt = w.split()
+        di = next((i for i, (a, b) in enumerate(zip(de_toks, wt)) if a != b),
+                  min(len(de_toks), len(wt)))
+        ei = min(len(en_toks) - 1,
+                 int(round(di * len(en_toks) / max(len(de_toks), 1))))
+        bare = en_toks[ei].strip(".,!?…:;«»()\"'")
+        if len(bare) < 3:
+            ei = max(range(len(en_toks)),
+                     key=lambda i: len(en_toks[i].strip(".,!?…:;«»()\"'")))
+            bare = en_toks[ei].strip(".,!?…:;«»()\"'")
+        pool = [v for v in en_vocab if abs(len(v) - len(bare)) <= 2
+                and v.lower() != bare.lower()]
+        m = difflib.get_close_matches(bare, pool, n=6, cutoff=0.0)
+        rep = rng.choice(m[:6]) if m else (rng.choice(pool) if pool else None)
+        if not rep:
+            continue
+        e2 = en_toks[:]
+        e2[ei] = rep + en_toks[ei][len(bare):]
+        t = " ".join(e2)
+        if t not in seen and abs(len(t) - len(correct_en)) <= 12:
+            seen.add(t)
+            traps.append(t)
+        if len(traps) >= 3:
+            break
+    return traps
+
+
 def run_fastpath(video_id, title, workdir, vocab=(), seed=41,
                  on_partial=None, cefr="A2", section="myvideos"):
     """Full fast path. on_partial(list_of_clips) streams early quizzes (Phase 4)."""
@@ -264,6 +306,9 @@ def run_fastpath(video_id, title, workdir, vocab=(), seed=41,
         raise NoSubtitles(f"no German subtitles for {video_id} | {log}")
     ce, ca = attach_translations(base, cues)
     wins = build_windows(cues)
+    en_vocab = sorted({w.strip(".,!?…:;«»()\"'") for _, _, t in ce
+                       for w in t.split()
+                       if 3 <= len(w.strip(".,!?…:;«»()\"'")) <= 18})
     clips = []
     for i, (s, e, txt) in enumerate(wins):
         c = {
@@ -294,6 +339,11 @@ def run_fastpath(video_id, title, workdir, vocab=(), seed=41,
                 tr["ar"] = ar
         if tr:
             c["translations"] = tr
+            if tr.get("en"):
+                et = make_en_traps(txt, c["wrong_answers"], tr["en"],
+                                   en_vocab, rng)
+                if et:
+                    c.setdefault("translation_distractors", {})["en"] = et
         clips.append(c)
         if on_partial and len(clips) in (3, 6, 12):
             on_partial(list(clips))

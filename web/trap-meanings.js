@@ -66,14 +66,16 @@
 
   // Live dictionary lookup from the visitor's own browser (CORS-open API,
   // no key). Fills whatever the offline glossary missed. Never throws.
-  async function mmLookup(words, pair, isRefused, setRefused) {
+  // sent=true switches validation to full-sentence mode (up to 200 chars,
+  // longer query budget) for translating whole trap sentences.
+  async function mmLookup(words, pair, isRefused, setRefused, sent) {
     const out = {};
     const queue = [...new Set((words || []).map((w) => String(w || '').trim()).filter((w) => w.length >= 3))].slice(0, 24);
     for (const q of queue) {
       if (isRefused && isRefused()) break;
       try {
         const r = await fetch('https://api.mymemory.translated.net/get?q=' +
-          encodeURIComponent(q.slice(0, 60)) + '&langpair=' + pair);
+          encodeURIComponent(q.slice(0, sent ? 500 : 60)) + '&langpair=' + pair);
         if (r.status === 429) { if (setRefused) setRefused(true); break; }
         if (!r.ok) continue;
         const d = await r.json();
@@ -81,12 +83,18 @@
         if (/MYMEMORY WARNING|QUERY LENGTH LIMIT|429/i.test(best)) continue;
         const wantAr = pair.slice(-2) === 'ar';
         best = best.replace(/\s*\(.*?\)\s*/g, ' ').replace(/[.،;!؟?]+$/, '').replace(/\s+/g, ' ').trim();
-        const ok = wantar_check(best, wantAr);
+        const ok = sent ? wantsent_check(best, wantAr) : wantar_check(best, wantAr);
         if (ok && best.toLowerCase() !== q.toLowerCase()) out[q.toLowerCase()] = best;
       } catch (_) {}
       await new Promise((res) => setTimeout(res, 350));
     }
     return out;
+  }
+  function wantsent_check(s, wantAr) {
+    if (!s || s.length < 6 || s.length > 200) return false;
+    if (wantAr) return /[ء-غف-ي]/.test(s);
+    const letters = (s.match(/[A-Za-z]/g) || []).length;
+    return letters >= s.length * 0.6;
   }
   function wantar_check(s, wantAr) {
     if (!s || s.length < 1 || s.length > 40) return false;
@@ -107,6 +115,58 @@
     return hits >= 2 || (hits >= 1 && /[äöüß]/.test(t));
   }
 
+  // Sentence-level trap meanings: translate each German WRONG answer as a
+  // WHOLE sentence. German traps are same-sound swaps, so their translations
+  // are full-sentence, pronunciation-linked distractors — never lone words.
+  // Topped up with sibling sentences from the same batch (same video =
+  // topical, real sentences). Returns number of clips enriched.
+  async function trapSentences(clips, lang, isRefused, setRefused) {
+    const pair = lang === 'ar' ? 'de|ar' : 'de|en';
+    const jobs = [];
+    for (const c of clips) {
+      const tr = String((c.translations || {})[lang] || '');
+      if (!tr || !/\s/.test(tr.trim())) continue; // words handled by glossary
+      const td = c.translation_distractors || {};
+      if (td[lang] && td[lang].length) continue;
+      if (!looksGerman(c.correct_answer || c.dutch_text || '')) continue;
+      for (const w of (c.wrong_answers || []).slice(0, 3)) {
+        if (w && w !== c.correct_answer && jobs.length < 12) jobs.push({ c, w });
+      }
+      if (jobs.length >= 12) break;
+    }
+    if (!jobs.length) return 0;
+    const got = await mmLookup(jobs.map((j) => j.w), pair, isRefused, setRefused, true);
+    const byClip = new Map();
+    for (const j of jobs) {
+      const m = (got[j.w.toLowerCase()] || got[j.w] || '').trim();
+      const tr = String((j.c.translations || {})[lang] || '');
+      if (!m || m.toLowerCase() === tr.toLowerCase()) continue;
+      if (Math.abs(m.length - tr.length) > 40) continue;
+      if (!byClip.has(j.c)) byClip.set(j.c, []);
+      const hol = byClip.get(j.c);
+      if (hol.indexOf(m) < 0 && hol.length < 3) hol.push(m);
+    }
+    let n = 0;
+    for (const [c, hol] of byClip) {
+      if (hol.length < 3) {
+        const tr = String((c.translations || {})[lang] || '');
+        for (const s of clips) {
+          if (hol.length >= 3) break;
+          if (s === c) continue;
+          const t = (s.translations || {})[lang];
+          if (!t || t === tr || hol.indexOf(t) >= 0) continue;
+          if (Math.abs(t.length - tr.length) > 60) continue;
+          hol.push(t);
+        }
+      }
+      if (hol.length) {
+        (c.translation_distractors = c.translation_distractors || {})[lang] = hol.slice(0, 3);
+        n++;
+      }
+    }
+    return n;
+  }
+
   async function enrichWithGlossary(clips) {
     // Offline glossary first, live dictionary for the gaps — all on-device.
     const g = await getGlossary();
@@ -115,18 +175,31 @@
     let refused = false;
     const needAr = clips.filter((c) => !((c.translations || {}).ar) && looksGerman(c.dutch_text)).slice(0, 6);
     if (needAr.length) {
-      const got = await mmLookup(needAr.map((c) => c.dutch_text.trim()), 'de|ar', () => refused, (v) => { refused = v; });
+      const got = await mmLookup(needAr.map((c) => c.dutch_text.trim()), 'de|ar', () => refused, (v) => { refused = v; }, true);
       for (const c of needAr) {
         const key = c.dutch_text.trim();
         const a = got[key.toLowerCase()] || got[key];
         if (a) { (c.translations = c.translations || {}).ar = a; n++; }
       }
     }
+    const needEn = clips.filter((c) => !((c.translations || {}).en) && looksGerman(c.dutch_text)).slice(0, 6);
+    if (needEn.length && !refused) {
+      const got = await mmLookup(needEn.map((c) => c.dutch_text.trim()), 'de|en', () => refused, (v) => { refused = v; }, true);
+      for (const c of needEn) {
+        const key = c.dutch_text.trim();
+        const a = got[key.toLowerCase()] || got[key];
+        if (a) { (c.translations = c.translations || {}).en = a; n++; }
+      }
+    }
+    // Full-sentence, pronunciation-linked traps first (both languages).
+    if (!refused) n += await trapSentences(clips, 'ar', () => refused, (v) => { refused = v; });
+    if (!refused) n += await trapSentences(clips, 'en', () => refused, (v) => { refused = v; });
     for (const c of clips) {
       const tr = c.translations || {};
       const td = (c.translation_distractors = c.translation_distractors || {});
       for (const lang of ['ar', 'en']) {
         if (!tr[lang] || (td[lang] && td[lang].length)) continue;
+        if (/\s/.test(String(tr[lang]).trim())) continue; // sentences done above
         const hol = [];
         const missing = [];
         for (const w of (c.wrong_answers || [])) {

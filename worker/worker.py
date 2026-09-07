@@ -41,6 +41,21 @@ def _req(method, path, payload=None):
         return json.loads(r.read().decode())
 
 
+def _human_error(e):
+    """Raw tracebacks (e.g. CalledProcessError 'Command [...]') scare users
+    and leak local paths — translate the known ones into plain language."""
+    s = str(e) or type(e).__name__
+    if (s.startswith("Command ") or "yt-dlp" in s
+            or "CalledProcessError" in s or "CalledProcessError" in type(e).__name__):
+        return ("YouTube refused this request from here (bot check) — "
+                "try another video, or build it on your own network via "
+                "the app / importer extension path")
+    if "Sign in to confirm" in s or "Failed to extract any player response" in s:
+        return ("YouTube blocked this request from the server "
+                "(the Deck retries on its own network — leave the card open)")
+    return s[:220]
+
+
 def post_progress(job_id, **fields):
     try:
         _req("POST", f"/api/jobs/{job_id}/progress", fields)
@@ -192,7 +207,7 @@ def main():
                     print(f"[worker] job {job.get('job_id')} failed: {e}", flush=True)
                     post_progress(job.get("job_id"), status="error",
                                   stage="error", progress=0.0,
-                                  error=str(e)[:300] or type(e).__name__)
+                                  error=_human_error(e))
                 if args.once:
                     return
             else:

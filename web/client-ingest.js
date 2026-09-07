@@ -170,8 +170,13 @@
     return outs.slice(0, 3);
   }
 
-  function makeClips(vid, title, wins, trCues, section) {
+  function makeClips(vid, title, wins, tr, section) {
     section = slugSection(section);
+    // tr: legacy array of EN cues, or {en:[], ar:[]} cue lists. Both become
+    // full-sentence translations (same timing as the German window), so new
+    // sections get real sentence quizzes — never word salad.
+    const enCues = Array.isArray(tr) ? (tr || []) : ((tr && tr.en) || []);
+    const arCues = Array.isArray(tr) ? [] : ((tr && tr.ar) || []);
     return wins.map(([s, e, txt]) => {
       const c = {
         clip_id: 'yt_' + vid + '_' + s, provider: 'youtube', video_id: vid,
@@ -183,12 +188,36 @@
         transcript_source: window.HKNative ? 'app_native_subs' : 'client_subs',
         rights_status: 'EMBED_ONLY',
       };
-      if (trCues && trCues.length) {
-        const en = textFor(trCues, s, e, 200);
-        if (en.length >= 6) c.translations = { en };
+      const trs = {};
+      if (enCues && enCues.length) {
+        const en = textFor(enCues, s, e, 200);
+        if (en.length >= 6) trs.en = en;
       }
+      if (arCues && arCues.length) {
+        const ar = textFor(arCues, s, e, 200);
+        if (ar.length >= 4) trs.ar = ar;
+      }
+      if (Object.keys(trs).length) c.translations = trs;
       return c;
     });
+  }
+
+  function showSection(newClips) {
+    // New sections appear instantly: refresh buttons FIRST (creates the new
+    // one), then mark it active. Old order toggled before refresh, so the
+    // new section never looked selected.
+    try {
+      const live = new Set(clips.map((c) => c.clip_id));
+      for (const c of newClips) if (!live.has(c.clip_id)) clips.push(c);
+      const sec = (newClips[0] && newClips[0].section) || 'general';
+      window._sec = sec;
+      try { if (typeof refreshSections === 'function') refreshSections(); } catch (_) {}
+      try {
+        document.querySelectorAll('.secbtn').forEach((x) => x.classList.toggle('active', x.dataset.sec === sec));
+      } catch (_) {}
+      if (typeof applyFilter === 'function') applyFilter();
+    } catch (_) { /* page context differs — clips are still cached */ }
+    try { window.dispatchEvent(new CustomEvent('hk:clips-updated', { detail: { section: (newClips[0] && newClips[0].section) || 'general' } })); } catch (_) {}
   }
 
   async function persistAndShow(newClips) {
@@ -198,18 +227,25 @@
     } catch (_) { mine = []; }
     const have = new Set(mine.map((c) => c.clip_id));
     for (const c of newClips) if (!have.has(c.clip_id)) { mine.push(c); have.add(c.clip_id); }
-    try { if (window.TrapMeanings) await window.TrapMeanings.enrichWithGlossary(newClips); } catch (_) {}
     try { if (window.ClipLoader) await window.ClipLoader.cachePut('clips_myvideos', mine); } catch (_) {}
+    showSection(newClips);
+    // Sentence translations + trap meanings enrich in the BACKGROUND (takes
+    // seconds on slow networks) and re-save when done — the section is
+    // already visible and playable with real-sentence fallbacks meanwhile.
     try {
-      const live = new Set(clips.map((c) => c.clip_id));
-      for (const c of newClips) if (!live.has(c.clip_id)) clips.push(c);
-      const sec = (newClips[0] && newClips[0].section) || 'general';
-      window._sec = sec;
-      document.querySelectorAll('.secbtn').forEach((x) => x.classList.toggle('active', x.dataset.sec === sec));
-      if (typeof applyFilter === 'function') applyFilter();
-    } catch (_) { /* page context differs — clips are still cached */ }
-    try { window.dispatchEvent(new CustomEvent('hk:clips-updated', { detail: { section: (newClips[0] && newClips[0].section) || 'general' } })); } catch (_) {}
-    try { if (typeof refreshSections === 'function') refreshSections(); } catch (_) {}
+      if (window.TrapMeanings) {
+        const n = await window.TrapMeanings.enrichWithGlossary(newClips);
+        if (n && window.ClipLoader) {
+          const cur2 = (await window.ClipLoader.cacheGet('clips_myvideos')) || [];
+          const byId = new Map(newClips.map((c) => [c.clip_id, c]));
+          for (let i = 0; i < cur2.length; i++) {
+            const u = byId.get(cur2[i].clip_id);
+            if (u) cur2[i] = u;
+          }
+          await window.ClipLoader.cachePut('clips_myvideos', cur2);
+        }
+      }
+    } catch (_) {}
     return newClips.length;
   }
 
@@ -300,7 +336,21 @@
           const v = await getJSON(base + '/api/v1/videos/' + vid + '?fields=title', 8000);
           if (v && v.title) title = v.title;
         } catch (_) {}
-        const clips = makeClips(vid, title, wins, [], section);
+        // EN/AR caption tracks on the same mirror: real full-sentence
+        // translations with the same timing (best effort, never fatal).
+        const trCues = { en: [], ar: [] };
+        for (const want of ['en', 'ar']) {
+          try {
+            const t = pickSub(list, want);
+            if (!t) continue;
+            const txt = await getText(t.url.indexOf('http') === 0 ? t.url : base + t.url, 12000);
+            if (txt && txt.length > 50) {
+              const cues2 = parseCues(txt);
+              if (cues2.length >= 2) trCues[want] = cues2;
+            }
+          } catch (_) {}
+        }
+        const clips = makeClips(vid, title, wins, trCues, section);
         clips.forEach((c) => { c.transcript_source = 'public_mirror_subs'; });
         const n = await persistAndShow(clips);
         return { n, title, section, source: 'mirrors' };
@@ -330,10 +380,14 @@
     if (cues.length < 2) throw new Error('subtitles unreadable — try another video');
     const wins = buildWindows(cues);
     if (!wins.length) throw new Error('no clip-length lines found');
-    let trCues = [];
+    let trCues = { en: [], ar: [] };
     const en = pickTrack(info.tracks, 'en');
     if (en && en.url !== de.url) {
-      try { const t = window.HKNative.fetchText(en.url); if (t && t.length > 50) trCues = parseCues(t); } catch (_) {}
+      try { const t = window.HKNative.fetchText(en.url); if (t && t.length > 50) trCues.en = parseCues(t); } catch (_) {}
+    }
+    const ar = pickTrack(info.tracks, 'ar');
+    if (ar && ar.url !== de.url) {
+      try { const t = window.HKNative.fetchText(ar.url); if (t && t.length > 50) trCues.ar = parseCues(t); } catch (_) {}
     }
     const title = info.title || 'YouTube video';
     onStage('Saving ' + wins.length + ' quizzes…', 0.8);
@@ -481,7 +535,8 @@
         const wins = buildWindows(cues);
         if (wins.length) {
           const enT = pickExtTrack(info.tracks, 'en');
-          const trCues = enT ? parseCues(enT.text) : [];
+          const arT = pickExtTrack(info.tracks, 'ar');
+          const trCues = { en: enT ? parseCues(enT.text) : [], ar: arT ? parseCues(arT.text) : [] };
           const title = info.title || 'YouTube video';
           onStage('Saving ' + wins.length + ' quizzes…', 0.8);
           const clips = makeClips(vid, title, wins, trCues, section);
