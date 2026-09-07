@@ -201,10 +201,7 @@ def fill_ar_word_traps(clips, vocab=()):
             key = max((x.strip(".,!?…:;«»()\"'") for x in correct.split()),
                       key=len, default="")
             if len(key) >= 4:
-                cands = [v for v in vocab
-                         if v.lower() != key.lower()
-                         and abs(len(v) - len(key)) <= 2]
-                for nb in difflib.get_close_matches(key, cands, n=8, cutoff=0.55):
+                for nb in phonetic_neighbors(key, vocab, 8):
                     a = lookup(nb)
                     if a and a != ar_ok and a not in hol:
                         hol.append(a)
@@ -214,3 +211,75 @@ def fill_ar_word_traps(clips, vocab=()):
             c.setdefault("translation_distractors", {})["ar"] = hol[:3]
             n += 1
     return n
+
+
+def koelner(word):
+    """Kolner Phonetik: German words that SOUND alike get the same code
+    (seit/seid->82, Meer/mehr->67, Stadt/statt->822). No dependencies."""
+    s = (word or "").lower().replace("ä", "a").replace("ö", "o") \
+        .replace("ü", "u").replace("ß", "ss")
+    out = []
+    n = len(s)
+    for i, ch in enumerate(s):
+        prev = s[i - 1] if i > 0 else ""
+        nxt = s[i + 1] if i + 1 < n else ""
+        if ch in "aeioujy":
+            out.append("0")
+        elif ch == "h":
+            continue
+        elif ch == "b":
+            out.append("1")
+        elif ch == "p":
+            out.append("3" if nxt == "h" else "1")
+        elif ch in "dt":
+            out.append("8" if nxt in "csz" else "2")
+        elif ch in "fvw":
+            out.append("3")
+        elif ch in "gkq":
+            out.append("4")
+        elif ch == "c":
+            if i == 0:
+                out.append("4" if nxt in "ahkloqrux" else "8")
+            else:
+                out.append("8" if prev in "sz" else ("4" if nxt in "ahkloqru" else "8"))
+        elif ch == "x":
+            out.append("8" if prev in "ckqz" else "48")
+        elif ch in "sz":
+            out.append("8")
+        elif ch in "mn":
+            out.append("6")
+        elif ch == "l":
+            out.append("5")
+        elif ch == "r":
+            out.append("7")
+    coded = "".join(out)
+    res = []
+    for ch in coded:
+        if not res or res[-1] != ch:
+            res.append(ch)
+    res = "".join(res)
+    if res.startswith("0"):
+        res = "0" + res[1:].replace("0", "")
+    else:
+        res = res.replace("0", "")
+    return res
+
+
+def phonetic_neighbors(word, vocab, n=8):
+    """Vocab words sounding like `word` (same sound-code first), then close
+    spellings. Returns up to n candidates, excluding the word itself."""
+    import difflib
+    key = (word or "").lower()
+    code = koelner(key)
+    same, rest = [], []
+    for v in vocab or []:
+        vl = v.lower()
+        if vl == key or abs(len(v) - len(word)) > 2:
+            continue
+        (same if koelner(vl) == code and code else rest).append(v)
+    same.sort(key=lambda v: difflib.SequenceMatcher(None, key, v.lower()).ratio(),
+              reverse=True)
+    if len(same) >= n:
+        return same[:n]
+    rest = difflib.get_close_matches(key, rest, n=n * 2, cutoff=0.5)
+    return (same + [v for v in rest if v not in same])[:n]

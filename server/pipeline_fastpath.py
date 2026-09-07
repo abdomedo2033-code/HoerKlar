@@ -178,9 +178,23 @@ def build_windows(cues, min_len=15, max_clips=24):
 
 
 def make_distractors(txt, vocab, rng):
+    try:
+        import mt_ar
+        _phon = mt_ar.phonetic_neighbors
+    except Exception:
+        _phon = None
+
     def cw(w, ex):
         cand = [v for v in vocab if abs(len(v) - len(w)) <= 1
                 and v.lower() != w.lower() and v not in ex]
+        if _phon:
+            try:
+                m = [v for v in _phon(w, vocab, 8)
+                     if v.lower() != w.lower() and v not in ex]
+                if m:
+                    return rng.choice(m[:6])
+            except Exception:
+                pass
         m = difflib.get_close_matches(w, cand, n=8, cutoff=0.0)
         return rng.choice(m[:6]) if m else (rng.choice(cand) if cand else w + "n")
     words = txt.split()

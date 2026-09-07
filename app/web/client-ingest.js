@@ -90,6 +90,31 @@
 
   // Same-sound traps in the page's own style (simWord pool when present).
   const FUNC = { der: 'die', die: 'der', das: 'der', ein: 'eine', ist: 'war', und: 'oder', nicht: 'nie', ich: 'er' };
+  // Kolner Phonetik (compact): same code = sounds alike in German
+  // (seit/seid, Meer/mehr, Stadt/statt). Used to rank trap words by SOUND.
+  function koelner(word) {
+    const s = String(word || '').toLowerCase().replace(/ä/g, 'a').replace(/ö/g, 'o').replace(/ü/g, 'u').replace(/ß/g, 'ss');
+    let out = '';
+    for (let i = 0; i < s.length; i++) {
+      const ch = s[i], prev = i ? s[i - 1] : '', nxt = s[i + 1] || '';
+      if ('aeioujy'.indexOf(ch) >= 0) out += '0';
+      else if (ch === 'h') continue;
+      else if (ch === 'b') out += '1';
+      else if (ch === 'p') out += (nxt === 'h' ? '3' : '1');
+      else if (ch === 'd' || ch === 't') out += ('csz'.indexOf(nxt) >= 0 ? '8' : '2');
+      else if ('fvw'.indexOf(ch) >= 0) out += '3';
+      else if ('gkq'.indexOf(ch) >= 0) out += '4';
+      else if (ch === 'c') out += (i === 0 ? ('ahkloqrux'.indexOf(nxt) >= 0 ? '4' : '8') : ('sz'.indexOf(prev) >= 0 ? '8' : ('ahkloqru'.indexOf(nxt) >= 0 ? '4' : '8')));
+      else if (ch === 'x') out += ('ckqz'.indexOf(prev) >= 0 ? '8' : '48');
+      else if (ch === 's' || ch === 'z') out += '8';
+      else if (ch === 'm' || ch === 'n') out += '6';
+      else if (ch === 'l') out += '5';
+      else if (ch === 'r') out += '7';
+    }
+    out = out.replace(/(.)\1+/g, '$1');
+    out = out.charAt(0) === '0' ? '0' + out.slice(1).replace(/0/g, '') : out.replace(/0/g, '');
+    return out;
+  }
   function simPick(word, ex) {
     try {
       if (typeof simWord === 'function') {
@@ -98,8 +123,12 @@
       }
     } catch (_) { /* fallthrough */ }
     const pool = window._dewords || window._wpool || ['Wasser', 'Zeit', 'Leute'];
-    const c = pool.filter((x) => x.toLowerCase() !== word.toLowerCase() && !(ex && ex.has(x.toLowerCase())) && Math.abs(x.length - word.length) <= 2);
-    return c.length ? c[Math.floor(Math.random() * Math.min(8, c.length))] : word + 'n';
+    const wl = word.toLowerCase();
+    const code = koelner(wl);
+    const c = pool.filter((x) => x.toLowerCase() !== wl && !(ex && ex.has(x.toLowerCase())) && Math.abs(x.length - word.length) <= 2);
+    const same = c.filter((x) => code && koelner(x.toLowerCase()) === code);
+    const pick = same.length ? same : c;
+    return pick.length ? pick[Math.floor(Math.random() * Math.min(8, pick.length))] : word + 'n';
   }
   function distractors(txt) {
     const words = txt.split(/\s+/);
