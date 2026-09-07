@@ -238,10 +238,14 @@
         if (n && window.ClipLoader) {
           const cur2 = (await window.ClipLoader.cacheGet('clips_myvideos')) || [];
           const byId = new Map(newClips.map((c) => [c.clip_id, c]));
+          const seen2 = new Set();
           for (let i = 0; i < cur2.length; i++) {
             const u = byId.get(cur2[i].clip_id);
-            if (u) cur2[i] = u;
+            if (u) { cur2[i] = u; seen2.add(cur2[i].clip_id); }
           }
+          // ADD anything missing: boot may have rewritten the cache while we
+          // enriched, and replace-only would lose the new section on refresh.
+          for (const c of newClips) if (!seen2.has(c.clip_id)) cur2.push(c);
           await window.ClipLoader.cachePut('clips_myvideos', cur2);
         }
       }
@@ -327,7 +331,17 @@
         const caps = await getJSON(base + '/api/v1/captions/' + vid, 9000);
         const list = Array.isArray(caps) ? caps : (caps.captions || []);
         const de = pickSub(list, 'de');
-        if (!de) { errs.push(base + ': no German track'); continue; }
+        if (!de) {
+          // Say WHAT the mirror lists — "has: en,ar" means the video really
+          // has no German subs (backend Whisper still covers it); "empty
+          // list" means the mirror couldn't read the video at all.
+          let has = '';
+          try {
+            has = (list || []).map((x) => String(x.languageCode || x.lang || '?')).filter(Boolean).join(',');
+          } catch (_) {}
+          errs.push(base + ': no German track' + (has ? ' (has: ' + has.slice(0, 60) + ')' : ' (empty list)'));
+          continue;
+        }
         onStage('Reading subtitles on your device…', 0.35);
         const vtt = await getText(de.url.indexOf('http') === 0 ? de.url : base + de.url, 15000);
         const cues = parseCues(vtt);

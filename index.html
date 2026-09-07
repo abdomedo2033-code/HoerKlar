@@ -685,6 +685,9 @@ window.HK_API_BASE = (function(){ try{ return localStorage.hk_api || "https://ho
         var before = clips.length;
         merge(saved);
         function finish(){
+        // Re-read before writing: a build may have saved while we booted —
+        // writing the stale list would drop the new section on refresh.
+        function writeMine(){
         var mine = clips.filter(function(c){ var s=c.section||''; return s && s!=='movies' && s!=='series' && s!=='songs' && s!=='nicos'; });
         try{
           window.ClipLoader.cachePut('clips_myvideos', mine).then(function(){
@@ -697,6 +700,13 @@ window.HK_API_BASE = (function(){ try{ return localStorage.hk_api || "https://ho
         }catch(_){}
         try{ console.log('[HörKlar] clips:', before, '->', clips.length, '(personal:', mine.length + ')'); }catch(_){}
         armed();
+        }
+        try{
+          window.ClipLoader.cacheGet('clips_myvideos').then(function(latest){
+            try{ if(latest&&latest.length) merge(latest); }catch(_){}
+            writeMine();
+          }).catch(function(){ writeMine(); });
+        }catch(_){ writeMine(); }
         }
         if ((!saved || !saved.length)) {
           // primary empty but backups may hold yesterday's sections: rescue
@@ -721,4 +731,4 @@ window.HK_API_BASE = (function(){ try{ return localStorage.hk_api || "https://ho
   else { withIDB([]); }
 })();
 if(location.protocol!=='file:' && 'serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(()=>{});
-</script><script src="web/myvideos-baked.js?v=6"></script><script src="web/trap-meanings.js?v=8"></script><script src="web/client-ingest.js?v=7"></script><script src="web/clips-loader.js?v=6"></script><script src="web/add-video.js?v=6"></script></body></html>
+</script><script src="web/myvideos-baked.js?v=6"></script><script src="web/trap-meanings.js?v=8"></script><script src="web/client-ingest.js?v=8"></script><script src="web/clips-loader.js?v=6"></script><script src="web/add-video.js?v=6"></script></body></html>
