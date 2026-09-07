@@ -50,6 +50,48 @@
     return out.sort((a, b) => b.length - a.length);
   }
 
+  // Similarity ratio (difflib-style) for stitching trap words into sentences.
+  function sim(a, b) {
+    a = a || ''; b = b || '';
+    if (!a || !b) return 0;
+    const m = a.length, n = b.length;
+    const dp = Array.from({ length: m + 1 }, () => new Uint16Array(n + 1));
+    for (let i = m - 1; i >= 0; i--) {
+      for (let j = n - 1; j >= 0; j--) {
+        dp[i][j] = a[i] === b[j] ? dp[i + 1][j + 1] + 1 : Math.max(dp[i + 1][j], dp[i][j + 1]);
+      }
+    }
+    return (2 * dp[0][0]) / (m + n);
+  }
+
+  // Stitch a single trap WORD into the correct full sentence at the most
+  // similar word (Termin->Termine becomes الموعد->المواعيد in place).
+  // Turns the old single-word sidecar entries into sentence-level,
+  // pronunciation-linked distractors. Returns null when nothing fits —
+  // callers then keep baked data / fall back to real sentences.
+  function stitchTrap(correct, trap) {
+    const words = String(correct || '').split(/\s+/).filter(Boolean);
+    if (words.length < 2) return null;
+    const bare = (w) => String(w).replace(/[.,!?…:;«»()"'\u061F\u060C]/g, '');
+    const bt = bare(trap);
+    if (bt.length < 2) return null;
+    let bi = -1, best = 0;
+    for (let i = 0; i < words.length; i++) {
+      const b = bare(words[i]);
+      if (b.length < 3) continue;
+      if (b.toLowerCase() === bt.toLowerCase()) continue;
+      const r = sim(b.toLowerCase(), bt.toLowerCase());
+      if (r > best) { best = r; bi = i; }
+    }
+    if (bi < 0 || best < 0.45) return null;
+    const w2 = words.slice();
+    w2[bi] = trap + words[bi].slice(bare(words[bi]).length);
+    const out = w2.join(' ');
+    const norm = (s) => String(s).replace(/[.,!?…:;«»()"'\u061F\u060C\s]/g, '').toLowerCase();
+    if (!out || norm(out) === norm(correct)) return null;
+    return out;
+  }
+
   async function apply(clips) {
     const sc = await getSidecar();
     if (!sc || !Object.keys(sc).length) return 0;
@@ -58,8 +100,44 @@
       const e = sc[c.clip_id];
       if (!e) continue;
       c.translation_distractors = c.translation_distractors || {};
-      if (e.ar && e.ar.length) { c.translation_distractors.ar = e.ar; n++; }
-      if (e.en && e.en.length) { c.translation_distractors.en = e.en; n++; }
+      for (const lang of ['ar', 'en']) {
+        const words = (e[lang] || []).map((w) => String(w || '').trim()).filter(Boolean);
+        if (!words.length) continue;
+        const correct = (c.translations || {})[lang];
+        if (!correct) continue;
+        if (!/\s/.test(String(correct).trim())) {
+          // Single-word quiz: word distractors are the right shape — keep.
+          c.translation_distractors[lang] = words.slice(0, 3);
+          n++;
+          continue;
+        }
+        const stitched = [];
+        const seen = new Set([String(correct)]);
+        for (const w of words) {
+          if (stitched.length >= 3) break;
+          if (seen.has(w)) continue;
+          if (/\s/.test(w)) {
+            // Already a sentence: keep if it looks like the right answer.
+            if (Math.abs(w.length - String(correct).length) <= 40) {
+              seen.add(w);
+              stitched.push(w);
+            }
+            continue;
+          }
+          const s = stitchTrap(correct, w);
+          if (s && !seen.has(s) && Math.abs(s.length - String(correct).length) <= 40) {
+            seen.add(s);
+            stitched.push(s);
+          }
+        }
+        // Only overwrite baked data when stitching produced real sentences;
+        // otherwise baked distractors (or the quiz-time sentence fallback)
+        // stay in charge — never lone words against a sentence.
+        if (stitched.length) {
+          c.translation_distractors[lang] = stitched;
+          n++;
+        }
+      }
     }
     return n;
   }
@@ -92,7 +170,14 @@
   }
   function wantsent_check(s, wantAr) {
     if (!s || s.length < 6 || s.length > 200) return false;
-    if (wantAr) return /[ء-غف-ي]/.test(s);
+    if (wantAr) {
+      // Real Arabic sentence: Arabic letters dominate, no untranslated
+      // Latin words left behind (the old 'zimpy'/'zimp' rot class).
+      const arL = (s.match(/[ء-غف-ي]/g) || []).length;
+      const latL = (s.match(/[A-Za-z]/g) || []).length;
+      const latW = (s.match(/[A-Za-z]{4,}/g) || []).length;
+      return arL > 0 && arL >= latL && latW === 0;
+    }
     const letters = (s.match(/[A-Za-z]/g) || []).length;
     return letters >= s.length * 0.6;
   }

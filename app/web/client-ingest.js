@@ -265,7 +265,10 @@
   // (Availability varies by network/day — caller falls back to the backend.)
   // Mirror sources: the OFFICIAL live instance directory (self-healing —
   // dead mirrors disappear by themselves) plus two hardcoded fallbacks.
-  const INVIDIOUS_FALLBACK = ['https://inv.nadeko.net', 'https://inv.tux.pizza'];
+  // Verified 2026-09-07 (live check): nadeko answers /api/v1/captions with
+  // CORS *; tux.pizza times out, f5.si is bot-walled, chocolatemoo53 and
+  // tiekoetter 403. The instance directory above stays the primary source.
+  const INVIDIOUS_FALLBACK = ['https://inv.nadeko.net'];
   let invCache = null, invCacheAt = 0;
   async function invidiousBases() {
     if (invCache && Date.now() - invCacheAt < 3600000) return invCache;

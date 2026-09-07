@@ -44,6 +44,28 @@ def text_for(cues,start,end):
         txt=cut.strip()
     return txt
 
+
+def _ok_ar(s):
+    """Arabic caption text must be Arabic-script with no untranslated Latin
+    words left behind (the old 'zimpy'/'== RARLRENS ==' rot class)."""
+    s = (s or "").strip()
+    if len(s) < 4 or len(s) > 200:
+        return False
+    ar = len(re.findall(r"[ء-ي]", s))
+    lat = len(re.findall(r"[A-Za-z]", s))
+    if ar == 0 or ar < lat or re.search(r"[A-Za-z]{4,}", s):
+        return False
+    return True
+
+
+def _ok_en(s):
+    s = (s or "").strip()
+    if len(s) < 6 or len(s) > 200:
+        return False
+    letters = len(re.findall(r"[A-Za-z]", s))
+    return letters >= len(s) * 0.5
+
+
 p=os.path.join(APP,"clips_modern.json")
 clips=json.load(open(p))
 nico=[c for c in clips if c.get("section")=="nicos"]
@@ -67,10 +89,12 @@ for vid,cset in eps.items():
         tr={}
         if ce:
             en=text_for(ce,c["start_time"],c["end_time"])
-            if len(en)>=6: tr["en"]=en; got_en+=1
+            if _ok_en(en): tr["en"]=en; got_en+=1
+            else: print(f"  quarantine EN {c.get('clip_id')}: {en[:80]}")
         if ca:
             ar=text_for(ca,c["start_time"],c["end_time"])
-            if len(ar)>=4: tr["ar"]=ar; got_ar+=1
+            if _ok_ar(ar): tr["ar"]=ar; got_ar+=1
+            else: print(f"  quarantine AR {c.get('clip_id')}: {ar[:80]}")
         if tr: c["translations"]=tr
 
 # Reclaim Your Face english subs

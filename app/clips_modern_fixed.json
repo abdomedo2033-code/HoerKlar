@@ -4307,19 +4307,19 @@
   "verified": true,
   "section": "series",
   "translations": {
-   "en": "I was out with the boys, so you don't get zimperlich.",
-   "ar": "كنت بالخارج مع الأولاد لذا لا تحصل على زيمبرليخ"
+   "en": "I was out with the boys. There's no room for squeamishness.",
+   "ar": "كنت في الخارج مع الأولاد، ولا مجال للتدلل هناك."
   },
   "translation_distractors": {
    "en": [
-    "I was with the boys, so you don't get zimpy.",
-    "I was with the boys, so they don't get any zimp.",
-    "I was out with the boys, because we weren't zimpy."
+    "I was out with the young ones. There's no room for squeamishness.",
+    "I was out with the boys. There is nothing squeamish about it.",
+    "I was out with the boys. We are not squeamish there."
    ],
    "ar": [
-    "كنت مع الأولاد، لذا لا تحصل على zimpy.",
-    "كنت مع الأولاد، لذا لم يحصلوا على أيّ zimp.",
-    "كنت بالخارج مع الأولاد لأننا لم نكن نمارس الجنس"
+    "كنت في الخارج مع الصغار، ولا مجال للتدلل هناك.",
+    "كنت في الخارج مع الأولاد، ولا شيء يستدعي التدليل هناك.",
+    "كنت في الخارج مع الأولاد، ونحن لسنا مدللين هناك."
    ]
   },
   "transcript_source": "dw_manual_subs",
@@ -5992,12 +5992,12 @@
   },
   "translation_distractors": {
    "en": [
-    "- Yes, I'm a hoe.",
+    "- Yes, I'll get the cave.",
     "- Yes, I'll get water.",
     "- I'll get something."
    ],
    "ar": [
-    "- نعم، أنا a a a a a a a a hoa.",
+    "- نعم، سأحضر الكهف.",
     "- نعم، أنا سَأَحْصلُ على الماءِ.",
     "-سأحصل على شيء ما"
    ]
@@ -16829,12 +16829,12 @@
   "translation_distractors": {
    "en": [
     "But maybe soon nothing more,",
-    "Maybe not albs any more,",
+    "Maybe nothing any more,",
     "But maybe not stupid anymore,"
    ],
    "ar": [
     "ولكن ربما قريباً لا أكثر",
-    "ربما لم يعد هناك abbs بعد الآن،",
+    "ربما لم يعد هناك شيء بعد الآن،",
     "ولكن ربما ليس من الغباء بعد الآن"
    ]
   },
@@ -18219,7 +18219,7 @@
     "– With the Büs to Grafenplatz."
    ],
    "ar": [
-    "- بواسطة الحافلة إلى Graävenplatz.",
+    "- بواسطة الحافلة إلى غريفنبلاتز.",
     "-خذ الحافلة إلى (غرفينبلاتز )",
     "-مع (بوس) إلى (غرافنبلاتز )"
    ]
@@ -30989,7 +30989,7 @@
    "ar": [
     "- ياراس، كأس أغسطس/آب",
     "-يارا) ، (آب/أغسطس) - (غاس) 03)",
-    "آب/أغسطس Trusbig Gase 20"
+    "- يارا. شارع أوغست شتراوسبرغ 20."
    ]
   },
   "transcript_source": "dw_manual_subs",
@@ -32332,7 +32332,7 @@
    ],
    "ar": [
     "- تمرير نيكو في الطاولة.",
-    "- - NEKSS في الكيس.",
+    "- تذكرة نيكو في الحقيبة.",
     "و \"نيكو\" مناسب في الحقيبة"
    ]
   },
@@ -34722,10 +34722,10 @@
    "en": [
     "on the website of Germany.",
     "West Germany.",
-    "==References== today."
+    "in the west of Germany today."
    ],
    "ar": [
-    "== RARLRENS ==",
+    "في غرب ألمانيا اليوم.",
     "على موقع ألمانيا على الإنترنت.",
     "ألمانيا الغربية."
    ]
@@ -42784,12 +42784,12 @@
   },
   "translation_distractors": {
    "en": [
-    "or in the Sociäl-media area.",
-    "eder in the social media sector.",
+    "or in the social-media area.",
+    "or in the social media sector.",
     "or social media."
    ],
    "ar": [
-    "أو في منطقة Sociäl-media.",
+    "أو في منطقة سوشيال ميديا.",
     "في قطاع وسائل الإعلام الاجتماعية.",
     "أو وسائط الإعلام أو وسائط الإعلام الاجتماعية."
    ]
@@ -46649,12 +46649,12 @@
   "translation_distractors": {
    "en": [
     "Oldenburg is located in the northwest of the German Chancellor Lower Saxony.",
-    "Oldenburg is a municipality in the district of Neuchâtel in Lower Saxony, Germany.",
+    "Oldenburg is located in the northwest of the state of Lower Saxony.",
     "Oldenburg reads in the northwest of the state of Lower Saxony."
    ],
    "ar": [
     "تقع أولدنبرغ في شمال غرب ولاية ساكسونيا.",
-    "أولدنبرغ (بالمانية: Oldenburg) هي بلدية تقع في ألمانيا في Neuchatel.",
+    "تقع أولدنبورغ في شمال غرب ولاية ساكسونيا السفلى.",
     "(أولدنبيرغ) يقرأ في شمال غرب ولاية (ساكسونيا السفلى)"
    ]
   },
@@ -47573,12 +47573,12 @@
   "translation_distractors": {
    "en": [
     "- Oh, I'm a little bit spoiled with Jacques.",
-    "- Oh, I'm dating Jäcques.",
+    "- Oh, I'm meeting Jacques.",
     "- I'm dating Jacques."
    ],
    "ar": [
     "-أنا منتحل قليلاً مع (جاك )",
-    "- أوه، أَتواعدُ Jaicques.",
+    "- أوه، أنا على موعد مع جاك.",
     "-أنا أواعد جاك"
    ]
   },
@@ -50727,7 +50727,7 @@
     "And the Kälberstraße is close to the restaurant and the language school yesterday."
    ],
    "ar": [
-    "و Kälberstraue هو قريب من المطعم ودورات اللغة.",
+    "وشارع كالبرستراسه قريب من المطعم ودورات اللغة.",
     "و \"كالبرستراوي\" قريب من المطعم و مدرسة اللغة",
     "و \"كالبرستراي\" قريبة من المطعم و مدرسة اللغة اليوم."
    ]
@@ -66010,12 +66010,12 @@
   },
   "translation_distractors": {
    "en": [
-    "- That's fäntastic!",
+    "- That's really fantastic!",
     "- That's a fantastic food!",
     "– That's fantastic! today."
    ],
    "ar": [
-    "-هذا هو fännartastic!",
+    "- هذا فانتاستيك!",
     "-هذا طعام رائع",
     "-ذلك رائع!"
    ]
@@ -93987,9 +93987,9 @@
     "– Yes. In our family, there was often roulade for lunch at Easter today."
    ],
    "ar": [
-    "في عائلتنا كان هناك في كثير من الأحيان roulad لتناول الغداء في عيد الفصح.",
-    "في عائلاتنا كان هناك في كثير من الأحيان roulad لتناول الغداء في عيد الفصح.",
-    "- نعم، في عائلتنا، كان هناك في أغلب الأحيان roulad لتناول الغداء في عيد الفصح اليوم."
+    "في عائلتنا كان هناك في كثير من الأحيان الرولاد لتناول الغداء في عيد الفصح.",
+    "في عائلاتنا كان هناك في كثير من الأحيان الرولاد لتناول الغداء في عيد الفصح.",
+    "- نعم، في عائلتنا، كان هناك في أغلب الأحيان الرولاد لتناول الغداء في عيد الفصح اليوم."
    ]
   },
   "transcript_source": "dw_manual_subs",
@@ -117545,13 +117545,13 @@
   "translation_distractors": {
    "en": [
     "a lot of mining operations.",
-    "==References==",
-    "The Commission has not yet taken a decision on the aid."
+    "a lot of fallen mining.",
+    "to contest a lot of mining."
    ],
    "ar": [
     "الكثير من عمليات التعدين",
-    "== REFRATIS ==",
-    "ولم تتخذ اللجنة بعد قرارا بشأن المعونة."
+    "الكثير من التعدين المنهار.",
+    "الاعتراض على الكثير من التعدين."
    ]
   },
   "transcript_source": "dw_manual_subs",
@@ -129977,12 +129977,12 @@
   "translation_distractors": {
    "en": [
     "with the second vote the prize.",
-    "==References====External links==",
+    "with the second vote, the party.",
     "The party was the second party today."
    ],
    "ar": [
     "مع التصويت الثاني الجائزة.",
-    "== RAFERENS == == ===وصلات خارجية ===========================",
+    "مع الصوت الثاني، الحزب.",
     "وكان الحزب هو الطرف الثاني اليوم."
    ]
   },

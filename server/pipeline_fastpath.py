@@ -291,6 +291,31 @@ def make_en_traps(correct_de, wrongs_de, correct_en, en_vocab, rng):
     return traps
 
 
+def _ok_ar(s):
+    """Auto-translated Arabic must be Arabic-script with no untranslated
+    Latin words (the old 'zimpy'/'== RARLRENS ==' rot class)."""
+    s = (s or "").strip()
+    if len(s) < 4 or len(s) > 200:
+        return False
+    ar = sum(1 for ch in s if chr(1536) <= ch <= "ۿ")
+    lat = sum(1 for ch in s if ("a" <= ch <= "z" or "A" <= ch <= "Z"))
+    if ar == 0 or ar < lat:
+        return False
+    run = best = 0
+    for ch in s:
+        run = run + 1 if ("a" <= ch <= "z" or "A" <= ch <= "Z") else 0
+        best = max(best, run)
+    return best < 4
+
+
+def _ok_en(s):
+    s = (s or "").strip()
+    if len(s) < 6 or len(s) > 200:
+        return False
+    letters = sum(1 for ch in s if ("a" <= ch <= "z" or "A" <= ch <= "Z"))
+    return letters >= len(s) * 0.5
+
+
 def run_fastpath(video_id, title, workdir, vocab=(), seed=41,
                  on_partial=None, cefr="A2", section="myvideos"):
     """Full fast path. on_partial(list_of_clips) streams early quizzes (Phase 4)."""
@@ -331,11 +356,11 @@ def run_fastpath(video_id, title, workdir, vocab=(), seed=41,
         tr = {}
         if ce:
             en = text_for(ce, s, e, cap=200)
-            if len(en) >= 6:
+            if _ok_en(en):
                 tr["en"] = en
         if ca:
             ar = text_for(ca, s, e, cap=200)
-            if len(ar) >= 4:
+            if _ok_ar(ar):
                 tr["ar"] = ar
         if tr:
             c["translations"] = tr
