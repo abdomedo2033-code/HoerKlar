@@ -158,8 +158,17 @@
     for (const q of queue) {
       if (isRefused && isRefused()) break;
       try {
-        const r = await fetch('https://api.mymemory.translated.net/get?q=' +
-          encodeURIComponent(q.slice(0, sent ? 500 : 60)) + '&langpair=' + pair + extra);
+        // 8s cap per request: quota-blocked endpoints hang to TCP timeout.
+        const ctl = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+        const to = ctl ? setTimeout(() => { try { ctl.abort(); } catch (_) {} }, 8000) : null;
+        let r;
+        try {
+          r = await fetch('https://api.mymemory.translated.net/get?q=' +
+            encodeURIComponent(q.slice(0, sent ? 500 : 60)) + '&langpair=' + pair + extra,
+            ctl ? { signal: ctl.signal } : undefined);
+        } finally {
+          if (to) clearTimeout(to);
+        }
         if (r.status === 429) { if (setRefused) setRefused(true); break; }
         if (!r.ok) throw new Error('http ' + r.status);
         const d = await r.json();

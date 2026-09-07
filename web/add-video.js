@@ -53,6 +53,26 @@
         impBtn.onclick = () => impFile.click();
         impFile.onchange = () => AddVideo.importFile(impFile.files && impFile.files[0]);
       }
+      // Debug stamp + quota email: proves exactly which build/scripts run.
+      try {
+        const em = document.getElementById('hkMmEmail');
+        if (em) {
+          try { em.value = localStorage.hk_mymemory_email || ''; } catch (_) {}
+          em.onchange = () => { try { localStorage.hk_mymemory_email = em.value.trim(); } catch (_) {} };
+        }
+        const hb = document.getElementById('hkBuild');
+        let stamp = 'build ' + (window.HK_BUILD || '?');
+        try {
+          const vers = {};
+          document.querySelectorAll('script[src]').forEach((s) => {
+            const m = String(s.src || s.getAttribute('src') || '').match(/web\/(client-ingest|trap-meanings|add-video|clips-loader)\.js\?v=(\d+)/);
+            if (m) vers[m[1]] = m[2];
+          });
+          stamp += Object.keys(vers).sort().map((k) => ' • ' + k.slice(0, 2) + ' v' + vers[k]).join('');
+        } catch (_) {}
+        if (hb) hb.textContent = stamp;
+        try { console.log('[HörKlar]', stamp); } catch (_) {}
+      } catch (_) {}
     },
     async importFile(file) {
       const err = document.getElementById('addVideoErr');
@@ -358,17 +378,37 @@
               const sec = (window.ClientIngest ? window.ClientIngest.prettySection(j.section) : null) || '📁 General';
               card.querySelector('.jc-title').textContent = `✅ ${n} quizzes ready in ${sec}${j.title ? ' — ' + j.title : ''}`;
               // Browser-private: keep these clips on THIS device only.
+              // Save + show FIRST (instant section), enrich translations in
+              // the BACKGROUND — enrichment is network-slow and must never
+              // gate the section appearing.
               (async () => {
                 try {
                   const fresh = j.clips_ready || [];
                   const mine = (await window.ClipLoader.cacheGet('clips_myvideos')) || [];
                   const have = new Set(mine.map((c) => c.clip_id));
                   for (const c of fresh) if (c.clip_id && !have.has(c.clip_id)) { mine.push(c); have.add(c.clip_id); }
-                  try { if (window.TrapMeanings) await window.TrapMeanings.enrichWithGlossary(fresh); } catch (_) {}
                   await window.ClipLoader.cachePut('clips_myvideos', mine);
+                } catch (e) { try { console.warn('[HörKlar] watch save failed:', e); } catch (_) {} }
+                try {
                   const live = new Set(clips.map((c) => c.clip_id));
                   for (const c of (j.clips_ready || [])) if (c.clip_id && !live.has(c.clip_id)) clips.push(c);
                   if (window.ClientIngest && window.ClientIngest.refreshSections) window.ClientIngest.refreshSections();
+                } catch (e) { try { console.warn('[HörKlar] watch show failed:', e); } catch (_) {} }
+                try {
+                  if (window.TrapMeanings) {
+                    const n = await window.TrapMeanings.enrichWithGlossary(j.clips_ready || []);
+                    if (n && window.ClipLoader) {
+                      const cur2 = (await window.ClipLoader.cacheGet('clips_myvideos')) || [];
+                      const byId = new Map((j.clips_ready || []).map((c) => [c.clip_id, c]));
+                      const seen2 = new Set();
+                      for (let i = 0; i < cur2.length; i++) {
+                        const u = byId.get(cur2[i].clip_id);
+                        if (u) { cur2[i] = u; seen2.add(cur2[i].clip_id); }
+                      }
+                      for (const c of (j.clips_ready || [])) if (c.clip_id && !seen2.has(c.clip_id)) cur2.push(c);
+                      await window.ClipLoader.cachePut('clips_myvideos', cur2);
+                    }
+                  }
                 } catch (_) {}
               })();
               window.dispatchEvent(new CustomEvent('hk:clips-updated', { detail: { section: 'myvideos' } }));
