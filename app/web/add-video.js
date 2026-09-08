@@ -125,31 +125,41 @@
       } catch (_) { /* page context differs */ }
     },
     renderManage() {
-      // "Your sections" list with delete buttons (browser-private data only).
-      try {
+      // "Your sections": one tidy row per section — name + quiz count on the
+      // left, backup + delete actions on the right (browser-private data).
+      (async () => { try {
         const host = document.getElementById('addVideoManage');
         if (!host || !window.ClientIngest) return;
         host.innerHTML = '';
         const secs = window.ClientIngest.listCustomSections();
         if (!secs.length) return;
+        let counts = {};
+        try {
+          const all = (window.ClipLoader && await window.ClipLoader.cacheGet('clips_myvideos')) || [];
+          for (const c of all) {
+            const s = (c && c.section) || '';
+            if (s) counts[s] = (counts[s] || 0) + 1;
+          }
+        } catch (_) {}
         const title = document.createElement('div');
         title.style.cssText = 'font-size:12px;color:#9aa3c7;margin:6px 0 4px';
-        title.textContent = 'Your sections (tap Delete to remove with all its quizzes):';
+        title.textContent = 'Your sections (delete removes its quizzes too):';
         host.appendChild(title);
         for (const s of secs) {
           const row = document.createElement('div');
           row.className = 'secrow';
-          const name = document.createElement('span');
+          const name = document.createElement('div');
+          name.className = 'secname';
           name.textContent = window.ClientIngest.prettySection(s);
-          const del = document.createElement('button');
-          del.className = 'secdel'; del.textContent = '✕ Delete';
-          del.onclick = async () => {
-            const n = await window.ClientIngest.deleteSection(s);
-            if (n >= 0) { AddVideo.fillSections(); AddVideo.renderManage(); }
-          };
-          row.appendChild(name); row.appendChild(del);
+          const n = counts[s] || 0;
+          const cnt = document.createElement('span');
+          cnt.className = 'seccount';
+          cnt.textContent = n === 1 ? '1 quiz' : n + ' quizzes';
+          name.appendChild(cnt);
+          const acts = document.createElement('div');
+          acts.className = 'secacts';
           const exp = document.createElement('button');
-          exp.className = 'secdel'; exp.textContent = '⬇';
+          exp.className = 'secexp'; exp.textContent = '⬇ Backup';
           exp.title = 'Download a backup of this section (move to another device)';
           exp.onclick = async () => {
             try {
@@ -163,10 +173,17 @@
               setTimeout(() => URL.revokeObjectURL(a.href), 10000);
             } catch (_) {}
           };
-          row.appendChild(exp); row.appendChild(del);
+          const del = document.createElement('button');
+          del.className = 'secdel'; del.textContent = '✕ Delete';
+          del.onclick = async () => {
+            const n2 = await window.ClientIngest.deleteSection(s);
+            if (n2 >= 0) { AddVideo.fillSections(); AddVideo.renderManage(); }
+          };
+          acts.appendChild(exp); acts.appendChild(del);
+          row.appendChild(name); row.appendChild(acts);
           host.appendChild(row);
         }
-      } catch (_) {}
+      } catch (_) {} })();
     },
     readSection() {
       try {

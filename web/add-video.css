@@ -12,7 +12,13 @@
 #addVideoCancel{background:var(--card2,#1a1e38);color:var(--text,#eef0ff);border:1px solid var(--border,rgba(255,255,255,.08));border-radius:999px;padding:10px 20px;cursor:pointer;font-weight:600}
 #addVideoCancel:hover{border-color:rgba(108,92,255,.4)}
 #addVideoManage{margin:2px 0 6px}
+.avlbl{font-size:11px;color:#9aa3c7;text-transform:uppercase;letter-spacing:.08em;margin:12px 0 4px}
 .secrow{display:flex;align-items:center;justify-content:space-between;gap:8px;background:#0a0e1e;border:1px solid var(--border,rgba(255,255,255,.08));border-radius:10px;padding:6px 6px 6px 12px;margin:4px 0;font-size:14px}
+.secrow .secname{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
+.secrow .seccount{display:block;font-size:11px;color:#9aa3c7;font-weight:400}
+.secrow .secacts{display:flex;gap:6px;flex:none}
+.secexp{background:transparent;color:#b8c0ff;border:1px solid rgba(184,192,255,.4);border-radius:999px;padding:4px 12px;cursor:pointer;font-weight:600;font-size:12px;white-space:nowrap}
+.secexp:hover{background:rgba(184,192,255,.12)}
 .secdel{background:transparent;color:#ff8a8a;border:1px solid rgba(255,138,138,.4);border-radius:999px;padding:4px 12px;cursor:pointer;font-weight:600;font-size:12px}
 .secdel:hover{background:rgba(255,138,138,.12)}
 #addVideoErr{color:#ff8a8a;min-height:20px;font-size:13px;margin-top:8px}
