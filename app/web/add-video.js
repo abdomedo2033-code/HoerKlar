@@ -132,7 +132,6 @@
         if (!host || !window.ClientIngest) return;
         host.innerHTML = '';
         const secs = window.ClientIngest.listCustomSections();
-        if (!secs.length) return;
         let counts = {};
         try {
           const all = (window.ClipLoader && await window.ClipLoader.cacheGet('clips_myvideos')) || [];
@@ -141,10 +140,14 @@
             if (s) counts[s] = (counts[s] || 0) + 1;
           }
         } catch (_) {}
+        const total = Object.keys(counts).reduce((a, s) => a + (counts[s] || 0), 0);
         const title = document.createElement('div');
         title.style.cssText = 'font-size:12px;color:#9aa3c7;margin:6px 0 4px';
-        title.textContent = 'Your sections (delete removes its quizzes too):';
+        title.textContent = total
+          ? 'Your sections (' + total + ' quizzes stored on this device):'
+          : 'Your sections (nothing stored on this device yet):';
         host.appendChild(title);
+        if (!secs.length) return;
         for (const s of secs) {
           const row = document.createElement('div');
           row.className = 'secrow';
@@ -407,7 +410,12 @@
                   const mine = (await window.ClipLoader.cacheGet('clips_myvideos')) || [];
                   const have = new Set(mine.map((c) => c.clip_id));
                   for (const c of fresh) if (c.clip_id && !have.has(c.clip_id)) { mine.push(c); have.add(c.clip_id); }
-                  await window.ClipLoader.cachePut('clips_myvideos', mine);
+                  const putOk = await window.ClipLoader.cachePut('clips_myvideos', mine);
+                  if (!putOk) {
+                    const why = (window.ClipLoader && window.ClipLoader.lastError) || 'storage blocked';
+                    try { console.warn('[HörKlar] watch save FAILED:', why); } catch (_) {}
+                    try { stageEl.textContent += ' — NOT saved on this device (' + why + ')'; } catch (_) {}
+                  }
                 } catch (e) { try { console.warn('[HörKlar] watch save failed:', e); } catch (_) {} }
                 try {
                   const live = new Set(clips.map((c) => c.clip_id));

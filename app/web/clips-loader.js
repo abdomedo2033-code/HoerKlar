@@ -30,24 +30,40 @@
       r.onerror = () => reject(r.error);
     });
   }
+  // lastError: human-readable reason when the last cache op failed
+  // (private mode, blocked storage, quota). Callers surface it instead of
+  // silently losing quizzes.
+  let lastError = '';
   async function cacheGet(key) {
     try {
       const db = await idb();
       return await new Promise((res) => {
         const tx = db.transaction(STORE, 'readonly').objectStore(STORE).get(key);
         tx.onsuccess = () => res(tx.result || null);
-        tx.onerror = () => res(null);
+        tx.onerror = () => { lastError = 'read failed: ' + (tx.error || 'unknown'); res(null); };
       });
-    } catch (_) { return null; }
+    } catch (e) { lastError = 'storage unavailable: ' + (e && e.message ? e.message : e); return null; }
   }
   async function cachePut(key, val) {
     try {
       const db = await idb();
-      await new Promise((res) => {
+      const ok = await new Promise((res) => {
         const tx = db.transaction(STORE, 'readwrite').objectStore(STORE).put(val, key);
-        tx.onsuccess = () => res(); tx.onerror = () => res();
+        tx.onsuccess = () => res(true);
+        tx.onerror = () => { lastError = 'write failed: ' + (tx.error || 'unknown'); res(false); };
       });
-    } catch (_) { /* private mode etc. — network still works */ }
+      // Verify small personal saves actually landed (cheap, catches quota lies).
+      if (ok && key === 'clips_myvideos') {
+        try {
+          const back = await cacheGet(key);
+          if (!back || back.length !== (val || []).length) {
+            lastError = 'write unverified (' + (back ? back.length : 0) + '/' + (val || []).length + ')';
+            return false;
+          }
+        } catch (_) {}
+      }
+      return ok;
+    } catch (e) { lastError = 'storage unavailable: ' + (e && e.message ? e.message : e); return false; }
   }
 
   async function fetchSection(sec) {
@@ -72,5 +88,6 @@
     return clips;
   }
 
-  window.ClipLoader = { loadAll, fetchSection, cacheGet, cachePut };
+  window.ClipLoader = { loadAll, fetchSection, cacheGet, cachePut,
+    get lastError() { return lastError; } };
 })();
