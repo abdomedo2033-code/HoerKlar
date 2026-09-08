@@ -227,7 +227,14 @@
     } catch (_) { mine = []; }
     const have = new Set(mine.map((c) => c.clip_id));
     for (const c of newClips) if (!have.has(c.clip_id)) { mine.push(c); have.add(c.clip_id); }
-    try { if (window.ClipLoader) await window.ClipLoader.cachePut('clips_myvideos', mine); } catch (_) {}
+    try {
+      if (window.ClipLoader) {
+        const ok0 = await window.ClipLoader.cachePut('clips_myvideos', mine);
+        if (!ok0) {
+          try { console.warn('[HörKlar] save FAILED:', (window.ClipLoader && window.ClipLoader.lastError) || 'storage blocked'); } catch (_) {}
+        }
+      }
+    } catch (_) {}
     showSection(newClips);
     // Sentence translations + trap meanings enrich in the BACKGROUND (takes
     // seconds on slow networks) and re-save when done — the section is
