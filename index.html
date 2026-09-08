@@ -573,7 +573,9 @@ function renderQuiz(){
     let langPick=(((document.getElementById('trlang')||{}).value)||'ar');
     if(!tr[langPick]) langPick=(langPick==='ar')?'en':'ar'; // fallback to whichever exists
     const correctT=tr[langPick];
-    if(correctT){
+    // Sentence-shape guard: a lone-word translation quizzed against
+    // sentence options (or the reverse) is a broken quiz — listen instead.
+    if(correctT&&/\s/.test(String(correctT).trim())){
       qAnswer=correctT; displayText=null;
       label=`Translate what you heard (${langPick==='ar'?'to Arabic \u0639\u0631\u0628\u064a':'to English'})`;
       let o3=[];
@@ -731,4 +733,4 @@ window.HK_API_BASE = (function(){ try{ return localStorage.hk_api || "https://ho
   else { withIDB([]); }
 })();
 if(location.protocol!=='file:' && 'serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(()=>{});
-</script><script>window.HK_BUILD="20260908c";</script><script src="web/myvideos-baked.js?v=6"></script><script src="web/trap-meanings.js?v=10"></script><script src="web/client-ingest.js?v=8"></script><script src="web/clips-loader.js?v=6"></script><script src="web/add-video.js?v=7"></script></body></html>
+</script><script>window.HK_BUILD="20260908d";</script><script src="web/myvideos-baked.js?v=6"></script><script src="web/trap-meanings.js?v=10"></script><script src="web/client-ingest.js?v=8"></script><script src="web/clips-loader.js?v=6"></script><script src="web/add-video.js?v=8"></script></body></html>

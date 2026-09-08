@@ -364,7 +364,9 @@ function renderQuiz(){
     const tr=cur.translations||{};
     const langPick=(tr.ar?'ar':'en'); // voscreen-style: Arabic first
     const correctT=tr[langPick];
-    if(correctT){
+    // Sentence-shape guard: a lone-word translation quizzed against
+    // sentence options (or the reverse) is a broken quiz — listen instead.
+    if(correctT&&/\s/.test(String(correctT).trim())){
       qAnswer=correctT; displayText=null;
       label=`Translate what you heard (${langPick==='ar'?'to Arabic \u0639\u0631\u0628\u064a':'to English'})`;
       let o3=[];

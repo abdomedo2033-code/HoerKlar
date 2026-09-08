@@ -68,7 +68,10 @@
             const m = String(s.src || s.getAttribute('src') || '').match(/web\/(client-ingest|trap-meanings|add-video|clips-loader)\.js\?v=(\d+)/);
             if (m) vers[m[1]] = m[2];
           });
-          stamp += Object.keys(vers).sort().map((k) => ' • ' + k.slice(0, 2) + ' v' + vers[k]).join('');
+          stamp += Object.keys(vers).sort().map((k) => {
+            const short = { 'client-ingest': 'ci', 'trap-meanings': 'tm', 'add-video': 'ad', 'clips-loader': 'cl' }[k] || k.slice(0, 2);
+            return ' • ' + short + ' v' + vers[k];
+          }).join('');
         } catch (_) {}
         if (hb) hb.textContent = stamp;
         try { console.log('[HörKlar]', stamp); } catch (_) {}
