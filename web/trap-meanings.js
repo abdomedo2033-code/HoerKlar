@@ -188,6 +188,9 @@
   }
   function wantsent_check(s, wantAr) {
     if (!s || s.length < 6 || s.length > 200) return false;
+    // A single word is never a sentence translation (blocks MyMemory
+    // one-word "answers" like lone transliterations becoming options).
+    if (s.split(/\s+/).filter(Boolean).length < 2) return false;
     if (wantAr) {
       // Real Arabic sentence: Arabic letters dominate, no untranslated
       // Latin words left behind (the old 'zimpy'/'zimp' rot class).

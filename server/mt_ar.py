@@ -184,7 +184,9 @@ def fill_ar_word_traps(clips, vocab=()):
     German trap sentence, find the swapped-in similar-sounding word and look
     up its TRUE Arabic meaning for the Arabic wrong options. Falls back to
     phonetic neighbors of the longest word. Skips clips that already have
-    Arabic distractors. Returns number of clips enriched."""
+    Arabic distractors. WORDS ONLY: skipped for sentence answers, where lone
+    words would read as broken quizzes (sentence traps cover those).
+    Returns number of clips enriched."""
     import difflib
     from glossary import lookup
     n = 0
@@ -192,6 +194,8 @@ def fill_ar_word_traps(clips, vocab=()):
         if not (c.get("translations") or {}).get("ar"):
             continue
         if (c.get("translation_distractors") or {}).get("ar"):
+            continue
+        if len(str(c["translations"]["ar"]).split()) > 1:
             continue
         correct = c.get("correct_answer", "")
         ar_ok = c["translations"]["ar"]
