@@ -1,7 +1,7 @@
 /* Add-video UI — themed to match the site (card pills + accent primary). */
 #addVideoBtn{background:var(--card,#14182e);color:var(--text,#eef0ff);border:1px solid var(--border,rgba(255,255,255,.08));border-radius:999px;padding:8px 18px;cursor:pointer;font-weight:700}
 #addVideoBtn:hover{border-color:rgba(108,92,255,.4)}
-#addVideoModal{position:fixed;z-index:50;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--card,#14182e);border:1px solid var(--border,rgba(255,255,255,.08));border-radius:var(--radius,18px);padding:20px;box-shadow:var(--shadow,0 12px 40px rgba(0,0,0,.45));min-width:min(92vw,420px);color:var(--text,#eef0ff)}
+#addVideoModal{position:fixed;z-index:50;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--card,#14182e);border:1px solid var(--border,rgba(255,255,255,.08));border-radius:var(--radius,18px);padding:20px;box-shadow:var(--shadow,0 12px 40px rgba(0,0,0,.45));width:min(94vw,480px);max-width:94vw;max-height:92dvh;max-height:92vh;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;color:var(--text,#eef0ff)}
 #addVideoModal[hidden]{display:none}
 #addVideoModal b{font-size:16px}
 #addVideoUrls{width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--border,rgba(255,255,255,.08));background:#0a0e1e;color:#eef0ff;margin:10px 0;resize:vertical;font:inherit}
@@ -29,3 +29,15 @@
 .jc-stage{color:#9aa3c7;font-size:13px;margin:4px 0}
 .jc-bar{height:6px;background:rgba(255,255,255,.08);border-radius:999px;overflow:hidden}
 .jc-prog{height:100%;width:0%;background:linear-gradient(90deg,#6c5cff,#00d4ff);transition:width .5s}
+/* Phone fit: stack modal rows, keep buttons tappable, no sideways scroll. */
+@media(max-width:480px){
+  #addVideoModal{padding:14px;border-radius:14px;top:50%}
+  #addVideoModal div[style*="display:flex"]{flex-wrap:wrap}
+  #addVideoUrls{font-size:14px}
+  #addVideoSectionSel,#addVideoSection{flex:1 1 100%!important;width:100%}
+  #addVideoGo{flex:1 1 100%!important}
+  #addVideoImportBtn,#addVideoCancel{flex:1 1 auto}
+  .secrow{flex-wrap:wrap}
+  .secrow .secacts{width:100%;justify-content:flex-end}
+  .jobcard{margin:10px 12px}
+}

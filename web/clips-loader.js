@@ -81,7 +81,7 @@
   }
 
   async function loadAll(sections) {
-    const secs = sections || ['movies', 'series', 'songs', 'nicos', 'myvideos'];
+    const secs = sections || ['movies', 'series', 'songs', 'course', 'nicos', 'myvideos'];
     const parts = await Promise.all(secs.map(fetchSection));
     let clips = parts.flat();
     if (!clips.length && Array.isArray(window.__SEED_CLIPS)) clips = window.__SEED_CLIPS.slice();
