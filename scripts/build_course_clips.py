@@ -106,9 +106,16 @@ def title_from_filename(base):
     return t or base
 
 
+def course_order(fn):
+    """Natural lesson order: '01 Lektion 10, ...' must come after Lektion 9,
+    not after Lektion 1 (plain sorted() gets this wrong)."""
+    m = re.search(r"lektion\s*(\d+)", fn, re.I)
+    return (int(m.group(1)) if m else 999, fn.lower())
+
+
 def build(audio_dir, base_url, id_map=None, api_base=""):
-    files = sorted(f for f in os.listdir(audio_dir)
-                   if f.lower().endswith(AUDIO_EXTS))
+    files = sorted((f for f in os.listdir(audio_dir)
+                    if f.lower().endswith(AUDIO_EXTS)), key=course_order)
     clips = []
     for fn in files:
         full = os.path.join(audio_dir, fn)
