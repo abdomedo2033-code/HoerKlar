@@ -401,12 +401,10 @@
     },
     "translation_distractors": {
       "en": [
-        "Hello, Pepe Gönzález.",
         "Hello, Pepet González.",
         "Hello, Pepe González today."
       ],
       "ar": [
-        "مرحباً، (بيبي غونزاليز)",
         "مرحباً، (بيبيت غونزاليز).",
         "مرحباً، بيبي غونزاليز اليوم."
       ]
@@ -906,13 +904,11 @@
     "translation_distractors": {
       "en": [
         "– \"The killing of Grandma?\"",
-        "– \"The dead Omä?",
-        "– \"The dead Grandma?"
+        "– \"The dead Omä?"
       ],
       "ar": [
         "- قتل الجدة؟",
-        "-الأوما الميتة؟",
-        "- الجدة الميتة؟"
+        "-الأوما الميتة؟"
       ]
     },
     "transcript_source": "dw_manual_subs",
@@ -1073,12 +1069,10 @@
     },
     "translation_distractors": {
       "en": [
-        "– I'm sorry, I was scared.",
         "- I'm sorry, I'd be scared.",
         "I'm sorry, I was scared today."
       ],
       "ar": [
-        "-أنا آسف، كنت خائفاً",
         "-أنا آسف، سأكون خائفاً",
         "أنا آسف، كنت خائفاً اليوم."
       ]
@@ -1414,7 +1408,6 @@
         "– Actually, we should be grateful to Nico today."
       ],
       "ar": [
-        "-في الواقع، يجب أن نكون ممتنين لـ(نيكو ).",
         "-في الواقع، يجب أن نكون ممتنين لـ(نيكس )",
         "-في الواقع، يجب أن نشكر (نيكو) على ما فعله"
       ]
@@ -1792,8 +1785,6 @@
         "– Have a nice day! tomorrow."
       ],
       "ar": [
-        "- أتمنى لك يوما سعيدا -",
-        "- أتمنى لك يوما سعيدا!",
         "- أتمنى لك يوماً سعيداً - اليوم."
       ]
     },
@@ -1871,7 +1862,6 @@
     },
     "translation_distractors": {
       "en": [
-        "Have a nice day! Thank you. – Goodbye!",
         "– Ham day! Thank you. – Goodbye!",
         "– Have a nice day! Thank you. – Goodbye! today."
       ],
@@ -2086,7 +2076,6 @@
         "Come on, let's help you! yesterday."
       ],
       "ar": [
-        "هيا، لنساعدك!",
         "هيا، ساعدْك!",
         "هيا لنساعدك اليوم."
       ]
@@ -2123,7 +2112,6 @@
     },
     "translation_distractors": {
       "en": [
-        "- My name is Emma!",
         "My name is Emmas!",
         "My name is Emma! today."
       ],
@@ -2213,8 +2201,7 @@
       ],
       "ar": [
         "-ليس ليس أمي",
-        "-لا، (ليسا) ليست أمّي",
-        "(ليسا) ليست أمي."
+        "-لا، (ليسا) ليست أمّي"
       ]
     },
     "transcript_source": "dw_manual_subs",
@@ -2249,12 +2236,10 @@
     },
     "translation_distractors": {
       "en": [
-        "My name is Nico.",
         "- My name is Nicos.",
         "- My name is Nico today."
       ],
       "ar": [
-        "اسمي (نيكو)",
         "-اسمي (نياز )",
         "-اسمي (نيكو ) اليوم."
       ]
@@ -2625,13 +2610,10 @@
     },
     "translation_distractors": {
       "en": [
-        "You're a grown man, you know what you want!",
-        "You're a grown man, you can do whatever you want!",
-        "– You're a grown man. You can do whatever you want!"
+        "You're a grown man, you know what you want!"
       ],
       "ar": [
         "أنت رجل ناضج، تعرف ما تريده!",
-        "أنت رجل ناضج، يمكنك أن تفعل ما تريد!",
         "-أنت رجل ناضج، يمكنك فعل ما تريد"
       ]
     },
@@ -2841,7 +2823,6 @@
       ],
       "ar": [
         "في سوريا، الرجل كان في عائلة تقليدية حتى اليوم",
-        "- في سوريا، الرجل كان في بعض العائلات التقليدية حتى اليوم",
         "في سوريا، الرجل كان في بعض العائلات التقليدية حتى اليوم اليوم."
       ]
     },
@@ -2920,8 +2901,7 @@
     "translation_distractors": {
       "en": [
         "The woman has, for example, tasks in the household,",
-        "For example, the woman has given up in the household,",
-        "The woman has tasks in the household, for example:"
+        "For example, the woman has given up in the household,"
       ],
       "ar": [
         "وعلى سبيل المثال، للمرأة مهام في الأسرة المعيشية،",
@@ -3344,7 +3324,6 @@
         "But when my parents lived there, he was still in Germany tomorrow."
       ],
       "ar": [
-        "ولكن عندما عاش والداي هناك كان لا يزال في ألمانيا",
         "ولكن عندما عاش والداي هناك، كان لا يزال في ألمانيا اليوم.",
         "ولكن عندما عاش والداي هناك، كان لا يزال في ألمانيا أمس."
       ]
@@ -3891,7 +3870,6 @@
       ],
       "ar": [
         "أين اسمك؟",
-        "أين منزلك؟",
         "-أين يأكل بيتك؟"
       ]
     },
@@ -5444,7 +5422,6 @@
       ],
       "ar": [
         "أولاً، تُخَصّص الجبنة الصغيرة،",
-        "أولاً قطع الجبنة الصغيرة",
         "أولاً، قطع الجبنة الصغيرة اليوم."
       ]
     },
@@ -6284,8 +6261,7 @@
       ],
       "ar": [
         "عندما عشنا في سوريا لم تسحبي قط",
-        "عندما كنا في سلسلة، لم تكذبي أبداً.",
-        "عندما عشنا في سوريا لم تكذبي أبداً"
+        "عندما كنا في سلسلة، لم تكذبي أبداً."
       ]
     },
     "transcript_source": "dw_manual_subs",
@@ -6950,7 +6926,6 @@
     },
     "translation_distractors": {
       "en": [
-        "- I love you too, Selma. You're my only daughter!",
         "- I love you too, Selma. You're my only theater!",
         "- I prefer you too, Selma. You're my only daughter!"
       ],
@@ -7879,7 +7854,6 @@
         "That's Jacques! yesterday."
       ],
       "ar": [
-        "هذا هو جاك!",
         "هذا ما يأكله (جاك)!",
         "ذلك هو جاك"
       ]
@@ -8042,7 +8016,6 @@
     },
     "translation_distractors": {
       "en": [
-        "And because we're still the best cooks you know.",
         "And because we are still the best cooks you know.",
         "- And because we're still the best cook you know."
       ],
@@ -9014,7 +8987,6 @@
       ],
       "ar": [
         "-نعم، أنت نصف وظيفة جديدة",
-        "-نعم لديك وظيفة جديدة",
         "-نعم، لديك وظيفة تسعة."
       ]
     },
@@ -9218,12 +9190,10 @@
     },
     "translation_distractors": {
       "en": [
-        "Do you know when your language exam is?",
         "– Do you know when your language exam is? today.",
         "– Do you know when your language exam is? yesterday."
       ],
       "ar": [
-        "هل تعرف متى يكون امتحان لغتك؟",
         "-هل تعرف متى يكون امتحان لغتك؟ اليوم.",
         "-هل تعرف متى يكون امتحان لغتك؟ أمس."
       ]
@@ -10562,12 +10532,9 @@
     },
     "translation_distractors": {
       "en": [
-        "- How long do you stay in Germany?",
-        "How long do you stay in Germany?",
         "– How long do you stay in Germany? today."
       ],
       "ar": [
-        "كم من الوقت ستمكث في ألمانيا؟",
         "-كم من الوقت ستمكث في ألمانيا؟ اليوم.",
         "-كم من الوقت ستمكث في ألمانيا؟ أمس."
       ]
@@ -10605,8 +10572,7 @@
     "translation_distractors": {
       "en": [
         "– Nico's table and his passport are still gone.",
-        "– Nico bag and his passport are still gone.",
-        "– Nico's bag and his passport are still gone."
+        "– Nico bag and his passport are still gone."
       ],
       "ar": [
         "- طاولة نيكو وجواز سفره لا يزالان مفقودين",
@@ -10772,7 +10738,6 @@
     },
     "translation_distractors": {
       "en": [
-        "– Just come over. Here's my address.",
         "- Just come by. Heart is my address.",
         "- Just come over. Here's my address today."
       ],
@@ -10946,7 +10911,6 @@
       ],
       "ar": [
         "-السيارة حمراء، ولكن لا شيء كبير، إنها صغيرة",
-        "-السيارة حمراء، لكنها ليست كبيرة، إنها صغيرة",
         "-السيارة حمراء لكنها ليست كبيرة، إنها صغيرة اليوم."
       ]
     },
@@ -11491,7 +11455,6 @@
       ],
       "ar": [
         "(نيكوس) هذه (سارة)",
-        "نيكو نيكو، هذه هي (سارة)",
         "(نيكـو) (ساره) تأكل ذلك"
       ]
     },
@@ -11653,7 +11616,6 @@
     },
     "translation_distractors": {
       "en": [
-        "For example next year for Halloween.",
         "For example, next years on Halloween.",
         "For example, next year for Halloween today."
       ],
@@ -11780,8 +11742,7 @@
     "translation_distractors": {
       "en": [
         "So, for example, pumpkin soup, pumpkin soup, pumpkin jam,",
-        "So, for example, pumpkin pie, pumpkin pie, pumpkin jam,",
-        "So, for example pumpkin soup, pumpkin pie, pumpkin jam,"
+        "So, for example, pumpkin pie, pumpkin pie, pumpkin jam,"
       ],
       "ar": [
         "لذا على سبيل المثال، حساء اليقطينة، حساء اليقطينة، المربى",
@@ -12158,8 +12119,7 @@
     "translation_distractors": {
       "en": [
         "Nico, come and play along!",
-        "Nicos, come and play along!",
-        "Nico, come and play with me!"
+        "Nicos, come and play along!"
       ],
       "ar": [
         "(نيكو) تعال والعب على طول",
@@ -12199,14 +12159,12 @@
     },
     "translation_distractors": {
       "en": [
-        "So there are four teams:",
         "As if there were four teams:",
         "So, there are four teams: today."
       ],
       "ar": [
         "اذاً هناك 4 فرق:",
-        "كما لو كان هناك أربعة فرق:",
-        "إذاً، هناك أربعة فرق:"
+        "كما لو كان هناك أربعة فرق:"
       ]
     },
     "transcript_source": "dw_manual_subs",
@@ -12709,7 +12667,6 @@
       ],
       "ar": [
         "سنكون جيدين!",
-        "- كنا جيدين -",
         "-ننتظر جيداً!"
       ]
     },
@@ -12746,7 +12703,6 @@
     "translation_distractors": {
       "en": [
         "- Come on, let's go refuel!",
-        "Come on, let's go dance!",
         "- Come on, let's go dance! today."
       ],
       "ar": [
@@ -13123,12 +13079,10 @@
     },
     "translation_distractors": {
       "en": [
-        "– When I was your age, I dreamed of this \"waste!\"",
         "– So I was your age, I dreamed of this \"waste!\"",
         "When I was your age, I dreamed of this \"waste!\" today."
       ],
       "ar": [
-        "-عندما كنت في عمرك، حلمت بهذه \"النفايات\"",
         "- لذا كنت في عمرك، حلمت بهذه \"النفايات\"",
         "عندما كنت في عمرك، حلمت بهذه \"النفايات\" اليوم."
       ]
@@ -13297,8 +13251,7 @@
       ],
       "ar": [
         "مرحباً، أنا (نيكو)، ابن أخ (يارا)، لم أرد أن أكون مستحيلاً",
-        "مرحباً، أنا (نيكو)، ابن (يارا) لم أقصد أن أكون وقحاً",
-        "مرحباً، أنا (نيكو)، ابن أخ (يارا)، لم أقصد أن أكون وقحاً"
+        "مرحباً، أنا (نيكو)، ابن (يارا) لم أقصد أن أكون وقحاً"
       ]
     },
     "transcript_source": "dw_manual_subs",
@@ -13964,7 +13917,6 @@
     "translation_distractors": {
       "en": [
         "– It's not stable. Step!",
-        "– It's not stable.",
         "– Stable it is nothing. Scrap!"
       ],
       "ar": [
@@ -15097,12 +15049,10 @@
     },
     "translation_distractors": {
       "en": [
-        "- Where are you from?",
         "- You're coming for a week?",
         "Where do you come from?"
       ],
       "ar": [
-        "-من أين أنت؟",
         "-هل ستأتي لأسبوع؟",
         "من أين أتيت؟"
       ]
@@ -15145,7 +15095,6 @@
       ],
       "ar": [
         "-أنا من سلسلة من السلسلة",
-        "لقد أتيت من سوريا.",
         "لقد أتيت من سوريا اليوم."
       ]
     },
@@ -16447,7 +16396,6 @@
       ],
       "ar": [
         "(إيما)، يجب أن تكوني مختلفة الآن",
-        "(إيمّا)، عليكِ أن تقولي وداعاً.",
         "(إيما)، عليكِ أن تقولي وداعاً اليوم."
       ]
     },
@@ -16656,7 +16604,6 @@
         "- Bye, Ciaö!"
       ],
       "ar": [
-        "إلى اللقاء",
         "-إلى اللقاء، يا (تشيو )!"
       ]
     },
@@ -16777,11 +16724,9 @@
     "translation_distractors": {
       "en": [
         "- How are yours?",
-        "- How are you?",
         "- How is he?"
       ],
       "ar": [
-        "-كيف حالك؟",
         "-كيف حاله؟",
         "كيف حالك؟ اليوم."
       ]
@@ -16903,8 +16848,7 @@
     "translation_distractors": {
       "en": [
         "– Already against Mr Murz?",
-        "- Nice again Mr Murz?",
-        "- Mr. Murz again?"
+        "- Nice again Mr Murz?"
       ],
       "ar": [
         "-فعلا ضد السيد مورز؟",
@@ -17071,7 +17015,6 @@
     "translation_distractors": {
       "en": [
         "- Maybe he wanted to upset the car.",
-        "– Maybe he wanted to heat up the car.",
         "– Maybe he wanted to heat up the paths."
       ],
       "ar": [
@@ -17323,7 +17266,6 @@
     "translation_distractors": {
       "en": [
         "– Global nutrition is a fact.",
-        "Global warming is a fact.",
         "– Global warming is a fact today."
       ],
       "ar": [
@@ -17700,7 +17642,6 @@
     },
     "translation_distractors": {
       "en": [
-        "Mr González. How are you?",
         "– Mr González. How are you? today.",
         "– Mr González. How are you? yesterday."
       ],
@@ -17748,7 +17689,6 @@
       ],
       "ar": [
         "-أنا بخير، فكر!",
-        "-أنا بخير، شكراً لك",
         "-أنا بخير، شكراً لك! اليوم."
       ]
     },
@@ -18335,7 +18275,6 @@
         "– In this Krugstraße?"
       ],
       "ar": [
-        "-في (كروغسترا)؟",
         "-إلى (كروغسترايس)؟",
         "-في هذا الكروجسترا؟"
       ]
@@ -18582,13 +18521,10 @@
     "translation_distractors": {
       "en": [
         "As if you were going to Grafenplatz.",
-        "So, go to Grafenplatz.",
         "So go to Grafenplatz today."
       ],
       "ar": [
-        "لذا اذهب إلى \"غرافنبلاتز\".",
-        "كما لو كنت ذاهباً إلى (غرافنبلاتز)",
-        "لذا، اذهب إلى (غرافنبلاتز)"
+        "كما لو كنت ذاهباً إلى (غرافنبلاتز)"
       ]
     },
     "transcript_source": "dw_manual_subs",
@@ -20175,7 +20111,6 @@
     },
     "translation_distractors": {
       "en": [
-        "- How? – Brake!",
         "- How?",
         "– How? – Brake! today."
       ],
@@ -20380,7 +20315,6 @@
     "translation_distractors": {
       "en": [
         "- Well, I've secured some basketball with my friends.",
-        "- Well, I played basketball with my friends.",
         "– Well, I played basketball with my friends today."
       ],
       "ar": [
@@ -20422,8 +20356,7 @@
     "translation_distractors": {
       "en": [
         "- Basketball? Isn't that fourth?",
-        "- Is that not forbidden?",
-        "– Basketball? Isn't that forbidden?"
+        "- Is that not forbidden?"
       ],
       "ar": [
         "-أهذا هو الرابع؟",
@@ -21052,12 +20985,10 @@
     "translation_distractors": {
       "en": [
         "– Thank you very much, but I'm just looking for my wallet.",
-        "Thank you, but I'm just looking for my wallet.",
         "– Thank you, but I'm just looking for my wallet today."
       ],
       "ar": [
         "-شكراً جزيلاً لك، لكنني أبحث عن محفظتي",
-        "شكراً لك، لكنني أبحث عن محفظتي",
         "-شكراً لك، لكنني أبحث عن محفظتي اليوم."
       ]
     },
@@ -21640,13 +21571,11 @@
     "translation_distractors": {
       "en": [
         "That's my offer. You just have to want it and you have to work for it.",
-        "That's my offer. You just wanted it and you had to work for it.",
-        "- Yes, that's my offer. You just have to want it and you have to work for it."
+        "That's my offer. You just wanted it and you had to work for it."
       ],
       "ar": [
         "هذا عرضي، عليك أن تريده و عليك أن تعمل من أجله",
-        "هذا عرضي، أنت أردته فقط وكان عليك العمل من أجله",
-        "نعم هذا عرضي، عليك فقط أن تريده و عليك أن تعمل من أجله"
+        "هذا عرضي، أنت أردته فقط وكان عليك العمل من أجله"
       ]
     },
     "transcript_source": "dw_manual_subs",
@@ -22479,12 +22408,10 @@
     },
     "translation_distractors": {
       "en": [
-        "Do you think you can do this?",
         "Do you think you know how to do this?",
         "- Do you think you can do this? today."
       ],
       "ar": [
-        "هل تعتقد أنه يمكنك فعل هذا؟",
         "هل تعتقد أنك تعرف كيف تفعل هذا؟",
         "-هل تعتقد أنه يمكنك فعل ذلك؟"
       ]
@@ -22862,7 +22789,6 @@
         "Freshly wiped living room runs, dialing it on the phone."
       ],
       "ar": [
-        "غرف المعيشة الممسوحة حديثاً تجري بينما هي على الهاتف.",
         "نفس غرفة المعيشة تجري بينما هي على الهاتف",
         "غرفة المعيشة التي تم مسحها حديثاً تجري، و تتصل بها على الهاتف."
       ]
@@ -23236,7 +23162,6 @@
     "translation_distractors": {
       "en": [
         "– Yes. But I can also back alone.",
-        "- Yes, but I can go alone.",
         "– Yes. Albe I can go alone."
       ],
       "ar": [
@@ -23786,7 +23711,6 @@
         "– And drink plenty of water! today."
       ],
       "ar": [
-        "-وشرب الكثير من الماء",
         "-و ماء التساقط!",
         "-وشرب الكثير من الماء! اليوم."
       ]
@@ -23870,7 +23794,6 @@
         "- Hello, Pepe. Thank you for coming so fast today."
       ],
       "ar": [
-        "-مرحباً بيبي شكراً لقدومكم بسرعة",
         "-مرحباً (بيبي)، شكراً لمجيئكِ جميلة جداً",
         "-مرحباً (بيبي)، شكراً لقدومك بسرعة"
       ]
@@ -24288,7 +24211,6 @@
         "\"Women and technology – what a stupid cliché! tomorrow."
       ],
       "ar": [
-        "\"المرأة والتكنولوجيا -- يا لها من مبتذلة غبية!",
         "\"المرأة والتكنولوجيا - يا لها من مبتذلة غبية! اليوم.",
         "\"المرأة والتكنولوجيا - يا لها من مبتذلة غبية! أمس."
       ]
@@ -24540,7 +24462,6 @@
         "But it doesn't always have to be easy for me to understand today."
       ],
       "ar": [
-        "ولكن ليس من السهل علي دائماً أن أفهم",
         "لكن لا شيء دائماً يجب أن يكون بسيطاً جداً لذا أنا أفهم",
         "ليس من السهل عليّ دائماً أن أفهم"
       ]
@@ -24704,12 +24625,10 @@
     "translation_distractors": {
       "en": [
         "What a ugliness!",
-        "- What nonsense!",
         "What nonsense! today."
       ],
       "ar": [
         "يا له من تشابه!",
-        "-ما هذا الهراء!",
         "ما ذلك الهراء!"
       ]
     },
@@ -25123,7 +25042,6 @@
     },
     "translation_distractors": {
       "en": [
-        "and in kindergarten mostly only women work.",
         "and in kindergarten, most only women work.",
         "and in kindergarten, mostly only women work today."
       ],
@@ -25544,12 +25462,10 @@
     "translation_distractors": {
       "en": [
         "- I think that's eight.",
-        "- I think so too.",
         "- I think so, too today."
       ],
       "ar": [
         "-أعتقد أن هذا ثمانية",
-        "-أعتقد ذلك أيضاً",
         "- أعتقد ذلك أيضاً اليوم."
       ]
     },
@@ -26010,7 +25926,6 @@
         "- Well, I'm happy tomorrow."
       ],
       "ar": [
-        "- حسناً، أنا سعيد -",
         "- حسناً، أنا سعيد اليوم.",
         "- حسناً، أنا سعيد أمس."
       ]
@@ -26804,7 +26719,6 @@
     "translation_distractors": {
       "en": [
         "– I'll make you a tea, then the descriptions will be better.",
-        "- I'll make you a tea, then the complaints will get better.",
         "- I'll make you a tea, then the complaints will be better."
       ],
       "ar": [
@@ -27018,7 +26932,6 @@
         "– But of course we also looked at the sights: yesterday."
       ],
       "ar": [
-        "-لكن بالطبع نظرنا أيضاً إلى المشاهد:",
         "- ولكن بالطبع علينا أيضا أن ننظر إلى المشاهد:",
         "-لكن بالطبع نظرنا أيضاً إلى المشاهد اليوم."
       ]
@@ -27228,7 +27141,6 @@
         "- Haha, Jacques wanted to today."
       ],
       "ar": [
-        "-هاهاها، أراد (جاك) ذلك",
         "-الشعر، المطلوب",
         "-هاهاها، يريد (جاك) ذلك"
       ]
@@ -27814,7 +27726,6 @@
       ],
       "ar": [
         "-مرحباً، هذا (إبراهيم البشاش )",
-        "-مرحباً، هذا إبراهيم الباشا",
         "-يوم جيد، هذا هو إبراهيم الباشا"
       ]
     },
@@ -28019,11 +27930,9 @@
     "translation_distractors": {
       "en": [
         "– Love: Can you tell me,",
-        "– Dear: Could you tell me,",
-        "– Dear: Can you tell me"
+        "– Dear: Could you tell me,"
       ],
       "ar": [
-        "- هل يمكنك أن تخبرني",
         "- هل يمكنك أن تخبرني اليوم.",
         "- هل يمكنك أن تخبرني أمس."
       ]
@@ -28192,8 +28101,7 @@
       ],
       "ar": [
         "وإلا، هذا هو توماس للمقابلة.",
-        "وإلا سيكون هذا موضوع المقابلة.",
-        "وإلا، فهذا موضوع للمقابلة."
+        "وإلا سيكون هذا موضوع المقابلة."
       ]
     },
     "transcript_source": "dw_manual_subs",
@@ -28402,7 +28310,6 @@
       ],
       "ar": [
         "-يُنظر إلى الأمور بشكل عظيم!",
-        "-يُظهر أنه عظيم!",
         "-يُظهر أنهُ عظيم! اليوم."
       ]
     },
@@ -28485,7 +28392,6 @@
         "You have to try! yesterday."
       ],
       "ar": [
-        "يجب أن تحاولي",
         "عليك أن تحاول!",
         "كان عليك أن تحاولي!"
       ]
@@ -28859,7 +28765,6 @@
     "translation_distractors": {
       "en": [
         "– Selmas and you – that's crystal clear.",
-        "- Selma and you – that's crystal clear.",
         "- Selma and you – that's probably eating crystal clear."
       ],
       "ar": [
@@ -29031,7 +28936,6 @@
         "They're not yours! yesterday."
       ],
       "ar": [
-        "إنهم ليسوا لك",
         "ليس لك!",
         "انهم ليسوا لك اليوم."
       ]
@@ -29116,7 +29020,6 @@
       ],
       "ar": [
         "- جيد، كان ذلك آخر واحد.",
-        "كان هذا آخر واحد لك.",
         "كان ذلك آخر واحد لك"
       ]
     },
@@ -29194,7 +29097,6 @@
     },
     "translation_distractors": {
       "en": [
-        "– What are you doing?",
         "- What are you doing? today.",
         "- What are you doing? yesterday."
       ],
@@ -30116,8 +30018,7 @@
     "translation_distractors": {
       "en": [
         "- Oh, that's sour? That's ultra boring!",
-        "– That's great too? That's ultra boring!",
-        "– Oh, that's great? That's ultra boring!"
+        "– That's great too? That's ultra boring!"
       ],
       "ar": [
         "-هذا مُمَلّل للغاية!",
@@ -30205,7 +30106,6 @@
       ],
       "ar": [
         "ثم سيعرفون ما هو في السياسة.",
-        "ثم سيعرفون ما هو مصنوع من البلاستيك.",
         "ثم سيعرفون ما هو البلاستيك"
       ]
     },
@@ -30246,7 +30146,6 @@
         "That's great! tomorrow."
       ],
       "ar": [
-        "هذا عظيم!",
         "ذلك عظيم",
         "هذا عظيم اليوم."
       ]
@@ -30792,7 +30691,6 @@
         "Emma's waiting! yesterday."
       ],
       "ar": [
-        "-إن (ايما) تنتظر الانتظار",
         "(إيما) تنتظر أيضاً",
         "-إن (ايما) تنتظر الإنتظار اليوم."
       ]
@@ -31122,12 +31020,10 @@
     },
     "translation_distractors": {
       "en": [
-        "– Yes and what do I do with Emma?",
         "– Yes and what do I do with Emmas?",
         "– Yes, and what do I do with Emma? today."
       ],
       "ar": [
-        "-نعم وماذا أفعل مع (إيما)؟",
         "-نعم وماذا أفعل بـ (إيمّا)؟",
         "-نعم، وماذا أفعل بـ(إيما)؟"
       ]
@@ -31169,7 +31065,6 @@
         "– When does the course start? today."
       ],
       "ar": [
-        "متى يبدأ المسار؟",
         "-متى يبدأ المسار؟ اليوم.",
         "-متى يبدأ المسار؟ أمس."
       ]
@@ -31505,7 +31400,6 @@
         "So all day long today."
       ],
       "ar": [
-        "لذا كل يوم طويل.",
         "يوم كامل",
         "لذا كل يوم طويل، اغني لي اغنية"
       ]
@@ -31924,7 +31818,6 @@
         "- All right, thank you today."
       ],
       "ar": [
-        "-حسناً، شكراً لك",
         "-حسناً، أعتقد ذلك",
         "-بالطبع، شكراً لك"
       ]
@@ -31962,12 +31855,10 @@
     "translation_distractors": {
       "en": [
         "- Yeah, hello! How hot are you?",
-        "- Yes, hello! What's your name?",
         "- Yes, hello! today."
       ],
       "ar": [
         "-أجل، ما مدى سخوانتك؟",
-        "- نعم, مرحباً, ما اسمك ؟",
         "-نعم، مرحباً!"
       ]
     },
@@ -32003,7 +31894,6 @@
     },
     "translation_distractors": {
       "en": [
-        "- Nico, how are you?",
         "Nicos, how are you?",
         "Nico, how are you? today."
       ],
@@ -32045,12 +31935,10 @@
     },
     "translation_distractors": {
       "en": [
-        "– Thank you, thank you, I'm fine.",
         "– Thank you, I think I'm fine.",
         "Thank you, thank you, I'm fine today."
       ],
       "ar": [
-        "-شكراً لك، شكراً لك، أنا بخير",
         "-شكراً لكِ، أعتقد أنني بخير",
         "شكراً لك، شكراً لك، أنا بخير اليوم."
       ]
@@ -32507,7 +32395,6 @@
     },
     "translation_distractors": {
       "en": [
-        "Thank you! Good luck!",
         "Thank you so much! Good luck!",
         "Thank you, Fiel Happiness!"
       ],
@@ -32680,7 +32567,6 @@
         "Social networks, digital versions, apps – and we are there! yesterday."
       ],
       "ar": [
-        "الشبكات الإجتماعية، الإصدارات الرقمية، التطبيقات، ونحن هناك!",
         "الشبكات الإجتماعية، الإصدارات الرقمية، التطبيق... ونحن هناك!",
         "الشبكات الإجتماعية، الإصدارات الرقمية، التطبيقات... ونحن هناك! اليوم."
       ]
@@ -33432,7 +33318,6 @@
     "translation_distractors": {
       "en": [
         "– Thank you, I'm fine. I'm on my way to my internships.",
-        "Thank you, I'm fine. I'm on my way to my internship.",
         "– Thank you, I'm fine. I'm on my way to my internship today."
       ],
       "ar": [
@@ -33605,7 +33490,6 @@
       ],
       "ar": [
         "- ظروف العمل في الشركة كبيرة،",
-        "- ظروف العمل في الشركة عظيمة",
         "- ظروف العمل في الشركة عظيمة اليوم."
       ]
     },
@@ -34308,7 +34192,6 @@
     },
     "translation_distractors": {
       "en": [
-        "See you soon, Sebästian!",
         "- Until then, Sebastian!",
         "- You're coming, Sebastian!"
       ],
@@ -35109,8 +34992,7 @@
       ],
       "ar": [
         "خير للذين \"يَسُمّونَ سماءً وأرض\" للبعضِ.",
-        "خير للذين \"يرغبون في خلق السماء والأرض\"",
-        "جيد لأولئك الذين يريدون أن \"يصنعوا السماء والأرض.\""
+        "خير للذين \"يرغبون في خلق السماء والأرض\""
       ]
     },
     "transcript_source": "dw_manual_subs",
@@ -35398,13 +35280,11 @@
     "translation_distractors": {
       "en": [
         "- I know you don't like me because I've been taking Inge.",
-        "I know you won't be me tomorrow because I lied to Inge.",
-        "- I know you don't like me because I lied to Inge."
+        "I know you won't be me tomorrow because I lied to Inge."
       ],
       "ar": [
         "-أعلم أنك لا تحبني لأنني كنت أصطحب (إنج )",
-        "أعلم أنك لن تكون مثلي غداً لأنني كذبت على (إنج)",
-        "-أعلم أنك لا تحبني لأنني كذبت على (إنج )"
+        "أعلم أنك لن تكون مثلي غداً لأنني كذبت على (إنج)"
       ]
     },
     "transcript_source": "dw_manual_subs",
@@ -35612,7 +35492,6 @@
         "- She's not listening to me yesterday."
       ],
       "ar": [
-        "-إنها لا تستمع إلي",
         "- شي لا يستمع لي.",
         "-إنها لا تستمع إليّ اليوم."
       ]
@@ -35979,7 +35858,6 @@
     },
     "translation_distractors": {
       "en": [
-        "– They are dissatisfied with their government.",
         "They are dissatisfied with their government today.",
         "They are dissatisfied with their government yesterday."
       ],
@@ -36399,7 +36277,6 @@
     },
     "translation_distractors": {
       "en": [
-        "– Yes, but the biggest problem is likely to be",
         "– Yes, but that biggest problem is likely to",
         "– Yes, but the biggest problem is likely to be today."
       ],
@@ -36862,7 +36739,6 @@
     "translation_distractors": {
       "en": [
         "- But everyone deserves it, don't you think?",
-        "– But everyone deserves that, don't you think?",
         "- But everyone deserves that, don't you think? today."
       ],
       "ar": [
@@ -36988,7 +36864,6 @@
     "translation_distractors": {
       "en": [
         "- How often do you get drunk?",
-        "– How often do you train?",
         "– How often does yours train?"
       ],
       "ar": [
@@ -37281,7 +37156,6 @@
     },
     "translation_distractors": {
       "en": [
-        "– How long have you been playing together?",
         "– How long do you play together?",
         "- How long have you been playing together? today."
       ],
@@ -37366,7 +37240,6 @@
     "translation_distractors": {
       "en": [
         "- Hey, half a time with me!",
-        "- Hey, help me out!",
         "- Hey, help me out today."
       ],
       "ar": [
@@ -37785,7 +37658,6 @@
     },
     "translation_distractors": {
       "en": [
-        "- Okay. So you want women",
         "- Okay, when you want women",
         "- Okay, so you want women today."
       ],
@@ -38169,7 +38041,6 @@
       ],
       "ar": [
         "مصفف الشعر، مصل، سكرتير",
-        "مصفف الشعر، مُعلِم، سكرتير",
         "مصفف الشعر، معلّم، سكرتير اليوم."
       ]
     },
@@ -38500,13 +38371,11 @@
     "translation_distractors": {
       "en": [
         "– No. Five, we're gonna get you.",
-        "- Roommates, five!",
-        "– Roommate number five!"
+        "- Roommates, five!"
       ],
       "ar": [
         "خمسة، سننال منك",
-        "-الزّمز في الغرفة، خمسة!",
-        "-الغرفة رقم خمسة"
+        "-الزّمز في الغرفة، خمسة!"
       ]
     },
     "transcript_source": "dw_manual_subs",
@@ -38584,7 +38453,6 @@
     "translation_distractors": {
       "en": [
         "– I don't know! I don't work around the clock,",
-        "- I don't work around the clock,",
         "– There's nothing! I don't work around the clock,"
       ],
       "ar": [
@@ -38924,7 +38792,6 @@
         "This is health insurance, pension insurance today."
       ],
       "ar": [
-        "هذا هو التأمين الصحي، تأمين التقاعد",
         "ذلك هو التأمين الصحي، تأمين التقاعد.",
         "هذا هو التأمين الصحي، تأمين التقاعد اليوم."
       ]
@@ -38966,7 +38833,6 @@
         "and unemployment insurance yesterday."
       ],
       "ar": [
-        "والتأمين ضد البطالة",
         "والتأمين ضد البطالة اليوم.",
         "والتأمين ضد البطالة أمس."
       ]
@@ -39004,12 +38870,10 @@
     "translation_distractors": {
       "en": [
         "And the church towers.",
-        "- And the church tax.",
         "And the church tax today."
       ],
       "ar": [
         "و الأبراج والكنيسة",
-        "-وضريبة الكنيسة",
         "وضريبة الكنيسة اليوم."
       ]
     },
@@ -39051,8 +38915,7 @@
       ],
       "ar": [
         "-ماذا؟ الكنيسة؟",
-        "-ويس) ضريبة الكنيسة؟ )",
-        "-ماذا، ضريبة الكنيسة؟"
+        "-ويس) ضريبة الكنيسة؟ )"
       ]
     },
     "transcript_source": "dw_manual_subs",
@@ -39297,7 +39160,6 @@
     },
     "translation_distractors": {
       "en": [
-        "- Cöol, may I?",
         "- Cool!",
         "- Cool, may I? today."
       ],
@@ -39632,12 +39494,10 @@
     },
     "translation_distractors": {
       "en": [
-        "Before I had a restaurant, I worked as a chef for a long time.",
         "– Before I had a restaurant, I worked as a chef for a long time today.",
         "– Before I had a restaurant, I worked as a chef for a long time yesterday."
       ],
       "ar": [
-        "قبل أن يكون لدي مطعم، عملت كطاهي لفترة طويلة.",
         "-قبل أن يكون لدي مطعم، عملت كطاهي لفترة طويلة اليوم.",
         "-قبل أن يكون لدي مطعم، عملت كطاهي لفترة طويلة أمس."
       ]
@@ -40268,7 +40128,6 @@
       ],
       "ar": [
         "-جاك) كنا نقرأه)",
-        "-جاك) كنا سنقرأه)",
         "-جاك)، كنا سنقرأها، أليس صحيحاً يا (ماكس)؟"
       ]
     },
@@ -40724,12 +40583,10 @@
     },
     "translation_distractors": {
       "en": [
-        "- Don't say she's right.",
         "- Don't say she's done.",
         "Don't say she's right today."
       ],
       "ar": [
-        "- لا تقل أنها محقة",
         "- لا تقل أنها فعلت.",
         "لا تقل أنها محقة اليوم."
       ]
@@ -40976,12 +40833,10 @@
     },
     "translation_distractors": {
       "en": [
-        "Then I decide. Read it!",
         "- Because I decide. Read it!",
         "- Then I decide. Lisa before!"
       ],
       "ar": [
-        "ثم أقرر، اقرأه",
         "-لأني أقرر، اقرأها",
         "-إذاً أنا من يقرر."
       ]
@@ -42115,7 +41970,6 @@
         "but only one exercise in my language course yesterday."
       ],
       "ar": [
-        "فقط تمرين واحد في اللغة التي أدرسها",
         "فقط تمرين في اللغة التي أدرسها",
         "فقط تمرين واحد في اللغة التي ادرسها اليوم."
       ]
@@ -42955,7 +42809,6 @@
         "– There is no fruit! today."
       ],
       "ar": [
-        "- لا يوجد فاكهة -",
         "- لا يوجد شرق شرق",
         "-لا يوجد فاكهة هناك"
       ]
@@ -43160,12 +43013,10 @@
     },
     "translation_distractors": {
       "en": [
-        "– We're on vacation.",
         "– We are on vacation.",
         "- We're on vacation today."
       ],
       "ar": [
-        "- نحن في عطلة -",
         "-نحن في إجازة",
         "- نحن في إجازة -"
       ]
@@ -43207,7 +43058,6 @@
         "– We are not on holiday. We play football! today."
       ],
       "ar": [
-        "- نحن لسنا في عطلة، نحن نلعب كرة القدم!",
         "- نحن لا نَعْرفُ في عطلة، نحن نَلْعبُ كرةَ قدم!",
         "-نحن لسنا في إجازة، نحن نلعب كرة القدم"
       ]
@@ -43250,7 +43100,6 @@
       ],
       "ar": [
         "- من الصباح فصاعداً، نحن نأكل بشكل صحي!",
-        "- من الغد سنأكل بشكل صحي",
         "- من الغد، سيكون الطعام صحياً"
       ]
     },
@@ -44211,12 +44060,10 @@
     "translation_distractors": {
       "en": [
         "– Wow, the little one after a lot of work.",
-        "- Wow, that sounds like a lot of work.",
         "Wow, that sounds like a lot of work today."
       ],
       "ar": [
         "-الصغير بعد الكثير من العمل",
-        "-هذا يبدو كعمل كثير",
         "ذلك يبدو كعمل كثير"
       ]
     },
@@ -44967,8 +44814,7 @@
     "translation_distractors": {
       "en": [
         "We can't do this in four weeks' time!",
-        "We'll never make it in four weeks!",
-        "We'll never make it in four weeks' time."
+        "We'll never make it in four weeks!"
       ],
       "ar": [
         "لا يمكننا فعل هذا في أربعة أسابيع",
@@ -45433,7 +45279,6 @@
         "My brother has changed completely tomorrow."
       ],
       "ar": [
-        "لقد تغير أخي تماماً",
         "لقد تغير أخي تماما اليوم.",
         "لقد تغير أخي تماما أمس."
       ]
@@ -46518,13 +46363,11 @@
     "translation_distractors": {
       "en": [
         "- Yes, I think.",
-        "- Yes. Älso, I thought.",
-        "- So, I thought."
+        "- Yes. Älso, I thought."
       ],
       "ar": [
         "- نعم، أعتقد.",
-        "-نعم، (أولسو) حسبت ذلك",
-        "-لذا، فكرت"
+        "-نعم، (أولسو) حسبت ذلك"
       ]
     },
     "transcript_source": "dw_manual_subs",
@@ -46894,7 +46737,6 @@
     "translation_distractors": {
       "en": [
         "\"Jan in the sack?",
-        "\"Jän in the bag?",
         "\"Jan Sack?"
       ],
       "ar": [
@@ -47146,7 +46988,6 @@
     "translation_distractors": {
       "en": [
         "– So: Week comes \"Kalter Hund\"?",
-        "– So, where does \"Kalter Hund\" come from?",
         "– As: Where does \"Kalter Hund\" come from?"
       ],
       "ar": [
@@ -47439,9 +47280,7 @@
     },
     "translation_distractors": {
       "en": [
-        "- Inges, what's going on?",
-        "– Inge, what's going on?",
-        "- Inge, what's going on?"
+        "- Inges, what's going on?"
       ],
       "ar": [
         "-إنجليس)، ماذا يجري؟ )",
@@ -47529,8 +47368,7 @@
       ],
       "ar": [
         "-أنا منتحل قليلاً مع (جاك )",
-        "- أوه، أنا على موعد مع جاك.",
-        "-أنا أواعد جاك"
+        "- أوه، أنا على موعد مع جاك."
       ]
     },
     "transcript_source": "dw_manual_subs",
@@ -47565,7 +47403,6 @@
     },
     "translation_distractors": {
       "en": [
-        "- It's not funny! I invited him to my home.",
         "- That's not funny! I half invited him to my home.",
         "– It's not funny! I invited him to my home today."
       ],
@@ -47776,8 +47613,7 @@
     "translation_distractors": {
       "en": [
         "- Oh, Inge, he's nothing that stupid.",
-        "- Oh, Inges. He's not that stupid.",
-        "- Oh, Inge. He's not that stupid."
+        "- Oh, Inges. He's not that stupid."
       ],
       "ar": [
         "-إنه ليس بهذا الغباء",
@@ -47859,7 +47695,6 @@
     },
     "translation_distractors": {
       "en": [
-        "– Rouläde with red cabbage and dumplings?",
         "– Roulade with red cabbage and dumplings? today.",
         "– Roulade with red cabbage and dumplings? yesterday."
       ],
@@ -47906,7 +47741,6 @@
         "- You are two treasures! today."
       ],
       "ar": [
-        "-أنتما كنزان",
         "-لقد كنت كنزين",
         "-أنت تظهر الكنز!"
       ]
@@ -48200,9 +48034,7 @@
         "And you belong to my family today."
       ],
       "ar": [
-        "وأنت مع عائلتي",
-        "وانت تنتمي الى عائلتي",
-        "وأنت تنتمي إلى عائلتي."
+        "وأنت مع عائلتي"
       ]
     },
     "transcript_source": "dw_manual_subs",
@@ -49413,12 +49245,10 @@
     },
     "translation_distractors": {
       "en": [
-        "– You get my website.",
         "You get my website today.",
         "You get my website yesterday."
       ],
       "ar": [
-        "-تحصل على موقعي الإلكتروني",
         "تحصل على موقعي الإلكتروني اليوم.",
         "تحصل على موقعي الإلكتروني أمس."
       ]
@@ -50294,7 +50124,6 @@
     },
     "translation_distractors": {
       "en": [
-        "- I have a present for you too.",
         "- I'll give you half a present.",
         "- I have eight gifts for you."
       ],
@@ -50420,7 +50249,6 @@
     },
     "translation_distractors": {
       "en": [
-        "– I live with Mrs. Kohlhaas.",
         "– I live with Mrs Kohlhaas today.",
         "– I live with Mrs Kohlhaas yesterday."
       ],
@@ -50468,8 +50296,7 @@
       ],
       "ar": [
         "إنها لطيفة جداً وأنت تعيش في (كالبر ستراس)",
-        "إنها لطيفة وتعيش في (كالبرسترا)",
-        "إنها لطيفة جداً و تعيش في \"كالبرسترا\"."
+        "إنها لطيفة وتعيش في (كالبرسترا)"
       ]
     },
     "transcript_source": "dw_manual_subs",
@@ -50505,12 +50332,10 @@
     "translation_distractors": {
       "en": [
         "- Calf's Street? Where does that eat?",
-        "– Calf Street? Where is that?",
         "- Calf Street? Wow is that?"
       ],
       "ar": [
         "أين يأكل هذا؟",
-        "- شارع (كالف)؟ أين ذلك؟",
         "-شارع (كالف)؟"
       ]
     },
@@ -50593,7 +50418,6 @@
         "Max and Tarek work there today."
       ],
       "ar": [
-        "ماكس وطارق يعملان هناك",
         "اليوم هو ماكس وطارق.",
         "ماكس وطارق يعملون هناك"
       ]
@@ -51349,7 +51173,6 @@
         "– That doesn't eat nonsense at all."
       ],
       "ar": [
-        "-هذا ليس هراء على الإطلاق.",
         "-هذا لا يُثير الهموم على الإطلاق.",
         "-ذلك ليس هراء على الإطلاق"
       ]
@@ -51560,7 +51383,6 @@
       ],
       "ar": [
         "ربما قلت أشياء خاطئة في مرحلة ما",
-        "ربما قلت شيئا خاطئا.",
         "ربما كنت سألت شيئا خطأ."
       ]
     },
@@ -51597,8 +51419,7 @@
     "translation_distractors": {
       "en": [
         "- No, we were just talking about her internships.",
-        "– No, we just have about her internship right now.",
-        "- No, we were just talking about her internship."
+        "– No, we just have about her internship right now."
       ],
       "ar": [
         "- لا، كنا نتحدث فقط عن تدريباتها",
@@ -51770,7 +51591,6 @@
       ],
       "ar": [
         "على الرغم من أن الجميع موافقون عليك",
-        "على الرغم من أنك بخير",
         "على الرغم من أنكِ بخير اليوم."
       ]
     },
@@ -52477,7 +52297,6 @@
     },
     "translation_distractors": {
       "en": [
-        "– Do you want to go back? Do you often think about your homeland?",
         "– Do you want to go back? Do you often think of your homeland?",
         "Do you want to go back? Do you often think about your homeland? today."
       ],
@@ -52688,7 +52507,6 @@
     "translation_distractors": {
       "en": [
         "– Yes, that was my sixteenth place of birth.",
-        "– Yes, that was my sixteenth birthday.",
         "- Yes, that was my sixteenth birthday today."
       ],
       "ar": [
@@ -53149,7 +52967,6 @@
     },
     "translation_distractors": {
       "en": [
-        "– Is that the last one?",
         "- Is that the last one? today.",
         "- Is that the last one? yesterday."
       ],
@@ -53234,7 +53051,6 @@
     "translation_distractors": {
       "en": [
         "– I have to cancel some drinks.",
-        "– I have to serve some more drinks.",
         "- I have to serve some more drinks today."
       ],
       "ar": [
@@ -53322,7 +53138,6 @@
         "– No problem, I can do it myself yesterday."
       ],
       "ar": [
-        "-لا مشكلة، يمكنني فعلها بنفسي",
         "-لا مشكلة، يمكنني فعل ذلك بنفسي.",
         "-لا مشكلة، يمكنني فعلها بنفسي اليوم."
       ]
@@ -53951,7 +53766,6 @@
         "- Yes, you're learning something new yesterday."
       ],
       "ar": [
-        "-نعم، أنت تتعلم شيئاً جديداً",
         "-نعم، أنت تقرأ شيئاً جديداً",
         "-نعم، أنت تتعلم شيئا جديدا اليوم."
       ]
@@ -54078,7 +53892,6 @@
       ],
       "ar": [
         "- سأساعدك - سأساعدك",
-        "- سأساعدك -",
         "-سأساعدك اليوم."
       ]
     },
@@ -54239,7 +54052,6 @@
     },
     "translation_distractors": {
       "en": [
-        "- A year ago.",
         "- Be a year.",
         "– For a year."
       ],
@@ -54365,7 +54177,6 @@
     "translation_distractors": {
       "en": [
         "– You speak Arabic?",
-        "– You speak Armenian?",
         "- You speak Armenian? today."
       ],
       "ar": [
@@ -54532,7 +54343,6 @@
     },
     "translation_distractors": {
       "en": [
-        "– I have already attended [[a] course in Syria.",
         "– I already have [a] course in Syria.",
         "– I have already attended [a] course in series."
       ],
@@ -54616,12 +54426,10 @@
     },
     "translation_distractors": {
       "en": [
-        "But I know that English is [an important] language.",
         "But I know that English is [[a] important language.]",
         "But I know that English is an important language today."
       ],
       "ar": [
-        "لكنني أعلم أن الإنكليزية لغة [مهمة].",
         "لكنني أعلم أن الإنكليزية لغة مهمة [[[لغة] مهمة]].]",
         "لكنني أعلم أن الإنكليزية لغة مهمة اليوم."
       ]
@@ -55708,7 +55516,6 @@
     },
     "translation_distractors": {
       "en": [
-        "– Yes, that's also very interesting, because",
         "– Yes, that's eight very interesting because",
         "– Yes, that's interesting, because"
       ],
@@ -55917,7 +55724,6 @@
     },
     "translation_distractors": {
       "en": [
-        "- Ibrahim, you should let Selma go.",
         "- Ibrahim, you should let Selmas go.",
         "Ibrahim, you should let Selma go today."
       ],
@@ -56043,8 +55849,6 @@
     },
     "translation_distractors": {
       "en": [
-        "– I'm sorry, it was a lie!",
-        "I'm sorry, it was a lie!",
         "- I'm sorry, it was a lie! today."
       ],
       "ar": [
@@ -56085,12 +55889,10 @@
     },
     "translation_distractors": {
       "en": [
-        "I have to go to Nicos!",
         "I have to go to Nico!",
         "I have to go to Nico's! today."
       ],
       "ar": [
-        "يجب أن أذهب إلى (نيكوس)!",
         "يجب أن أذهب إلى (نيكو)!",
         "يجب أن أذهب إلى (نيكوس) اليوم."
       ]
@@ -56258,7 +56060,6 @@
         "– Hello, Nawin, good to see you! Thank you for the invitation! today."
       ],
       "ar": [
-        "-مرحباً (ناوين) من الجيد رؤيتك شكراً على الدعوة",
         "-مرحباً (ناوينز) من الجيد رؤيتك شكراً على الدعوة",
         "-مرحباً (ناوين)، إنه أن أراك، شكراً على الدعوة"
       ]
@@ -56511,8 +56312,7 @@
       ],
       "ar": [
         "- الآن لدي هدية من كولونيا، هامبورغ، دوسلدورف، هايدلبرغ وبرلين.",
-        "-الآن نصف هداياي من كولونيا، هامبورغ، دوسلدورف، هايدلبرغ وبرلين.",
-        "- الآن لدي هدايا من كولونيا، هامبورغ، دوسلدورف، هايدلبرغ وبرلين."
+        "-الآن نصف هداياي من كولونيا، هامبورغ، دوسلدورف، هايدلبرغ وبرلين."
       ]
     },
     "transcript_source": "dw_manual_subs",
@@ -57687,7 +57487,6 @@
       ],
       "ar": [
         "هل (يراس) تعلم أنك هنا؟",
-        "-هل تعلم (يارا) أنك هنا؟",
         "هل تعلم (يارا) أنك هنا؟ اليوم."
       ]
     },
@@ -58101,7 +57900,6 @@
     },
     "translation_distractors": {
       "en": [
-        "– But where is that? Do you know Yara's bicycle shop?",
         "– But where is that? Do you know Yara bicycle shop?",
         "– Albe, where is that? Do you know Yara's bicycle shop?"
       ],
@@ -58270,12 +58068,10 @@
     "translation_distractors": {
       "en": [
         "– For me offer a coffee.",
-        "- For me, please have a coffee.",
         "- I'll have coffee for you."
       ],
       "ar": [
         "- من أجلي أعرض قهوة -",
-        "- من أجلي، رجاءً تناولي قهوة",
         "-سأتناول قهوة لك"
       ]
     },
@@ -58395,7 +58191,6 @@
     },
     "translation_distractors": {
       "en": [
-        "- What about you, Nico? Are you thirsty? What do you want to drink?",
         "- What about you, Nicos? Are you thirsty? What do you want to drink?",
         "– What about you, Nico? Are you thirsty? What do you want to drink? today."
       ],
@@ -59819,9 +59614,7 @@
     },
     "translation_distractors": {
       "en": [
-        "– How long have you not been Mrs. González?",
-        "How long have you not seen Mrs González?",
-        "How long have you not seen Mrs. González?"
+        "– How long have you not been Mrs. González?"
       ],
       "ar": [
         "-منذ متى وأنتِ لم تكوني السيدة (غونزالز)؟",
@@ -60029,12 +59822,10 @@
     },
     "translation_distractors": {
       "en": [
-        "Why didn't you inform the police earlier?",
         "– Why didn't you inform the police leading?",
         "– Why didn't you inform the police earlier? today."
       ],
       "ar": [
-        "لماذا لم تخبر الشرطة مسبقاً؟",
         "-لماذا لم تخبر الشرطة بقيادة الشرطة؟",
         "-لماذا لم تخبر الشرطة مسبقاً؟ اليوم."
       ]
@@ -60202,7 +59993,6 @@
         "They're my parents yesterday."
       ],
       "ar": [
-        "إنهم والدي والديّ.",
         "هذا والديّ والديّ.",
         "هذان والديّ والديّ."
       ]
@@ -60324,7 +60114,6 @@
     "translation_distractors": {
       "en": [
         "Do you think your aunt is in Spain visiting your parents?",
-        "Do you think your aunt is in Spain and visiting your parents?",
         "– Do you think your aunt is in Spain and visiting your parents? today."
       ],
       "ar": [
@@ -60497,7 +60286,6 @@
       ],
       "ar": [
         "-أين يعيش والداك في الإسبان؟",
-        "-أين يعيش والداك في (إسبانيا)؟",
         "-أين يعيش والداك في إسبانيا؟ اليوم."
       ]
     },
@@ -60869,12 +60657,10 @@
     },
     "translation_distractors": {
       "en": [
-        "- I heard you were playing football?",
         "- I half heard you were playing football?",
         "- I heard you were playing football today."
       ],
       "ar": [
-        "-سمعت أنك تلعب كرة القدم؟",
         "-سمعت أنك تلعب كرة القدم اليوم.",
         "-سمعت أنك تلعب كرة القدم أمس."
       ]
@@ -60912,11 +60698,9 @@
     "translation_distractors": {
       "en": [
         "- Soon you'll play football with us. Next week!",
-        "- Soon you will play football with us. Next week!",
         "– Soon you will play football with us. Next weeks!"
       ],
       "ar": [
-        "-قريباً ستلعب كرة القدم معنا، الأسبوع القادم!",
         "-قريباً ستلعب كرة القدم معنا الأسبوع القادم اليوم.",
         "-قريباً ستلعب كرة القدم معنا الأسبوع القادم أمس."
       ]
@@ -60954,7 +60738,6 @@
     "translation_distractors": {
       "en": [
         "– What are you doing in your free time? Do you like to jog?",
-        "What are you doing in your spare time? Do you like to jog?",
         "– What are you doing in your spare time? Do you like to jog? today."
       ],
       "ar": [
@@ -61079,7 +60862,6 @@
     },
     "translation_distractors": {
       "en": [
-        "- Fishing? You like fishing?",
         "– Fishing? You like fishing? today.",
         "– Fishing? You like fishing? yesterday."
       ],
@@ -61121,13 +60903,11 @@
     },
     "translation_distractors": {
       "en": [
-        "– Fishing, yes. I like fishing.",
         "- Fishing, yes. I like fishing today.",
         "- Fishing, yes. I like fishing yesterday."
       ],
       "ar": [
         "-صيد السمك، نعم، أحب الصيد",
-        "-الصيد، نعم، أحب الصيد.",
         "-الصيد، نعم، أحب الصيد اليوم."
       ]
     },
@@ -61294,7 +61074,6 @@
         "Come here, I'll show you some pictures tomorrow."
       ],
       "ar": [
-        "تعال هنا، سأريك بعض الصور",
         "تعال هنا سأريك بعض الصور اليوم.",
         "تعال هنا سأريك بعض الصور أمس."
       ]
@@ -61374,8 +61153,7 @@
     "translation_distractors": {
       "en": [
         "I didn't go anything at all, I wanted to give up",
-        "I didn't catch anything at all, wanted to get upset,",
-        "I didn't catch anything at all, I wanted to give up"
+        "I didn't catch anything at all, wanted to get upset,"
       ],
       "ar": [
         "لم أفعل أي شيء على الإطلاق أردت أن أتخلى",
@@ -61546,7 +61324,6 @@
         "- This is my aunt! today."
       ],
       "ar": [
-        "-هذه عمتي",
         "-هذه طماطمي",
         "-هذه عمتي! اليوم."
       ]
@@ -61589,8 +61366,7 @@
       ],
       "ar": [
         "يارا هي عمتك؟",
-        "يارا هي طماطم الخاص بك؟",
-        "-هل (يارا) عمتك؟"
+        "يارا هي طماطم الخاص بك؟"
       ]
     },
     "transcript_source": "dw_manual_subs",
@@ -61667,14 +61443,12 @@
     },
     "translation_distractors": {
       "en": [
-        "– I don't know if I'm good enough.",
         "– I don't know if I'm good at it.",
         "I don't know if I'm good enough today."
       ],
       "ar": [
         "-لا أعلم إن كنتُ بارعاً بما يكفي",
-        "-لا أعلم إن كنتُ بارعاً في ذلك",
-        "-لا أعلم إن كنتُ جيدة بما يكفي"
+        "-لا أعلم إن كنتُ بارعاً في ذلك"
       ]
     },
     "transcript_source": "dw_manual_subs",
@@ -62219,8 +61993,7 @@
       ],
       "ar": [
         "شكراً جزيلاً لك، الآن لديّ زيارة واضحة",
-        "شكراً جزيلاً، لدي مرض صغير الآن",
-        "شكراً جزيلاً لك، الآن لدي بعض الوضوح"
+        "شكراً جزيلاً، لدي مرض صغير الآن"
       ]
     },
     "transcript_source": "dw_manual_subs",
@@ -63138,8 +62911,7 @@
       ],
       "ar": [
         "ذلك سقط كثيراً جداً",
-        "هذا كثير جداً للسقوط",
-        "هذا كثير جداً!"
+        "هذا كثير جداً للسقوط"
       ]
     },
     "transcript_source": "dw_manual_subs",
@@ -63642,7 +63414,6 @@
       ],
       "ar": [
         "-أنا آسف يا (بيبي)، انتهى أمر (طارق )",
-        "-أنا آسف يا بيبي، (طارق) محق",
         "-أنا آسف يا (بيبي)، (طارق) محق اليوم."
       ]
     },
@@ -64265,7 +64036,6 @@
     },
     "translation_distractors": {
       "en": [
-        "Goodbye, good-bye.",
         "- Goodbye, good luck!",
         "- Goodbye, good-bye today."
       ],
@@ -64312,7 +64082,6 @@
         "- Bye, Ciaö!"
       ],
       "ar": [
-        "إلى اللقاء",
         "-إلى اللقاء، يا (تشيو )!"
       ]
     },
@@ -64348,7 +64117,6 @@
     },
     "translation_distractors": {
       "en": [
-        "- See you soon!",
         "- Bye, bye!",
         "- You're coming soon."
       ],
@@ -65446,7 +65214,6 @@
       ],
       "ar": [
         "عيد ميلاد سعيد لموضع الميلاد",
-        "عيد ميلاد سعيد!",
         "! عيد ميلاد سعيد اليوم."
       ]
     },
@@ -65903,7 +65670,6 @@
     "translation_distractors": {
       "en": [
         "- Lisas knows.",
-        "Lisa knows.",
         "Read it."
       ],
       "ar": [
@@ -66616,13 +66382,10 @@
     "translation_distractors": {
       "en": [
         "– And how are the neighbor?",
-        "- And how are the neighbors?",
         "– And how are the neighbors? today."
       ],
       "ar": [
-        "-وكيف حال الجيران؟",
-        "-وكيف حال الجار؟",
-        "- وكيف حال الجيران؟"
+        "-وكيف حال الجار؟"
       ]
     },
     "transcript_source": "dw_manual_subs",
@@ -66705,8 +66468,7 @@
       ],
       "ar": [
         "إنهم عالى جداً و لا شئ لطيف",
-        "- نعم, صوته عالي جداً و ليس لطيفاً",
-        "- نعم، هم عالي جداً بصوت عال وليسوا لطفاء!"
+        "- نعم, صوته عالي جداً و ليس لطيفاً"
       ]
     },
     "transcript_source": "dw_manual_subs",
@@ -66746,7 +66508,6 @@
         "- Well, we'll call you today."
       ],
       "ar": [
-        "-حسناً، سنتصل بك",
         "-لنتصل بك",
         "- حسناً، سنتصل بك اليوم."
       ]
@@ -67077,7 +66838,6 @@
     },
     "translation_distractors": {
       "en": [
-        "- I'm Nicö.",
         "- I'm Nicos.",
         "- I'm Nice."
       ],
@@ -67544,7 +67304,6 @@
         "- Oh, and what are you doing now?"
       ],
       "ar": [
-        "-ماذا تفعل الآن؟",
         "-ماذا تفعل؟",
         "-وماذا تفعل الآن؟"
       ]
@@ -68091,7 +67850,6 @@
       ],
       "ar": [
         "(ألبي) (بابا) مريض",
-        "لكن الأُم مريض",
         "لكن (داد) يمرض"
       ]
     },
@@ -68174,7 +67932,6 @@
         "which expires this week yesterday."
       ],
       "ar": [
-        "التي تنتهي هذا الأسبوع",
         "التي تنتهي هذه الأسابيع.",
         "التي تنتهي ذلك الأسبوع."
       ]
@@ -68511,8 +68268,7 @@
       ],
       "ar": [
         "-سيلما)، لم يكن عملاً).",
-        "- سيلماس، لم يكن حادثا في العمل.",
-        "-سيلما)، لم يكن حادثاً في العمل)"
+        "- سيلماس، لم يكن حادثا في العمل."
       ]
     },
     "transcript_source": "dw_manual_subs",
@@ -68804,7 +68560,6 @@
         "- Yeah, I'll have another lemonade yesterday."
       ],
       "ar": [
-        "- نعم، أنا سَيكونُ عِنْدي عصيرُ ليمون آخرُ.",
         "- نعم، سآخذ عصير ليمون.",
         "- نعم، أنا سَيكونُ عِنْدي عصير ليمون آخر اليوم."
       ]
@@ -68842,8 +68597,7 @@
     "translation_distractors": {
       "en": [
         "It's a twenty-hour.",
-        "- It's lunchtime.",
-        "- It's 12 o'clock."
+        "- It's lunchtime."
       ],
       "ar": [
         "إنها 20 ساعة",
@@ -69723,7 +69477,6 @@
     },
     "translation_distractors": {
       "en": [
-        "Hello, I'm Nico!",
         "- Hello, I'm Nichoe!",
         "- Hallö, I'm Nico!"
       ],
@@ -69812,7 +69565,6 @@
         "Thank you for your help! today."
       ],
       "ar": [
-        "-شكراً على مساعدتك",
         "شكراً لك على نصفك",
         "شكراً على مساعدتك اليوم."
       ]
@@ -70268,12 +70020,10 @@
     },
     "translation_distractors": {
       "en": [
-        "- I don't like housework either.",
         "- I don't like housework eight.",
         "– I don't like housework either today."
       ],
       "ar": [
-        "- أنا لا أحب الأعمال المنزلية أيضا.",
         "-لا أحب الأعمال المنزلية الثمانية",
         "-أنا لا أحب الأعمال المنزلية أيضاً اليوم."
       ]
@@ -71657,7 +71407,6 @@
         "- Don't worry tomorrow."
       ],
       "ar": [
-        "-لا تقلقى",
         "- لا تقلقى اليوم.",
         "- لا تقلقى أمس."
       ]
@@ -72833,7 +72582,6 @@
         "It's not in any city guide yesterday."
       ],
       "ar": [
-        "ليس في أي دليل المدينة.",
         "لا يوجد دليل مدينة يرى ذلك",
         "ليس في أي دليل المدينة اليوم."
       ]
@@ -73458,8 +73206,6 @@
     },
     "translation_distractors": {
       "en": [
-        "– So we're looking for an address. The woman has a bicycle store. Right?",
-        "So we're looking for an address. The woman has a bicycle store. Right?",
         "– We are looking for an address. The woman has a bicycle shop. Right?"
       ],
       "ar": [
@@ -74507,12 +74253,10 @@
     },
     "translation_distractors": {
       "en": [
-        "Hey, you crazy?",
         "Hey, sprints you?",
         "- Hey, are you playing?"
       ],
       "ar": [
-        "هل أنت مجنون؟",
         "هل أنتِ من ستُصَبِكِ؟",
         "-هل تلعب؟"
       ]
@@ -74721,7 +74465,6 @@
         "Nico, what are you talking about? today."
       ],
       "ar": [
-        "(نيكو)، عمّ تتحدّث؟",
         "(نيكوس) ما الذي تتحدث عنه؟",
         "-ما الذي تتحدث عنه؟"
       ]
@@ -74847,7 +74590,6 @@
         "Did I say something wrong? yesterday."
       ],
       "ar": [
-        "هل قلت شيئا خاطئا؟",
         "هل سألتك عن شيء خاطئ؟",
         "هل قلت شيئاً خاطئاً؟ اليوم."
       ]
@@ -74890,8 +74632,7 @@
       ],
       "ar": [
         "كان عليّ رؤيتك، لذا أنا محجوزة.",
-        "كان عليّ رؤيتك، لكن هذه المرة جئت.",
-        "ولكن كان علي رؤيتك، لذا أتيت"
+        "كان عليّ رؤيتك، لكن هذه المرة جئت."
       ]
     },
     "transcript_source": "dw_manual_subs",
@@ -75137,7 +74878,6 @@
     "translation_distractors": {
       "en": [
         "My father is in the hospital.",
-        "– My father is back in the hospital.",
         "My father is back in the hospital today."
       ],
       "ar": [
@@ -75221,7 +74961,6 @@
     "translation_distractors": {
       "en": [
         "- I'm sorry, but it's not your school.",
-        "I'm sorry, but it's not your fault.",
         "- I'm sorry, but it's not your fault today."
       ],
       "ar": [
@@ -75682,7 +75421,6 @@
     },
     "translation_distractors": {
       "en": [
-        "– That's right. At least in winter.",
         "- That's right, at least in the Winger.",
         "- That's right, at least in winter today."
       ],
@@ -76144,7 +75882,6 @@
     },
     "translation_distractors": {
       "en": [
-        "Then we can visit Nico at the bicycle shop, because he has to work at noon.",
         "Then we can visit Nico at the bicycle shop because he has to work for lunch.",
         "Then we can visit Nico at the bicycle shop because he has to work at noon today."
       ],
@@ -76186,12 +75923,10 @@
     },
     "translation_distractors": {
       "en": [
-        "– I don't know what's going on with them today.",
         "– I don't know what's going on with thinking today.",
         "I don't know what's going on with them today today."
       ],
       "ar": [
-        "-لا أعلم ما الذي يجري معهم اليوم",
         "-لا أعلم ما الذي يجري مع التفكير اليوم",
         "لا أعلم ما الذي يجري معهم اليوم اليوم."
       ]
@@ -76354,8 +76089,6 @@
     },
     "translation_distractors": {
       "en": [
-        "Hello, I'm Nico.",
-        "- Hello, I'm Nicö.",
         "- Hallö, I'm Nico."
       ],
       "ar": [
@@ -76402,8 +76135,7 @@
       ],
       "ar": [
         "مرحباً يا (نيكو) أنا (سيباستيان) ماذا تفعل هنا؟",
-        "-مرحباً (نيكوس) أنا (سيباستيان )",
-        "-مرحباً (نيكو) أنا (سيباستيان )"
+        "-مرحباً (نيكوس) أنا (سيباستيان )"
       ]
     },
     "transcript_source": "dw_manual_subs",
@@ -76438,12 +76170,10 @@
     },
     "translation_distractors": {
       "en": [
-        "- I have a problem:",
         "- I'm half a problem.",
         "– I have a problem: today."
       ],
       "ar": [
-        "-لدي مشكلة",
         "-أنا نصف مشكلة",
         "- لدي مشكلة: اليوم."
       ]
@@ -76611,7 +76341,6 @@
         "– I am from Spain. I live in Seville yesterday."
       ],
       "ar": [
-        "-أنا من (إسبانيا)، أعيش في (إشبيلية )",
         "-أنا من إسبانيا، أعيش في إشبيلية اليوم.",
         "-أنا من إسبانيا، أعيش في إشبيلية أمس."
       ]
@@ -76815,7 +76544,6 @@
     "translation_distractors": {
       "en": [
         "– I am 22 years old. And you? Are you from Germany?",
-        "- I'm 22 years old. And you? Are you from Germany?",
         "– I'm 22 years old. And you? Are you from Germany? today."
       ],
       "ar": [
@@ -76861,7 +76589,6 @@
         "– I am 25 years old. And yes, I am from Germany yesterday."
       ],
       "ar": [
-        "-أنا في الخامسة والعشرين من عمري ونعم، أنا من ألمانيا",
         "-أنا في الخامسة والعشرين من عمري ونعم أنا من ألمانيا اليوم.",
         "-أنا في الخامسة والعشرين من عمري ونعم أنا من ألمانيا أمس."
       ]
@@ -76903,7 +76630,6 @@
         "– And my name is Nina. I also come from Germany tomorrow."
       ],
       "ar": [
-        "- واسمي نينا، أنا أيضاً من ألمانيا",
         "- واسمي نينا. أنا أيضاً من ألمانيا اليوم.",
         "- واسمي نينا. أنا أيضاً من ألمانيا أمس."
       ]
@@ -76982,7 +76708,6 @@
     },
     "translation_distractors": {
       "en": [
-        "– Can Nico live here for two days?",
         "- Can Nicos live here for two days?",
         "- Can Nico show days stay here?"
       ],
@@ -77109,7 +76834,6 @@
     "translation_distractors": {
       "en": [
         "Thank you! – Wonderful welcome!",
-        "– Thank you! – Welcome!",
         "Thank you! – Welcome! today."
       ],
       "ar": [
@@ -77191,7 +76915,6 @@
     },
     "translation_distractors": {
       "en": [
-        "– Yes, but we have a little problem.",
         "- Yes, but we're half a little problem.",
         "- Yes, but we have a little problem today."
       ],
@@ -77317,7 +77040,6 @@
     },
     "translation_distractors": {
       "en": [
-        "– Yes. Emma's mother is on the plane and Emma is fine, she's with Lotte.",
         "- Yes. Emma's mother is on the plane and Emma is fine, she's at the last.",
         "- Yes. Emma's father is on the plane and Emma is fine, she's with Lotte."
       ],
@@ -77359,7 +77081,6 @@
     },
     "translation_distractors": {
       "en": [
-        "- Great, Nico! Thank you! Would you like a drink?",
         "- Great, Nico! Thank you! Would you like something to drink?",
         "- Steuer, Nico! Thank you! Would you like a drink?"
       ],
@@ -78331,7 +78052,6 @@
       ],
       "ar": [
         "-أعتقد أن فترة تدريبك صعبة جداً؟",
-        "-هل تدريبكِ مرهق؟",
         "-هل تدريبكِ مرهق تماماً؟"
       ]
     },
@@ -79079,7 +78799,6 @@
         "- Yes, no problem yesterday."
       ],
       "ar": [
-        "- نعم، لا مشكلة -",
         "-أجل، لا محاولة",
         "- نعم، لا مشكلةَ اليوم."
       ]
@@ -79163,7 +78882,6 @@
         "– Little tip: Tomorrow is the twenty-second today."
       ],
       "ar": [
-        "-غدًا هو الثاني والعشرون",
         "غداً هو الثاني والعشرون اليوم.",
         "غداً هو الثاني والعشرون أمس."
       ]
@@ -79625,7 +79343,6 @@
         "We look forward to seeing you! Thank you! yesterday."
       ],
       "ar": [
-        "نحن نتطلع لرؤيتك شكراً لك",
         "نحن نتطلع لرؤيتك",
         "نحن نتطلع لرؤيتك شكرا لك اليوم."
       ]
@@ -80634,7 +80351,6 @@
       ],
       "ar": [
         "- حسناً، هذا فقط -",
-        "-حسناً، هذا غير مؤكد قليلاً، أجل.",
         "-حسناً، هذا لا يُمكن أن يُؤكل إلا قليلاً من عدم اليقين، أجل."
       ]
     },
@@ -81180,7 +80896,6 @@
       ],
       "ar": [
         "ولم يحصل على وظيفة منذ سنة",
-        "-نعم، ولم يتلق أي أوامر منذ سنة",
         "-أجل، ولم يتلقّ أي أوامر منذ سنة."
       ]
     },
@@ -81472,7 +81187,6 @@
       ],
       "ar": [
         "-لا أعلم إن كان عليّ التعامل مع الإمتحان بعد",
-        "-لا أعلم إن كنت قد نجحت في الإمتحان بعد",
         "-لا أعلم إن كنت قد نجحت في الامتحان بعد اليوم."
       ]
     },
@@ -81513,7 +81227,6 @@
         "- I'm convinced you passed yesterday."
       ],
       "ar": [
-        "-أنا مقتنع أنك نجحت",
         "-أنا متأكد أنك كنت تعالجين",
         "-أنا مقتنع أنكِ نجحتِ اليوم."
       ]
@@ -81761,12 +81474,10 @@
     "translation_distractors": {
       "en": [
         "– I don't know if I managed not to worry.",
-        "I don't know if I can do anything to avoid worrying.",
         "– I don't know if I can manage, not to worry about some."
       ],
       "ar": [
         "-لا أعلم إن كنت قد تمكنت من عدم القلق",
-        "لا أعلم إن كان بإمكاني فعل أي شيء لتجنب القلق",
         "-لا أعلم إن كنت أستطيع تدبر أمري، لا أن أقلق على البعض"
       ]
     },
@@ -81976,7 +81687,6 @@
       ],
       "ar": [
         "- هذا الاختبار هو أول خردة في طريقك الجديد.",
-        "-هذا الاختبار هو الخطوة الأولى في طريقك الجديد",
         "-هذا الاختبار هو الخطوة الأولى على طريقك الجديد"
       ]
     },
@@ -82060,8 +81770,7 @@
       ],
       "ar": [
         "-على طريق الطريق الصحيح",
-        "- الطريق إلى الطريق",
-        "-على طريق (نيكو)"
+        "- الطريق إلى الطريق"
       ]
     },
     "transcript_source": "dw_manual_subs",
@@ -82227,7 +81936,6 @@
         "- So, this is the apartment today."
       ],
       "ar": [
-        "-إذاً هذه هي الشقة",
         "-إذاً، هذا ما تأكله الشقة",
         "-إذاً، هذه هي الشقة اليوم."
       ]
@@ -82265,7 +81973,6 @@
     "translation_distractors": {
       "en": [
         "- Martina wants to see your room.",
-        "- Marvin wants to see your room.",
         "- Marvin wants to stand your room."
       ],
       "ar": [
@@ -82312,7 +82019,6 @@
       ],
       "ar": [
         "-مرحباً، أنا (نافينز )",
-        "-مرحباً، أنا نافين",
         "-مرحباً، أنا (ناوين )"
       ]
     },
@@ -82390,7 +82096,6 @@
     "translation_distractors": {
       "en": [
         "– To go with Nina.",
-        "– Outside with Ninä.",
         "– Draught with Nina."
       ],
       "ar": [
@@ -82436,8 +82141,6 @@
         "- Okay, let's get started! today."
       ],
       "ar": [
-        "- حسناً، لنبدأ -",
-        "-حسناً، لنبدأ!",
         "- حسناً، إذاً سيبدأ"
       ]
     },
@@ -82763,7 +82466,6 @@
     "translation_distractors": {
       "en": [
         "- It's big.",
-        "– It's a big one.",
         "- Pretty big."
       ],
       "ar": [
@@ -82973,7 +82675,6 @@
     "translation_distractors": {
       "en": [
         "- So, that's the cooks.",
-        "– So that's the kitchen.",
         "- So, the kitchen eats."
       ],
       "ar": [
@@ -83477,7 +83178,6 @@
     "translation_distractors": {
       "en": [
         "Come on, boys, come on!",
-        "- And back! Come on, run, boys!",
         "- And back! today."
       ],
       "ar": [
@@ -83601,7 +83301,6 @@
     },
     "translation_distractors": {
       "en": [
-        "– Selma's father now knows she's meeting me.",
         "– Selma's father now knows that she's meeting me.",
         "- Selma's father now knows she's meeting me today."
       ],
@@ -83942,7 +83641,6 @@
         "- Ice skating is off, and all else eight."
       ],
       "ar": [
-        "-التزلج على الجليد غير ممكن وكل شيء آخر",
         "-التزلج على الجليد غير ممكن، وكل شخص آخر كذلك",
         "-التزلج على الجليد مُلغي، والثمانية الآخرين."
       ]
@@ -84023,9 +83721,7 @@
         "– Max, Tarek. How are you? today."
       ],
       "ar": [
-        "-ماكس)، (طارق)، كيف حالك؟",
-        "-ماكس، طارق.",
-        "-ماكس، طارق كيف حالك؟"
+        "-ماكس، طارق."
       ]
     },
     "transcript_source": "dw_manual_subs",
@@ -84108,8 +83804,7 @@
       ],
       "ar": [
         "-جيد جداً على ما أعتقد",
-        "-حسناً، شكراً لك",
-        "-جيد جداً شكراً لك"
+        "-حسناً، شكراً لك"
       ]
     },
     "transcript_source": "dw_manual_subs",
@@ -84734,7 +84429,6 @@
       ],
       "ar": [
         "ماكس، جوليوس، لاينوس، شكراً لك، يانيس، لاس وأنا.",
-        "(ماكس)، (جوليوس)، (لاينوس)، (دانيال)، (يانيس)، (لاس) وأنا",
         "ماكس، جوليوس، لاينوس، دانيال، يانيس، لاس وأنا اليوم."
       ]
     },
@@ -84817,7 +84511,6 @@
         "– Do you play football with us? Do you want to? yesterday."
       ],
       "ar": [
-        "هل تلعب كرة القدم معنا؟",
         "-هل تلعب كرة القدم معنا؟ اليوم.",
         "-هل تلعب كرة القدم معنا؟ أمس."
       ]
@@ -85064,12 +84757,9 @@
     },
     "translation_distractors": {
       "en": [
-        "- Okay! I like playing football!",
-        "- Okay, I like playing football!",
         "– Okay! I like playing football! today."
       ],
       "ar": [
-        "-حسناً، أحب لعب كرة القدم!",
         "-حسناً، أحب لعب كرة القدم اليوم.",
         "-حسناً، أحب لعب كرة القدم أمس."
       ]
@@ -85232,7 +84922,6 @@
     },
     "translation_distractors": {
       "en": [
-        "– Yes, see you! On Friday at one.",
         "- Yes, be there! On Friday at one.",
         "- Yes, see you! On Friday at one today."
       ],
@@ -86832,7 +86521,6 @@
         "- I don't know, Nico yesterday."
       ],
       "ar": [
-        "- لا أعلم يا (نيكو)",
         "- لا أعرف يا نيكاس",
         "-لا أعلم يا (نيكو ) اليوم."
       ]
@@ -87122,7 +86810,6 @@
     "translation_distractors": {
       "en": [
         "And asked him we were here.",
-        "– And told him we were here.",
         "- And told him we were here today."
       ],
       "ar": [
@@ -87541,12 +87228,10 @@
     },
     "translation_distractors": {
       "en": [
-        "- Just stay out of my life!",
         "– Just stay out of my love!",
         "- Just got you out of my life!"
       ],
       "ar": [
-        "- فقط ابقى بعيدا عن حياتي -",
         "- فقط ابتعد عن حبي -",
         "-لقد أخرجتك من حياتي"
       ]
@@ -87668,7 +87353,6 @@
     "translation_distractors": {
       "en": [
         "- I want to give her a bicycle.",
-        "– I want to give her a bike.",
         "- I want to give her a bike today."
       ],
       "ar": [
@@ -87835,7 +87519,6 @@
     },
     "translation_distractors": {
       "en": [
-        "- Yes, I give her a used bike.",
         "– Yes, I give her a used bike today.",
         "– Yes, I give her a used bike yesterday."
       ],
@@ -87966,7 +87649,6 @@
         "- That's really nice of you yesterday."
       ],
       "ar": [
-        "-هذا لطف منكِ",
         "-ذلك لطف منك",
         "-هذا لطف منك اليوم."
       ]
@@ -88214,8 +87896,7 @@
     "translation_distractors": {
       "en": [
         "When is the birthplace?",
-        "- What's the birthday?",
-        "– When is the birthday?"
+        "- What's the birthday?"
       ],
       "ar": [
         "متى مكان الولادة؟",
@@ -88464,12 +88145,10 @@
     "translation_distractors": {
       "en": [
         "- All right, my guess. The three pizzas with salami are 22,50.",
-        "– All right, hold on. The three pizzas with salami are 22,50.",
         "– All right, hold on. The three pizzas with salad are 22,50."
       ],
       "ar": [
         "حسناً، تخميني، ثلاث بيتزا مع السلامي هي 22،50",
-        "-حسناً، انتظر، ثلاث بيتزا مع السلامي هي 22،50",
         "-حسناً، انتظر، ثلاث بيتزا مع سلطة هي 22،50"
       ]
     },
@@ -88632,7 +88311,6 @@
     "translation_distractors": {
       "en": [
         "- Thank you, this is the direction.",
-        "- Thank you! Here's the bill.",
         "- Thank you! Heart is the bill. Bye."
       ],
       "ar": [
@@ -88799,7 +88477,6 @@
     },
     "translation_distractors": {
       "en": [
-        "– This is perhaps the last pizza I'm going to eat here.",
         "- This is perhaps the last pizza I'm going to eat here today.",
         "- This is perhaps the last pizza I'm going to eat here yesterday."
       ],
@@ -89014,7 +88691,6 @@
         "- I don't understand tomorrow."
       ],
       "ar": [
-        "- أنا لا أفهم -",
         "- أنا لا أفهم اليوم.",
         "- أنا لا أفهم أمس."
       ]
@@ -89056,7 +88732,6 @@
         "Of course I'm not a rich man tomorrow."
       ],
       "ar": [
-        "بالطبع لست رجلا غنيا",
         "بالطبع لست رجلاً غنياً اليوم.",
         "بالطبع لست رجلاً غنياً أمس."
       ]
@@ -89891,7 +89566,6 @@
     },
     "translation_distractors": {
       "en": [
-        "- What's going to happen?",
         "– What's gonna happen?",
         "- What's to happen?"
       ],
@@ -90143,12 +89817,10 @@
     },
     "translation_distractors": {
       "en": [
-        "- Hello, good day! Do you have an appointment?",
         "Hello, good day! Are you holding an appointment?",
         "Hello, good day! Do you have an appointment? today."
       ],
       "ar": [
-        "-مرحباً، يوم جيد، هل لديك موعد؟",
         "مرحباً، يوم جيد هل أنتِ حاملة موعداً؟",
         "مرحباً، يوم جيد هل لديك موعد؟ اليوم."
       ]
@@ -90312,8 +89984,7 @@
     "translation_distractors": {
       "en": [
         "– Do you have strong weights?",
-        "– Are you in pain?",
-        "– Are you in severe pain?"
+        "– Are you in pain?"
       ],
       "ar": [
         "-هل لديك أوزان قوية؟",
@@ -90983,12 +90654,10 @@
     "translation_distractors": {
       "en": [
         "- What was your last vacation?",
-        "- When was your last vacation?",
         "When was your last vacation? today."
       ],
       "ar": [
         "-ما كانت آخر أجازتك؟",
-        "-متى كانت آخر عطلة لك؟",
         "متى كانت آخر عطلة لك؟ اليوم."
       ]
     },
@@ -91576,8 +91245,7 @@
       ],
       "ar": [
         "- لا، لا شيء بعد الآن.",
-        "-نينا) ليس بعد)",
-        "- لا، ليس بعد."
+        "-نينا) ليس بعد)"
       ]
     },
     "transcript_source": "dw_manual_subs",
@@ -91697,12 +91365,10 @@
     "translation_distractors": {
       "en": [
         "– Thanks for your help!",
-        "– Thank you for your half!",
-        "Thank you for your help!"
+        "– Thank you for your half!"
       ],
       "ar": [
         "-شكراً لك على نصفك",
-        "شكراً على مساعدتك",
         "-شكراً على مساعدتك اليوم."
       ]
     },
@@ -91780,7 +91446,6 @@
     },
     "translation_distractors": {
       "en": [
-        "– We could do that with a cup of tea, right?",
         "- We could do that with a cup of tea, right? today.",
         "- We could do that with a cup of tea, right? yesterday."
       ],
@@ -92037,7 +91702,6 @@
         "and I hope I'll start working in Yara's store soon today."
       ],
       "ar": [
-        "وآمل أن أبدأ العمل في متجر يارا قريباً",
         "وآمل أن أبدأ العمل في يارا لادن قريباً",
         "وآمل أن أبدأ العمل في متجر (يارا) قريباً اليوم."
       ]
@@ -92206,7 +91870,6 @@
       ],
       "ar": [
         "على الأقل ليس بدون هوية شخصية",
-        "على الأقل ليس بدون بطاقة هوية.",
         "على الأقل لا شيء بدون بطاقة هوية"
       ]
     },
@@ -92535,7 +92198,6 @@
     },
     "translation_distractors": {
       "en": [
-        "I miss you, Nico.",
         "I miss you, Nicos.",
         "- I miss you, Nico today."
       ],
@@ -92746,7 +92408,6 @@
     "translation_distractors": {
       "en": [
         "– Good morning, Mrs. Schneiden. Thank you, good! And you?",
-        "- Good morning, Mrs. Schneider. Thank you, good! And you?",
         "- Good morning, Mrs Schneider. Thank you, good! And you? today."
       ],
       "ar": [
@@ -92830,7 +92491,6 @@
     "translation_distractors": {
       "en": [
         "– Good morning, Mrs. Schneiden. Thank you, good! And you?",
-        "- Good morning, Mrs. Schneider. Thank you, good! And you?",
         "- Good morning, Mrs Schneider. Thank you, good! And you? today."
       ],
       "ar": [
@@ -93124,13 +92784,11 @@
     "translation_distractors": {
       "en": [
         "– The table is beautiful!",
-        "- The bag is already!",
-        "– The bag is beautiful!"
+        "- The bag is already!"
       ],
       "ar": [
         "-الطاولة جميلة",
-        "-الكيس جاهز بالفعل",
-        "-الحقيبة جميلة!"
+        "-الكيس جاهز بالفعل"
       ]
     },
     "transcript_source": "dw_manual_subs",
@@ -93212,7 +92870,6 @@
         "Emma, come on, excuse me! yesterday."
       ],
       "ar": [
-        "(ايما) هيا، اعذريني",
         "(إيما) هيا، اعذريني! اليوم.",
         "(إيما) هيا، اعذريني! أمس."
       ]
@@ -93381,8 +93038,7 @@
       ],
       "ar": [
         "-اللورد، نصف ريل من الخبز يكلف 1.60 يورو",
-        "نصفه، نصفه من الخبز يكلف 1.60 يورو",
-        "نصف سعر الخبز بالريي يساوي 1.60 يورو."
+        "نصفه، نصفه من الخبز يكلف 1.60 يورو"
       ]
     },
     "transcript_source": "dw_manual_subs",
@@ -93879,7 +93535,6 @@
     },
     "translation_distractors": {
       "en": [
-        "– Yes. In our family there was often roulade for lunch at Easter.",
         "– Yes. In our families, there was often roulade for lunch at Easter.",
         "– Yes. In our family, there was often roulade for lunch at Easter today."
       ],
@@ -94346,7 +94001,6 @@
       ],
       "ar": [
         "-نعم، نحن نتحدث",
-        "- نعم، معنا، أيضا.",
         "-نعم، ونحن كذلك"
       ]
     },
@@ -95102,7 +94756,6 @@
       ],
       "ar": [
         "-ليس وكأنه سلام",
-        "-لا رغبة، إنها عطلة!",
         "-لا هواء، إنها عطلة"
       ]
     },
@@ -95559,7 +95212,6 @@
     "translation_distractors": {
       "en": [
         "Please, a mine!",
-        "One moment, please!",
         "Give me a moment!"
       ],
       "ar": [
@@ -95811,7 +95463,6 @@
     "translation_distractors": {
       "en": [
         "- Ham day still.",
-        "– Have a nice day.",
         "Have a nice day today."
       ],
       "ar": [
@@ -96319,7 +95970,6 @@
         "- Yes. I think so too, because I have to make money today."
       ],
       "ar": [
-        "نعم، أعتقد ذلك أيضاً، لأنه يجب أن أجني المال",
         "-نعم، أعتقد ذلك، لأنه يجب أن أجني المال",
         "أعتقد ذلك، لأنه يجب أن أجني المال"
       ]
@@ -97491,7 +97141,6 @@
     "translation_distractors": {
       "en": [
         "– View comfortable.",
-        "– Looks comfortable.",
         "- You look comfortable."
       ],
       "ar": [
@@ -98544,7 +98193,6 @@
       ],
       "ar": [
         "ماذا تعطين والدك؟",
-        "ماذا تعطين لوالدكِ؟",
         "ماذا تعطين لوالدك؟ اليوم."
       ]
     },
@@ -98917,7 +98565,6 @@
     "translation_distractors": {
       "en": [
         "– So, Selma, one last question: Who are you inviting to your birthplace?",
-        "– So, Selma, one last question: Who are you inviting for your birthday?",
         "So, Selma, one last question: Who are you inviting for your birthday? today."
       ],
       "ar": [
@@ -99258,7 +98905,6 @@
       ],
       "ar": [
         "- نعم لم أعتقد ذلك من قبل أريد أن أجربها",
-        "-نعم، لم أفعل ذلك من قبل، أريد تجربتها",
         "-نعم، نصفه لم أفعله من قبل، أود تجربته"
       ]
     },
@@ -99510,7 +99156,6 @@
       ],
       "ar": [
         "يمكنك أن تكون فخوراً بمسارحك",
-        "يمكنك أن تكون فخوراً بإبنتك",
         "يمكنك أن تكون فخوراً بابنتك اليوم."
       ]
     },
@@ -99924,7 +99569,6 @@
     },
     "translation_distractors": {
       "en": [
-        "- You're going to the music class?",
         "- You said about the music class?",
         "– You're going to the music class? today."
       ],
@@ -100055,7 +99699,6 @@
         "- I don't believe that! today."
       ],
       "ar": [
-        "- لا أصدق ذلك -",
         "- لا أعتقد ذلك -",
         "-لا أصدق ذلك! اليوم."
       ]
@@ -100596,7 +100239,6 @@
     },
     "translation_distractors": {
       "en": [
-        "- I have to learn German.",
         "– I have to learn German today.",
         "– I have to learn German yesterday."
       ],
@@ -100849,8 +100491,7 @@
     "translation_distractors": {
       "en": [
         "- Yes. It's incredibly expensive, but we could share the price by four.",
-        "– Yes. It's incredibly expensive, but we can get the price through four parts.",
-        "- Yes. It's incredibly expensive, but we can share the price by four."
+        "– Yes. It's incredibly expensive, but we can get the price through four parts."
       ],
       "ar": [
         "نعم، إنه غالي جداً، لكن يمكننا أن نتشارك السعر بأربعة",
@@ -101148,7 +100789,6 @@
       ],
       "ar": [
         "-حذري هو أن أنظف الحمام الآن وأنت تنظفي المطبخ",
-        "- اقتراحي هو أن أنظف الحمام الآن وأنت تنظفي المطبخ",
         "-إقتراحي هو أن أنظف الحمام الآن وأنت تطبخ"
       ]
     },
@@ -102655,7 +102295,6 @@
     "translation_distractors": {
       "en": [
         "– I really like reading times.",
-        "- I really like reading the paper.",
         "– I really like reading the paper today."
       ],
       "ar": [
@@ -103038,7 +102677,6 @@
       ],
       "ar": [
         "وثانياً، سيكون مهماً دائماً.",
-        "والصحف ستكون دائماً مهمة",
         "والصحف ستكون دائما مهمة اليوم."
       ]
     },
@@ -103541,7 +103179,6 @@
         "- I don't understand your problem tomorrow."
       ],
       "ar": [
-        "- أنا لا أفهم مشكلتك -",
         "- أنا لا أفهم مشكلتك اليوم.",
         "- أنا لا أفهم مشكلتك أمس."
       ]
@@ -104207,7 +103844,6 @@
     },
     "translation_distractors": {
       "en": [
-        "– Culture is often called a feuilleton. It's French.",
         "– Culture is often called a feuilleton. That's French.",
         "Culture is often called a feuilleton. It's French today."
       ],
@@ -104549,7 +104185,6 @@
       ],
       "ar": [
         "شكراً لك سيدة (شول)",
-        "شكراً لكِ.",
         "شكراً لك اليوم."
       ]
     },
@@ -104675,8 +104310,7 @@
       ],
       "ar": [
         "-أين الطاولة؟",
-        "-أين تأكل الحقيبة؟",
-        "-أين الحقيبة؟"
+        "-أين تأكل الحقيبة؟"
       ]
     },
     "transcript_source": "dw_manual_subs",
@@ -105345,7 +104979,6 @@
       ],
       "ar": [
         "الأمر مهم، (إيمس)، حسناً؟",
-        "هذا مهم يا (إيما) حسناً؟",
         "ذلك مهم يا (إيما)، حسناً؟"
       ]
     },
@@ -105381,8 +105014,6 @@
     },
     "translation_distractors": {
       "en": [
-        "– I always brush my teeth!",
-        "- I always brush my teeth!",
         "- I always clean my teeth!"
       ],
       "ar": [
@@ -106014,7 +105645,6 @@
         "- Yes, I am today."
       ],
       "ar": [
-        "- نعم، أنا كذلك.",
         "-أنا كذلك",
         "-نعم، هذه أنا"
       ]
@@ -106308,7 +105938,6 @@
         "- This is great! today."
       ],
       "ar": [
-        "-هذا عظيم",
         "-أنت عظيم هنا",
         "-ذلك عظيم!"
       ]
@@ -106434,7 +106063,6 @@
         "- Thank you so much today."
       ],
       "ar": [
-        "-شكراً جزيلاً لكِ",
         "-شكراً لك",
         "-شكراً جزيلاً لك اليوم."
       ]
@@ -106561,8 +106189,7 @@
       ],
       "ar": [
         "هل أنا أسوق؟",
-        "هل أنا مدعو للكلام؟",
-        "-هل أنا مدعو؟"
+        "هل أنا مدعو للكلام؟"
       ]
     },
     "transcript_source": "dw_manual_subs",
@@ -107101,12 +106728,10 @@
     },
     "translation_distractors": {
       "en": [
-        "Hello, I'm Yara.",
         "- Hello, I'm Yera.",
         "- Hallö, I'm Yara."
       ],
       "ar": [
-        "مرحباً، أنا (يارا)",
         "-مرحباً، أنا (ييرا )",
         "- هالو، أنا يارا."
       ]
@@ -107521,11 +107146,9 @@
     "translation_distractors": {
       "en": [
         "- I think eight.",
-        "- I think so too.",
         "- I think so, too today."
       ],
       "ar": [
-        "- أعتقد ذلك أيضاً",
         "-أعتقد ثمانية.",
         "-أعتقد ذلك أيضاً اليوم."
       ]
@@ -107898,12 +107521,10 @@
     },
     "translation_distractors": {
       "en": [
-        "I miss my father very much, Yara.",
         "– I miss my father very much, Yara today.",
         "– I miss my father very much, Yara yesterday."
       ],
       "ar": [
-        "أفتقد أبي كثيراً يا (يارا)",
         "-أفتقد أبي كثيراً يا (يارا ) اليوم.",
         "-أفتقد أبي كثيراً يا (يارا ) أمس."
       ]
@@ -108318,12 +107939,10 @@
     },
     "translation_distractors": {
       "en": [
-        "– In short: First, your company develops an app for our offer.",
         "– So briefly asked: First your company develops an app for our offer.",
         "– In short: First your company develops an app for our offer today."
       ],
       "ar": [
-        "أولاً، شركتك تطور تطبيق لعرضنا.",
         "ـ إذاً سألنا أولاً: أولاً تقوم شركتك بتطوير تطبيق لعرضنا.",
         "أولاً شركتكَ تُطوّرُ تطبيق لعروضِنا."
       ]
@@ -108618,7 +108237,6 @@
       ],
       "ar": [
         "أو الآن المكونات.",
-        "أو فقط المكونات.",
         "أو فقط هذا المكوّن."
       ]
     },
@@ -109117,8 +108735,7 @@
     "translation_distractors": {
       "en": [
         "- Was the parties good?",
-        "- Would the party be good?",
-        "- Was the party good?"
+        "- Would the party be good?"
       ],
       "ar": [
         "-هل كانت الحفلات جيدة؟",
@@ -109584,7 +109201,6 @@
       ],
       "ar": [
         "ما هي اللغة التي تتكلمها؟ – إنني أتكلم الألمانية والانكليزية والإيطالية، ولكن سيئة جدا.",
-        "ما هي اللغات التي تتكلمها؟ - إنني أتكلم الألمانية والإنكليزية والإيطالية، ولكن سيئة جدا.",
         "ما هي اللغات التي تتكلمها؟ – إنني أتكلم الألمانية والانكليزية والإيطالية، ولكن سيئة جدا اليوم."
       ]
     },
@@ -109710,7 +109326,6 @@
       ],
       "ar": [
         "تعال هنا، تعال هنا، تعال هنا.",
-        "تعال هنا بسرعة",
         "تعال هنا، بسرعة! اليوم."
       ]
     },
@@ -110634,8 +110249,7 @@
       ],
       "ar": [
         "جدي وجدي يعيشان معنا أيضاً",
-        "جدتي و جدتي تعيشان معنا",
-        "جدّي وجدّي يعيشان معنا"
+        "جدتي و جدتي تعيشان معنا"
       ]
     },
     "transcript_source": "dw_manual_subs",
@@ -110675,7 +110289,6 @@
         "We also have a little bird, a parrot yesterday."
       ],
       "ar": [
-        "لدينا أيضاً طائر صغير، ببغاء",
         "نحن نصف طائر صغير، ببغاء",
         "لدينا أيضاً طائر صغير، ببغاء اليوم."
       ]
@@ -111053,7 +110666,6 @@
         "– I think you speak German very well, Selma! tomorrow."
       ],
       "ar": [
-        "-أعتقد أنك تتحدث الألمانية جيداً يا (سيلما )!",
         "-أعتقد أنك تتحدث الألمانية جيداً يا (سيلما ) اليوم.",
         "-أعتقد أنك تتحدث الألمانية جيداً يا (سيلما ) أمس."
       ]
@@ -111557,7 +111169,6 @@
         "But for the hundredth time, Nina, you can do it! today."
       ],
       "ar": [
-        "لكن للمرة المائة يا (نينا) يمكنك فعلها",
         "يمكنك فعل هذا",
         "ولكن للمرة المائة، لا، يمكنك أن تفعل ذلك!"
       ]
@@ -112098,12 +111709,10 @@
     },
     "translation_distractors": {
       "en": [
-        "I'm not an expert, Ibrahim, but you're not from an EU country.",
         "– I'm not an expert, Ibrahim, but you don't come from an EU country.",
         "– I'm not an expert, Ibrahim, but you're not from an EU country today."
       ],
       "ar": [
-        "أنا لست خبيراً يا (إبراهيم) ولكنك لست من دولة اتحادية",
         "-أنا لست خبيراً يا (إبراهيم) ولكنك لا تأتي من دولة اتحادية",
         "-أنا لست خبيراً يا (إبراهيم) ولكنك لست من دولة اتحادية اليوم."
       ]
@@ -113068,7 +112677,6 @@
         "And in this time yesterday."
       ],
       "ar": [
-        "وفي هذا الوقت،",
         "وفي ذلك الـ 2،",
         "وفي ذلك الوقت"
       ]
@@ -113236,7 +112844,6 @@
         "What you need is a loan tomorrow."
       ],
       "ar": [
-        "ما تحتاجه هو قرض.",
         "ما تحتاجه هو قرض اليوم.",
         "ما تحتاجه هو قرض أمس."
       ]
@@ -113612,7 +113219,6 @@
         "– Let's see. What kind of profession do you want to learn? tomorrow."
       ],
       "ar": [
-        "- لنرى، أي نوع من المهن تريد تعلمه؟",
         "-لنرى، أي نوع من المهن تريد تعلمه؟ اليوم.",
         "-لنرى، أي نوع من المهن تريد تعلمه؟ أمس."
       ]
@@ -113738,7 +113344,6 @@
         "– You can attend a drama school in Germany. But there is a very difficult entrance exam yesterday."
       ],
       "ar": [
-        "- يمكنك الذهاب إلى مدرسة مسرحية في ألمانيا، ولكن هناك امتحان دخول صعب جدا.",
         "- يمكنك أن تحضر مدرسة مسرحية في ألمانيا ولكن هناك امتحان دخول صعب جداً",
         "- يمكنك الذهاب إلى مدرسة مسرحية في ألمانيا ولكن هناك امتحان دخول صعب جداً اليوم."
       ]
@@ -115203,12 +114808,10 @@
     },
     "translation_distractors": {
       "en": [
-        "– That was fun.",
         "- That was fun today.",
         "- That was fun yesterday."
       ],
       "ar": [
-        "-كان ذلك ممتعاً",
         "- كان ذلك ممتعاً اليوم.",
         "- كان ذلك ممتعاً أمس."
       ]
@@ -115335,7 +114938,6 @@
       ],
       "ar": [
         "-أين منضدتى؟",
-        "أين حقيبتي؟",
         "-أين تأكل حقيبتي؟"
       ]
     },
@@ -115419,7 +115021,6 @@
       ],
       "ar": [
         "سأكون سعيداً عندما تعودين",
-        "أنا سعيد لرؤيتك مرة أخرى.",
         "أنا سعيد لرؤيتك مرة أخرى اليوم."
       ]
     },
@@ -116846,7 +116447,6 @@
       ],
       "ar": [
         "أبي يقول دائماً أن علي الذهاب إلى الكلية",
-        "أبي يقول دائماً أن عليّ الدراسة",
         "أبي يقول دائماً أن علي الدراسة اليوم."
       ]
     },
@@ -117601,7 +117201,6 @@
         "And the question is, what do you do with them? today."
       ],
       "ar": [
-        "والسؤال هو: ماذا تفعل بهم؟",
         "والسؤال هو، ماذا تفعل معه؟",
         "والسؤال هو، ماذا تفعل بهم؟ اليوم."
       ]
@@ -117681,8 +117280,7 @@
     "translation_distractors": {
       "en": [
         "– Selma, watch out for that tone!",
-        "Selmas, watch your tone!",
-        "– Selma, watch your tone!"
+        "Selmas, watch your tone!"
       ],
       "ar": [
         "-سيلما)، انتبهي لتلك النغمة)!",
@@ -117933,12 +117531,10 @@
     "translation_distractors": {
       "en": [
         "I know the address. I'll come with you in the morning.",
-        "I know the address. I'll come with you tomorrow.",
         "- I know the address. I'll come with you tomorrow today."
       ],
       "ar": [
         "أعرف العنوان سآتي معك في الصباح",
-        "أعرف العنوان سآتي معك غداً",
         "-أعرف العنوان، سآتي معك غداً اليوم."
       ]
     },
@@ -118436,7 +118032,6 @@
     },
     "translation_distractors": {
       "en": [
-        "– My parents say engineer is good.",
         "My parents say that engineer is good.",
         "My parents say engineer eats well."
       ],
@@ -118689,12 +118284,10 @@
     "translation_distractors": {
       "en": [
         "And here's Tarek and I, the boss.",
-        "And here's Tarek and I, the bosses.",
         "And here's Tarek and I the bosses today."
       ],
       "ar": [
         "وها أنا و(طارق) الرئيس",
-        "وهنا (طارق) وأنا، الرؤساء.",
         "وهنا طارق وأنا الرؤساء اليوم."
       ]
     },
@@ -118772,7 +118365,6 @@
     },
     "translation_distractors": {
       "en": [
-        "- Yes. I like my work.",
         "- Yes, I like my work today.",
         "- Yes, I like my work yesterday."
       ],
@@ -118857,12 +118449,10 @@
     "translation_distractors": {
       "en": [
         "- Of course I like my job.",
-        "- Sure I like my job.",
         "- Sure I like my jobs."
       ],
       "ar": [
         "-بالطبع أحب عملي",
-        "-بالتأكيد أحب عملي",
         "-بالتأكيد، أحب عملي اليوم."
       ]
     },
@@ -118940,7 +118530,6 @@
     },
     "translation_distractors": {
       "en": [
-        "- You're wolf-gäng, aren't you?",
         "- You're up to Wolfgang, right?",
         "– You're Wolfgang, you're a bit boring?"
       ],
@@ -119072,7 +118661,6 @@
       ],
       "ar": [
         "-الحقيبة ليست جميلة",
-        "-الطاولة، ليست جميلة",
         "- الطاولة، ليست بالفعل."
       ]
     },
@@ -119491,7 +119079,6 @@
         "- Yes, yes, that's not a problem yesterday."
       ],
       "ar": [
-        "- نعم، نعم، هذه ليست مشكلة.",
         "-نعم، نعم، أنت لست مشكلة",
         "-نعم، نعم، هذه ليست مشكلة اليوم."
       ]
@@ -119660,8 +119247,7 @@
       ],
       "ar": [
         "-حسناً، شكراً يا (ليزا) على كل شيء",
-        "شكراً لكِ يا (ليزا) على كل شخص",
-        "شكراً لك يا (ليزا) على كل شيء"
+        "شكراً لكِ يا (ليزا) على كل شخص"
       ]
     },
     "transcript_source": "dw_manual_subs",
@@ -120453,13 +120039,11 @@
     "translation_distractors": {
       "en": [
         "- Have you ever been in a cut?",
-        "- You ever wait in Sweden?",
-        "- Have you ever been to Sweden?"
+        "- You ever wait in Sweden?"
       ],
       "ar": [
         "-هل سبق لك أن كنت في عملية قطع؟",
-        "-هل سبق لك أن انتظرت في السويد؟",
-        "-هل سبق لك أن ذهبت إلى السويد؟"
+        "-هل سبق لك أن انتظرت في السويد؟"
       ]
     },
     "transcript_source": "dw_manual_subs",
@@ -120704,7 +120288,6 @@
     },
     "translation_distractors": {
       "en": [
-        "And you, Sebästian?",
         "Are you, Sebastian?",
         "And you, Sebastian? today."
       ],
@@ -120752,8 +120335,7 @@
       ],
       "ar": [
         "-قلبي، أعطني هذا",
-        "- هنا، أعطني.",
-        "- هنا، أعطني هذا."
+        "- هنا، أعطني."
       ]
     },
     "transcript_source": "dw_manual_subs",
@@ -122508,7 +122090,6 @@
     },
     "translation_distractors": {
       "en": [
-        "- To the center, please.",
         "- To the centrum, to the royal court.",
         "– To the center. To the royal court."
       ],
@@ -122639,7 +122220,6 @@
         "- Okay, no problem yesterday."
       ],
       "ar": [
-        "- حسناً، لا مشكلة -",
         "- حسناً، لا محاولة",
         "- حسناً، لا مشكلةَ اليوم."
       ]
@@ -122681,7 +122261,6 @@
         "Hey, Nawin, you want something to eat? today."
       ],
       "ar": [
-        "يا (ناوين) أتريد شيئاً لتأكله؟",
         "مرحباً يا (نافينز) هل تريد شيئاً لتأكله؟",
         "-مرحباً (ناوين)، أتريد أن تأكل؟"
       ]
@@ -122971,7 +122550,6 @@
     "translation_distractors": {
       "en": [
         "- Hello, I'm Nichoe.",
-        "- Hello, I'm Nico.",
         "Hello, I'm Nico today."
       ],
       "ar": [
@@ -123143,8 +122721,7 @@
         "- Guys, the menu today."
       ],
       "ar": [
-        "-الناس، القائمة، ماذا تأخذ؟",
-        "-القائمة، يا رفاق."
+        "-الناس، القائمة، ماذا تأخذ؟"
       ]
     },
     "transcript_source": "dw_manual_subs",
@@ -124107,7 +123684,6 @@
         "- What? yesterday."
       ],
       "ar": [
-        "ماذا؟ ماذا؟",
         "-ماذا؟ ماذا؟ اليوم.",
         "-ماذا؟ ماذا؟ أمس."
       ]
@@ -124187,12 +123763,10 @@
     "translation_distractors": {
       "en": [
         "I don't trust anything.",
-        "- I don't trust the whole thing.",
         "I don't trust the whole thing today."
       ],
       "ar": [
         "أنا لا أثق بأي شيء",
-        "-لا أثق في كل شيء",
         "لا أثق في كل شيء اليوم."
       ]
     },
@@ -124438,7 +124012,6 @@
     },
     "translation_distractors": {
       "en": [
-        "I'm not Jäcques,",
         "I'm nothing Jacques,",
         "I'm not Jacques today."
       ],
@@ -124648,7 +124221,6 @@
     },
     "translation_distractors": {
       "en": [
-        "- I don't want anything back, Jäcques!",
         "- I don't want to go back, Jacques!",
         "- I don't want to be a fool, Jacques!"
       ],
@@ -125158,7 +124730,6 @@
       ],
       "ar": [
         "- لا تبدأ الحديث عن القلب والثقة!",
-        "-لا تبدأ الحديث عن القلب والعقل",
         "- لا تبدأ الحديث عن القلب والعقل اليوم."
       ]
     },
@@ -125362,7 +124933,6 @@
     },
     "translation_distractors": {
       "en": [
-        "You and Tarek, you have the key?",
         "– You and Tarek, they have the key?",
         "- You and Tarek, you have the key? today."
       ],
@@ -125409,7 +124979,6 @@
         "Yara, Tarek and I are friends today."
       ],
       "ar": [
-        "يارا، طارق وأنا أصدقاء.",
         "ياراس، طارق وأنا أصدقاء.",
         "يارا، طارق وأنا صديقه."
       ]
@@ -125573,7 +125142,6 @@
     "translation_distractors": {
       "en": [
         "- Could you do me a favor?",
-        "– Can you do me a favor?",
         "- Can you do me a favor? today."
       ],
       "ar": [
@@ -125745,7 +125313,6 @@
         "You'll get the next meal for free! tomorrow."
       ],
       "ar": [
-        "ستحصل على الوجبة التالية مجاناً!",
         "ستحصل على الوجبة التالية مجاناً اليوم.",
         "ستحصل على الوجبة التالية مجاناً أمس."
       ]
@@ -126452,8 +126019,7 @@
     "translation_distractors": {
       "en": [
         "– Yes. Kömedie. Una comedia.",
-        "– Yes. Comedy. Una comedä.",
-        "– Yes. Comedy. Unä comedia."
+        "– Yes. Comedy. Una comedä."
       ],
       "ar": [
         "-نعم، (كوميدي)، لا داعي للتكرار",
@@ -126615,7 +126181,6 @@
     "translation_distractors": {
       "en": [
         "– The little one is exciting.",
-        "– That sounds exciting.",
         "- That sounds exciting today."
       ],
       "ar": [
@@ -127581,7 +127146,6 @@
     "translation_distractors": {
       "en": [
         "\"You have to study media, mechanical engineering or law. That has a future.\"",
-        "\"You have to study medicine, mechanical engineering or law. That has a future.\"",
         "\"You have to study medicine, mechanical engineering or law. That has a future today."
       ],
       "ar": [
@@ -127790,7 +127354,6 @@
     },
     "translation_distractors": {
       "en": [
-        "I understand, but that's not why he's not talking to you.",
         "- I understand, but that's not why he's not talking to you today.",
         "- I understand, but that's not why he's not talking to you yesterday."
       ],
@@ -127958,12 +127521,10 @@
     },
     "translation_distractors": {
       "en": [
-        "- I know, I can wait.",
         "I know. I can have been.",
         "I know, I can wait today."
       ],
       "ar": [
-        "-أعلم، يمكنني الانتظار",
         "أعلم، كان بإمكاني ذلك",
         "أعلم، يمكنني الانتظار اليوم."
       ]
@@ -128001,7 +127562,6 @@
     "translation_distractors": {
       "en": [
         "- Your company, what are they doing?",
-        "– Your company, what does it do?",
         "- Your company, what does it do? today."
       ],
       "ar": [
@@ -128341,7 +127901,6 @@
         "– On the third floor today."
       ],
       "ar": [
-        "- في الطابق الثالث -",
         "-في الـ \"ثالث\"",
         "- إلى الطابق الثالث."
       ]
@@ -128630,7 +128189,6 @@
         "– 431. Thank you very much! today."
       ],
       "ar": [
-        "-431 شكرا جزيلا لكم!",
         "- 431 شكراً لكم!",
         "- 031 شكرا جزيلا لكم!"
       ]
@@ -128919,7 +128477,6 @@
     },
     "translation_distractors": {
       "en": [
-        "– So, that's it. I can't learn anymore.",
         "– So, that's it. I can't learn anything anymore.",
         "- So, that's it. I can't learn anymore today."
       ],
@@ -129925,7 +129482,6 @@
     },
     "translation_distractors": {
       "en": [
-        "more candidates than they have seats;",
         "more candidates than they have been elected,",
         "more candidates than they have seats today."
       ],
@@ -131018,7 +130574,6 @@
     "translation_distractors": {
       "en": [
         "If you want to, you'll be able to give me back the money.",
-        "If you want to, you can give me back the money.",
         "If you want to, you can give me back the money today."
       ],
       "ar": [
@@ -137471,7 +137026,6 @@
         "Like a bird at the beginning of winter,"
       ],
       "ar": [
-        "مثل زهرة في بداية الشتاء",
         "كما تبدأ الزهرة في الشتاء،",
         "مثل طائر في بداية الشتاء"
       ]
@@ -137682,8 +137236,7 @@
       ],
       "ar": [
         "واسمع صرخات الطير في الريح.",
-        "واسمع صرخات الطيور في الشتاء.",
-        "واسمع صرخات الطيور في الريح."
+        "واسمع صرخات الطيور في الشتاء."
       ]
     },
     "lyrics_source": "Bernd Meinunger / Ralph Siegel — verified against Diggiloo/EurovisionWorld",
@@ -138017,7 +137570,6 @@
         "I'm just a woman who says what she feels."
       ],
       "ar": [
-        "أنا مجرد فتاة تقول ما تشعر به",
         "أنا مجرد فتاة تقول ما يشعر به",
         "أنا فتاة الآن التي تقول ما تشعر به"
       ]

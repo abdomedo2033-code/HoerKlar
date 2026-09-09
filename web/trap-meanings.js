@@ -101,7 +101,14 @@
       if (!e) continue;
       c.translation_distractors = c.translation_distractors || {};
       for (const lang of ['ar', 'en']) {
-        const words = (e[lang] || []).map((w) => String(w || '').trim()).filter(Boolean);
+        // Poison fuel never enters: ASS tags, backslashes, or wrong-script
+        // words (old bulk runs left entries like {pos}… and LissLISa…).
+        const BS = String.fromCharCode(92);
+        const words = (e[lang] || []).map((w) => String(w || '').trim()).filter((w) => {
+          if (!w || w.indexOf('{') >= 0 || w.indexOf('}') >= 0 || w.indexOf(BS) >= 0) return false;
+          if (lang === 'ar' && /[A-Za-z]{3,}/.test(w)) return false;
+          return true;
+        });
         if (!words.length) continue;
         const correct = (c.translations || {})[lang];
         if (!correct) continue;
