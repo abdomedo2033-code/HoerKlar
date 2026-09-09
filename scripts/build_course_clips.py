@@ -106,7 +106,7 @@ def title_from_filename(base):
     return t or base
 
 
-def build(audio_dir, base_url, id_map=None):
+def build(audio_dir, base_url, id_map=None, api_base=""):
     files = sorted(f for f in os.listdir(audio_dir)
                    if f.lower().endswith(AUDIO_EXTS))
     clips = []
@@ -121,8 +121,12 @@ def build(audio_dir, base_url, id_map=None):
         # Stream from Drive when an ID map is given (nothing to host, nothing
         # in git); local_audio stays relative for offline/local use.
         if id_map and fn in id_map:
-            url = ("https://drive.google.com/uc?export=download&id="
-                   + id_map[fn])
+            if api_base:
+                url = (api_base.rstrip("/") + "/api/course-audio?id="
+                       + id_map[fn])
+            else:
+                url = ("https://drive.google.com/uc?export=download&id="
+                       + id_map[fn])
         else:
             url = local_url
         cid = "course_" + slug(base)
@@ -197,6 +201,14 @@ def main():
     ap.add_argument("--id-map", default="",
                     help="JSON file mapping mp3 filename -> Google Drive file ID; "
                          "when set, video/audio URLs stream from Drive directly")
+    ap.add_argument("--api-base", default="",
+                    help="API base URL for the course-audio proxy "
+                         "(e.g. https://hoerklar-api.onrender.com); when set, "
+                         "clip URLs use <api>/api/course-audio?id=... which "
+                         "re-serves Drive bytes as playable inline audio")
+    ap.add_argument("--write-ids", default="",
+                    help="write the allowlisted Drive IDs to this JSON file "
+                         "(tracked server/course_ids.json feeds the proxy)")
     a = ap.parse_args()
     if not os.path.isdir(a.audio_dir):
         print(f"no audio dir yet: {a.audio_dir}")
@@ -208,10 +220,15 @@ def main():
     if a.id_map:
         id_map = json.load(open(a.id_map, encoding="utf-8"))
         print(f"id map: {len(id_map)} entries (streaming from Drive)")
-    clips = build(a.audio_dir, a.base_url, id_map)
+    clips = build(a.audio_dir, a.base_url, id_map, a.api_base)
     if not clips:
         print(f"no audio files in {a.audio_dir}")
         return 1
+    if a.write_ids and id_map:
+        ordered = sorted(set(id_map.values()))
+        json.dump(ordered, open(a.write_ids, "w", encoding="utf-8"),
+                  ensure_ascii=False, indent=1)
+        print(f"wrote {a.write_ids}: {len(ordered)} allowlisted IDs")
     if os.path.exists(a.out):
         os.replace(a.out, a.out + ".bak")
     json.dump(clips, open(a.out, "w", encoding="utf-8"),

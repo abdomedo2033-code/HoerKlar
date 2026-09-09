@@ -5,6 +5,10 @@ Endpoints:
   GET  /api/health
   GET  /api/manifest                        -> per-section {count,sha1,bytes}
   GET  /api/clips?section=movies            -> JSON array (Phase 1 server-JSON)
+  GET  /api/course-audio?id=<driveid>        -> course MP3, audio/mpeg inline
+                                               (Drive serves attachment, which
+                                               browsers won't play; IDs are
+                                               allowlisted in course_ids.json)
   POST /api/ingest  {url, user?}            -> {job_id, status} | {error}
   GET  /api/jobs/<id>                       -> job incl. clips_ready + progress
   GET  /api/jobs/next?worker=deck           -> oldest queued job, claimed (Deck poll)
@@ -20,7 +24,7 @@ Run locally:  python3 server/api_server.py 8788
 Render: set startCommand to `python server/api_server.py $PORT`
         (or mount these routes into the existing yt_proxy.py — same handlers).
 """
-import json, os, re, sys, urllib.parse
+import json, os, re, sys, urllib.parse, urllib.request
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -79,6 +83,40 @@ def _extract_playlist_id(url):
     return None
 
 
+_COURSE_IDS = None
+
+
+def _course_ids():
+    """Drive file IDs the course-audio proxy may serve.
+
+    Read from the tracked server/course_ids.json (fallback: DATA copy of
+    clips_course.json, which is gitignored). Unknown IDs -> 404 so the
+    endpoint can't be abused as an open Drive proxy.
+    """
+    global _COURSE_IDS
+    if _COURSE_IDS is None:
+        ids = set()
+        try:
+            with open(os.path.join(HERE, "course_ids.json"),
+                      encoding="utf-8") as f:
+                ids.update(json.load(f))
+        except (OSError, ValueError):
+            pass
+        try:
+            clips = json.load(open(os.path.join(DATA, "clips_course.json"),
+                                   encoding="utf-8"))
+            for c in clips:
+                for k in ("video_url", "audio_url"):
+                    m = re.search(r"[?&]id=([A-Za-z0-9_-]{10,})",
+                                  str(c.get(k) or ""))
+                    if m:
+                        ids.add(m.group(1))
+        except (OSError, ValueError):
+            pass
+        _COURSE_IDS = ids
+    return _COURSE_IDS
+
+
 def _manifest():
     mp = os.path.join(DATA, "manifest.json")
     if os.path.exists(mp):
@@ -128,6 +166,57 @@ class H(BaseHTTPRequestHandler):
                     if not ch:
                         break
                     self.wfile.write(ch)
+            return
+        if u.path == "/api/course-audio":
+            # Course MP3s live on Drive, which serves them as
+            # `Content-Disposition: attachment` — browsers won't play that
+            # inline. Re-serve the bytes as audio/mpeg + inline (+ ranges).
+            fid = (qs.get("id") or [""])[0]
+            if (not re.fullmatch(r"[A-Za-z0-9_-]{10,}", fid)
+                    or fid not in _course_ids()):
+                return _send(self, 404, {"error": "unknown audio"})
+            try:
+                ip = (self.headers.get("X-Forwarded-For", "").split(",")[0]
+                      or self.client_address[0])
+            except Exception:
+                ip = "?"
+            if not rate.allow("course:" + ip):
+                return _send(self, 429, {"error": "rate limited, try again soon"})
+            upstream = ("https://drive.usercontent.google.com/download?id="
+                        + fid + "&export=download")
+            headers = {"User-Agent": "Mozilla/5.0 (Linux; Android 13)"}
+            if self.headers.get("Range"):
+                headers["Range"] = self.headers["Range"]
+            try:
+                up = urllib.request.urlopen(
+                    urllib.request.Request(upstream, headers=headers),
+                    timeout=30)
+            except Exception:
+                return _send(self, 502, {"error": "upstream failed"})
+            ctype = up.headers.get("Content-Type") or ""
+            if not re.search(r"audio|mpeg|octet-stream|binary",
+                             ctype, re.I):
+                try:
+                    up.close()
+                except Exception:
+                    pass
+                return _send(self, 502, {"error": "unexpected upstream type"})
+            self.send_response(up.getcode())
+            self.send_header("Content-Type", "audio/mpeg")
+            self.send_header("Content-Disposition", "inline")
+            self.send_header("Access-Control-Allow-Origin", "*")
+            self.send_header("Accept-Ranges", "bytes")
+            for hk in ("Content-Length", "Content-Range"):
+                hv = up.headers.get(hk)
+                if hv:
+                    self.send_header(hk, hv)
+            self.send_header("Cache-Control", "public, max-age=86400")
+            self.end_headers()
+            import shutil
+            try:
+                shutil.copyfileobj(up, self.wfile, 65536)
+            except (BrokenPipeError, ConnectionResetError):
+                pass
             return
         m = re.fullmatch(r"/api/jobs/([0-9a-f]+)", u.path)
         if m:
