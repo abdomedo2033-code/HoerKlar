@@ -106,7 +106,7 @@ def title_from_filename(base):
     return t or base
 
 
-def build(audio_dir, base_url):
+def build(audio_dir, base_url, id_map=None):
     files = sorted(f for f in os.listdir(audio_dir)
                    if f.lower().endswith(AUDIO_EXTS))
     clips = []
@@ -117,7 +117,14 @@ def build(audio_dir, base_url):
         transcript = read_sidecar(os.path.join(audio_dir, base + ".txt"))
         en = read_sidecar(os.path.join(audio_dir, base + ".en.txt"))
         ar = read_sidecar(os.path.join(audio_dir, base + ".ar.txt"))
-        url = base_url.rstrip("/") + "/" + fn
+        local_url = base_url.rstrip("/") + "/" + fn
+        # Stream from Drive when an ID map is given (nothing to host, nothing
+        # in git); local_audio stays relative for offline/local use.
+        if id_map and fn in id_map:
+            url = ("https://drive.google.com/uc?export=download&id="
+                   + id_map[fn])
+        else:
+            url = local_url
         cid = "course_" + slug(base)
         title = title_from_filename(fn)
         clip = {
@@ -126,7 +133,7 @@ def build(audio_dir, base_url):
             "video_id": cid,
             "video_url": url,
             "audio_url": url,
-            "local_audio": url,
+            "local_audio": local_url,
             "embed_url": DRIVE_URL,
             "title": title,
             "start_time": 0.0,
@@ -187,6 +194,9 @@ def main():
     ap.add_argument("--out", default=os.path.join(DATA, "clips_course.json"))
     ap.add_argument("--base-url", default="course_audio",
                     help="URL prefix for audio files as seen by the app")
+    ap.add_argument("--id-map", default="",
+                    help="JSON file mapping mp3 filename -> Google Drive file ID; "
+                         "when set, video/audio URLs stream from Drive directly")
     a = ap.parse_args()
     if not os.path.isdir(a.audio_dir):
         print(f"no audio dir yet: {a.audio_dir}")
@@ -194,7 +204,11 @@ def main():
         print("2. put them in course_audio/  (see course_audio/README.md)")
         print("3. re-run this script")
         return 1
-    clips = build(a.audio_dir, a.base_url)
+    id_map = None
+    if a.id_map:
+        id_map = json.load(open(a.id_map, encoding="utf-8"))
+        print(f"id map: {len(id_map)} entries (streaming from Drive)")
+    clips = build(a.audio_dir, a.base_url, id_map)
     if not clips:
         print(f"no audio files in {a.audio_dir}")
         return 1
