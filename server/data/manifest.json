@@ -1,0 +1,27 @@
+{
+  "movies": {
+    "count": 212,
+    "sha1": "3a382e421482f358ad81e45d621e2822858a9b43",
+    "bytes": 1641917
+  },
+  "nicos": {
+    "count": 4935,
+    "sha1": "e192656607997fc6ab049b6b1fdd7780a4d40bb9",
+    "bytes": 4036218
+  },
+  "series": {
+    "count": 3126,
+    "sha1": "de36248d1e3bcdf2cf757732d945484a8fdf1d11",
+    "bytes": 4424430
+  },
+  "songs": {
+    "count": 22,
+    "sha1": "9e5ca2e418f60c66f9b42a7707cbe05d9b8d762b",
+    "bytes": 37544
+  },
+  "course": {
+    "count": 242,
+    "sha1": "e6d0b54aeb360ced299b1b6ad24d6fde74808940",
+    "bytes": 940606
+  }
+}

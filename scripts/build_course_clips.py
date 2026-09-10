@@ -113,9 +113,12 @@ def course_order(fn):
     return (int(m.group(1)) if m else 999, fn.lower())
 
 
-def build(audio_dir, base_url, id_map=None, api_base=""):
+def build(audio_dir, base_url, id_map=None, api_base="",
+          section="course", cefr="A1", title_prefix="", book_rank=0,
+          book_tag=""):
     files = sorted((f for f in os.listdir(audio_dir)
-                    if f.lower().endswith(AUDIO_EXTS)), key=course_order)
+                    if f.lower().endswith(AUDIO_EXTS)),
+                   key=lambda fn: (book_rank,) + course_order(fn))
     clips = []
     for fn in files:
         full = os.path.join(audio_dir, fn)
@@ -127,17 +130,25 @@ def build(audio_dir, base_url, id_map=None, api_base=""):
         local_url = base_url.rstrip("/") + "/" + fn
         # Stream from Drive when an ID map is given (nothing to host, nothing
         # in git); local_audio stays relative for offline/local use.
-        if id_map and fn in id_map:
+        # (Also tries with/without a leading "01 " — Drive listing names and
+        # on-disk names don't always agree on the prefix.)
+        fid = None
+        if id_map:
+            fid = (id_map.get(fn) or id_map.get("01 " + fn)
+                   or id_map.get(fn[3:] if fn.startswith("01 ") else fn))
+        if fid:
             if api_base:
-                url = (api_base.rstrip("/") + "/api/course-audio?id="
-                       + id_map[fn])
+                url = (api_base.rstrip("/") + "/api/course-audio?id=" + fid)
             else:
-                url = ("https://drive.google.com/uc?export=download&id="
-                       + id_map[fn])
+                url = ("https://drive.google.com/uc?export=download&id=" + fid)
         else:
             url = local_url
-        cid = "course_" + slug(base)
+        tag = (re.sub(r"[^a-z0-9]+", "_", (book_tag or title_prefix or section).lower()).strip("_") + "_"
+               if (book_tag or title_prefix or section) else "")
+        cid = "course_" + tag + slug(base)
         title = title_from_filename(fn)
+        if title_prefix:
+            title = title_prefix + " · " + title
         clip = {
             "clip_id": cid,
             "provider": "html5",
@@ -149,12 +160,12 @@ def build(audio_dir, base_url, id_map=None, api_base=""):
             "title": title,
             "start_time": 0.0,
             "end_time": dur,
-            "cefr": "A1",
-            "difficulty": 1,
+            "cefr": cefr,
+            "difficulty": 1 if cefr == "A1" else 2,
             "verified": False,
-            "section": "course",
+            "section": section,
             "license": "Course audio — personal study copy, not redistributed",
-            "attribution": "Menschen A1 course audio (personal study copy)",
+            "attribution": "Menschen course audio (personal study copy)",
         }
         if transcript:
             clip.update({
@@ -199,6 +210,22 @@ def update_manifest(clips):
     return man.get("course")
 
 
+BOOK_ORDER = ["A1.1 AB", "A1.1 KB", "A1.2 AB", "B1.1 KB", "B1.2 KB"]
+
+
+def merged_key(c):
+    title = str(c.get("title") or "")
+    rank = next((i for i, b in enumerate(BOOK_ORDER)
+                 if title.startswith(b)), None)
+    if rank is None:
+        # legacy unprefixed A1.1 AB titles ("01 Lektion ...")
+        rank = 0 if re.match(r"01 Lektion", title) else 99
+    m = re.search(r"Lektion\s*(\d+)", title, re.I)
+    lek = int(m.group(1)) if m else 999
+    cefr_rank = {"A1": 0, "A2": 1, "B1": 2}.get(c.get("cefr"), 9)
+    return (cefr_rank, rank, lek, title.lower())
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--audio-dir", default=os.path.join(REPO, "course_audio"))
@@ -216,6 +243,18 @@ def main():
     ap.add_argument("--write-ids", default="",
                     help="write the allowlisted Drive IDs to this JSON file "
                          "(tracked server/course_ids.json feeds the proxy)")
+    ap.add_argument("--section", default="course")
+    ap.add_argument("--cefr", default="A1")
+    ap.add_argument("--title-prefix", default="",
+                    help="prefix shown before each clip title, e.g. 'A1.1 KB'")
+    ap.add_argument("--book-rank", type=int, default=0,
+                    help="orders books inside one section (0=A1.1 AB, ...)")
+    ap.add_argument("--book-tag", default="",
+                    help="namespaces clip_ids per book, e.g. a1_1_kb "
+                         "(prevents Intro/Lektion collisions across books)")
+    ap.add_argument("--merge-out", default="",
+                    help="append built clips to this JSON file instead of "
+                         "overwriting --out (keeps other books' clips)")
     a = ap.parse_args()
     if not os.path.isdir(a.audio_dir):
         print(f"no audio dir yet: {a.audio_dir}")
@@ -227,18 +266,33 @@ def main():
     if a.id_map:
         id_map = json.load(open(a.id_map, encoding="utf-8"))
         print(f"id map: {len(id_map)} entries (streaming from Drive)")
-    clips = build(a.audio_dir, a.base_url, id_map, a.api_base)
+    clips = build(a.audio_dir, a.base_url, id_map, a.api_base,
+                  a.section, a.cefr, a.title_prefix, a.book_rank,
+                  a.book_tag)
     if not clips:
         print(f"no audio files in {a.audio_dir}")
         return 1
     if a.write_ids and id_map:
-        ordered = sorted(set(id_map.values()))
+        ordered = set(sorted(set(id_map.values())))
+        if os.path.exists(a.write_ids):
+            try:
+                ordered.update(json.load(open(a.write_ids, encoding="utf-8")))
+            except (OSError, ValueError):
+                pass
+        ordered = sorted(ordered)
         json.dump(ordered, open(a.write_ids, "w", encoding="utf-8"),
                   ensure_ascii=False, indent=1)
         print(f"wrote {a.write_ids}: {len(ordered)} allowlisted IDs")
-    if os.path.exists(a.out):
-        os.replace(a.out, a.out + ".bak")
-    json.dump(clips, open(a.out, "w", encoding="utf-8"),
+    out_path = a.merge_out or a.out
+    if a.merge_out and os.path.exists(a.merge_out):
+        old = json.load(open(a.merge_out, encoding="utf-8"))
+        have = {c["clip_id"] for c in clips}
+        clips = sorted([c for c in old if c.get("clip_id") not in have]
+                       + clips, key=merged_key)
+        print(f"merged with {a.merge_out}")
+    if os.path.exists(out_path):
+        os.replace(out_path, out_path + ".bak")
+    json.dump(clips, open(out_path, "w", encoding="utf-8"),
               ensure_ascii=False, indent=1)
     entry = update_manifest(clips)
     pending = sum(1 for c in clips if c.get("transcript_pending"))

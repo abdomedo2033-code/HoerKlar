@@ -21,12 +21,15 @@ def main():
     ap.add_argument("--model", default="small",
                     help="faster-whisper model (tiny/base/small/...)")
     ap.add_argument("--force", action="store_true")
+    ap.add_argument("--dir", default=AUDIO_DIR,
+                    help="audio folder to transcribe (default course_audio/)")
     a = ap.parse_args()
 
     from faster_whisper import WhisperModel
     print(f"loading model {a.model} (cpu, int8)...", flush=True)
     model = WhisperModel(a.model, device="cpu", compute_type="int8")
-    files = sorted(glob.glob(os.path.join(AUDIO_DIR, "*.mp3")))
+    files = sorted(glob.glob(os.path.join(a.dir, "*.mp3")) +
+                   glob.glob(os.path.join(a.dir, "*.m4a")))
     print(f"{len(files)} files", flush=True)
     done, skipped = 0, 0
     for i, f in enumerate(files):
