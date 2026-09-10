@@ -177,7 +177,6 @@ function pickRandom(){
   const dueP=filtered.filter(c=>{ const st=srsGet(c.clip_id); return (st.d||0)<=now; });
   const pool=dueP.length?dueP:filtered;
   cur=pool[Math.floor(Math.random()*pool.length)];
-  else cur=pool[Math.floor(Math.random()*pool.length)];
   slowReset();
   renderQuiz(); setupPlayer(); try{updateFilterLabel();}catch(e){}
   document.getElementById('feedback').textContent=''; document.getElementById('next').style.display='none';
