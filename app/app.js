@@ -238,15 +238,18 @@ function safeReplace(text, find, rep){
 }
 
 window._wpool=[...new Set((typeof clips!=='undefined'?clips:[]).flatMap(c=>((c.dutch_text||'')+' '+(c.correct_answer||'')).split(/\s+/)).map(w=>w.replace(/[^\w\u00e4\u00f6\u00fc\u00df\u00c4\u00d6\u00dc-]/g,'')).filter(w=>w.length>=4))];
+window._stop=new Set(("ich du er sie es wir ihr der die das ein eine einen einer und oder aber nicht kein keine keinen zu von auf an im in ist sind war waren werden wird habe hat haben mit für nach aus bei um als wie so auch noch nur schon immer nie jetzt dann dort hier mein dein sein unser euer mir mich dich dir uns ihm ihnen sich dem den man was wer wenn weil dass damit gern gerne mal bitte danke na ja nein doch denn am da den dann das des die ob".split(" ")));
+
 function modeNow(){ const sel=document.getElementById('qtype').value; if(sel!=='all' && sel!=='dictation') return sel; if(sel==='dictation') return 'listening'; const r=Math.random();
   return r<0.4?'listening':(r<0.78?'cloze':(cur.translations&&(cur.translations.en||cur.translations.ar)?'translation':'cloze')); }
 function nearWord(w,ex){ const pool=window._wpool||[]; let c=pool.filter(x=>!ex.has(x)&&Math.abs(x.length-w.length)<=1); if(!c.length)c=pool.filter(x=>!ex.has(x)); if(!c.length)return w+'n'; c.sort((a,b)=>Math.abs(a.length-w.length)-Math.abs(b.length-w.length)); return c[Math.floor(Math.random()*Math.min(8,c.length))]; }
 function buildCloze(){
   const toks=cur.dutch_text.split(/\s+/).filter(Boolean);
   let idxs=[];
-  for(let j=0;j<toks.length;j++){ if(toks[j].replace(/[^\w\u00e4\u00f6\u00fc\u00df]/g,'').length>=3) idxs.push(j); }
+  for(let j=0;j<toks.length;j++){ const bare=toks[j].replace(/[^\w\u00e4\u00f6\u00fc\u00df]/g,''); if(bare.length>=3&&!window._stop.has(bare.toLowerCase())) idxs.push(j); }
+  if(!idxs.length) for(let j=0;j<toks.length;j++) if(toks[j].replace(/[^\w\u00e4\u00f6\u00fc\u00df]/g,'').length>=3) idxs.push(j);
   if(!idxs.length) return {blanked:cur.dutch_text,phrase:cur.dutch_text,opts:null};
-  const want=Math.min(toks.length>=8?3:(toks.length>=5?2:1),idxs.length);
+  const want=Math.min(toks.length>16?6:(toks.length>12?5:(toks.length>8?4:(toks.length>=6?3:2))),idxs.length);
   const shuffled=idxs.slice().sort(()=>Math.random()-0.5);
   const picked=[]; const scattered=Math.random()<0.55;
   for(const j of shuffled){ if(!scattered || picked.every(q=>Math.abs(q-j)>1)) picked.push(j); if(picked.length===want) break; }
@@ -255,19 +258,73 @@ function buildCloze(){
   const answers=picked.map(j=>toks[j]);
   const phrase=answers.join(' ');
   const blanked=toks.map((t,j)=>picked.includes(j)?'___':t).join(' ');
-  const ex=new Set([phrase.toLowerCase()]); const outs=[];
-  let guard=0;
-  while(outs.length<3&&guard++<40){
-    const pt=answers.slice();
-    const k=Math.floor(Math.random()*pt.length);
-    const bare=pt[k].replace(/[^\w\u00e4\u00f6\u00fc\u00df]/g,'');
-    if(!bare) continue;
-    const rep=nearWord(bare,new Set([bare]));
-    const np=pt.slice(0,k).concat([rep+(pt[k].slice(bare.length)||'')],pt.slice(k+1)).join(' ');
-    if(!ex.has(np.toLowerCase())){ ex.add(np.toLowerCase()); outs.push(np); }
+  const needSwap = answers.length>=5?3: Math.min(2, answers.length);
+  const ex=new Set([phrase.toLowerCase()]);
+  const usedPerPos=new Map(answers.map((_,i)=>[i,new Set()]));
+  const outs=[]; let guard=0;
+  while(outs.length<3&&guard++<80){
+    const need=Math.min(needSwap, answers.length);
+    const idxs2=[...Array(answers.length).keys()].sort(()=>Math.random()-0.5).slice(0,need);
+    const pt=answers.slice(); let ok=true;
+    for(const k of idxs2){
+      const bare=pt[k].replace(/[^\w\u00e4\u00f6\u00fc\u00df]/g,'');
+      if(!bare){ ok=false; break; }
+      const ex2=new Set([bare.toLowerCase(), ...usedPerPos.get(k)]);
+      const rep=nearWord(bare, new Set([...ex2].map(s=>s.toLowerCase())));
+      if(!rep || rep.toLowerCase()===bare.toLowerCase()){ ok=false; break; }
+      pt[k]=rep+(pt[k].slice(bare.length)||'');
+      usedPerPos.get(k).add(rep.toLowerCase());
+    }
+    const np=pt.join(' ');
+    if(!ok || ex.has(np.toLowerCase())) continue;
+    let tooClose=false;
+    for(const o of outs){
+      const ot=o.split(' '); let diff=0; for(let i=0;i<pt.length;i++) if(pt[i]!==ot[i]) diff++;
+      if(diff<2){ tooClose=true; break; }
+    }
+    if(tooClose) continue;
+    ex.add(np.toLowerCase()); outs.push(np);
   }
   while(outs.length<3){ outs.push(phrase+' '+['ja','wohl','schon'][outs.length]); }
   return {blanked,phrase,answers,opts:[phrase,...outs].sort(()=>Math.random()-0.5)};
+}
+function buildListeningOpts(correct){
+  const toks=correct.split(/\s+/).filter(Boolean);
+  if(!toks.length) return [correct+' ja', correct+' wohl', correct+' schon'];
+  let idxs=[];
+  for(let j=0;j<toks.length;j++){ const bare=toks[j].replace(/[^\w\u00e4\u00f6\u00fc\u00df]/g,''); if(bare.length>=3&&!window._stop.has(bare.toLowerCase())) idxs.push(j); }
+  if(!idxs.length) for(let j=0;j<toks.length;j++) if(toks[j].replace(/[^\w\u00e4\u00f6\u00fc\u00df]/g,'').length>=3) idxs.push(j);
+  if(!idxs.length) return [correct+' ja', correct+' wohl', correct+' schon'];
+  const want = Math.min(toks.length>=9?4: toks.length>=6?3: 2, idxs.length);
+  const outs=[]; const seen=new Set([correct]); const usedPerPos=new Map(idxs.map(i=>[i,new Set()]));
+  let guard=0;
+  while(outs.length<3&&guard++<80){
+    const chosen=[...idxs].sort(()=>Math.random()-0.5).slice(0,want);
+    const cand=toks.slice(); let ok=true;
+    for(const i of chosen){
+      const orig=cand[i];
+      const m=orig.match(/^([\w\u00e4\u00f6\u00fc\u00df]+)(.*)$/i);
+      const bare=m?m[1]:orig.replace(/[^\w\u00e4\u00f6\u00fc\u00df]/g,'');
+      const suffix=m?m[2]:orig.slice(bare.length);
+      if(!bare){ ok=false; break; }
+      const ex=new Set([bare.toLowerCase(), ...usedPerPos.get(i)]);
+      const rep=nearWord(bare, new Set([...ex]));
+      if(!rep || rep.toLowerCase()===bare.toLowerCase()){ ok=false; break; }
+      cand[i]=rep+suffix;
+      usedPerPos.get(i).add(rep.toLowerCase());
+    }
+    const s=cand.join(' ');
+    if(!ok||seen.has(s)) continue;
+    let tooClose=false;
+    for(const o of outs){
+      const ot=o.split(/\s+/); let diff=0; for(let k=0;k<toks.length;k++) if(cand[k]!==ot[k]) diff++;
+      if(diff<2){ tooClose=true; break; }
+    }
+    if(tooClose) continue;
+    seen.add(s); outs.push(s);
+  }
+  while(outs.length<3) outs.push(correct+' '+['ja','wohl','schon'][outs.length]);
+  return outs;
 }
 function clozeTap(tt,btn,o){
   if(window._clozeDone) return;
@@ -425,7 +482,8 @@ function renderQuiz(){
     } else { mode='listening'; }
   }
   if(mode==='listening'){
-    opts=[cur.correct_answer, ...cur.wrong_answers].sort(()=>Math.random()-0.5);
+    const hard=buildListeningOpts(cur.correct_answer);
+    opts=[cur.correct_answer, ...hard].sort(()=>Math.random()-0.5);
   }
   window._qAnswer=qAnswer;
   d.textContent= mode==='dictation' ? '\u{1F50A} Dictation \u2014 type what you hear' : (displayText||'\u{1F50A} Listen and answer');

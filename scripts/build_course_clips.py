@@ -37,10 +37,26 @@ AUDIO_EXTS = (".mp3", ".m4a", ".ogg", ".wav")
 
 DRIVE_URL = "https://drive.google.com/drive/folders/1rnUPDhwmGJlHjo7_Mjulp-ML0AoC2p10"
 
-# Small swap pool for single-word distractors (A1-ish German).
-SWAP_POOL = ("Haus Zeit Mann Frau Kind Stadt Schule Lehrer Musik Film Tisch Fenster "
-             "Straße Auto Zug Zimmer Küche Wasser Brot Milch Käse Apfel Suppe Fleisch "
-             "Familie Freund Arbeit Morgen Abend Tag Woche Jahr Name Frage Antwort").split()
+STOPWORDS = set("ich du er sie es wir ihr der die das ein eine einen einer und oder aber nicht kein keine keinen zu von auf an im in ist sind war waren werden wird habe hat haben mit für nach aus bei um als wie so auch noch nur schon immer nie jetzt dann dort hier mein dein sein unser euer mir mich dich dir uns ihm ihnen sich dem den man was wer wenn weil dass damit gern gerne mal bitte danke na ja nein doch denn am da den dann das des die ob".split())
+
+# Large German distractors pool — same source as the browser's _dewords,
+# so any swap looks like a plausible close word rather than "Haus/Zeit/Mann".
+POOL = ("gestern heute morgen kommen gehen sehen sagen machen haben sein wollen können müssen wissen denken arbeiten spielen essen trinken schlafen sprechen lesen schreiben fahren fliegen laufen springen lachen weinen singen tanzen kaufen verkaufen finden geben nehmen bringen holen öffnen schließen wohnen lieben hassen helfen fragen antworten verstehen vergessen erinnern Geld Zeit Haus Buch Wasser Mann Frau Kind Freund Stadt Land Welt Arbeit Schule Lehrer Schüler Musik Film Tisch Stuhl Fenster Tür Straße Auto Zug Bahnhof Zimmer Küche sitzen stehen liegen schicken bekommen warten treffen besuchen reisen kochen backen schneiden legen stellen fühlen freuen sorgen rennen schwimmen wandern erzählen üben wiederholen hören sehen schauen gucken verlassen ankommen abfahren aufstehen aufwachen frühstücken klingeln läuten rufen melden erklären beschreiben berichten zeigen machen tun bringen holen nehmen geben schenken leihen bezahlen verkaufen kaufen bekommen finden suchen verlieren spielen gewinnen hoffen wünschen träumen studieren jobben verdienen sparen zahlen kosten rechnen feiern genießen dürfen sollen mögen bleiben fliegen reisen klettern Schein Glück Kleid Schuhe Jacke Mantel Hemd Hose Rock Pullover Socken Treppe Keller Dach Boden Wand Lampe Sessel Sofa Bett Schrank Regal Bild Uhr Heft Bleistift Tafel Apfel Banane Brot Käse Milch Wasser Saft Bier Wein Zucker Salz Pfeffer Suppe Salat Fleisch Wurst Brötchen Kuchen Torte Schokolade Eis Tomate Gurke Zwiebel Kartoffel Karotte Paprika Pilz Reis Nudeln Mehl Öl Eltern Mutter Vater Oma Opa Tante Onkel Bruder Schwester Familie Freunde Partner Nachbar Polizei Arzt Ärztin Apotheke Krankenhaus Flughafen Haltestelle Kreuzung Ampel Weg Richtung Platz Park Geschäft Laden Markt Bäckerei Supermarkt Kaufhaus".split())
+
+
+def _sim_word(w, ex, pool=POOL):
+    wl = w.lower()
+    cand = [x for x in pool if x.lower() != wl and x.lower() not in ex and abs(len(x) - len(w)) <= 2 and x[0].lower() == wl[0].lower()]
+    if not cand:
+        cand = [x for x in pool if x.lower() != wl and x.lower() not in ex and abs(len(x) - len(w)) <= 2]
+    if not cand:
+        cand = [x for x in pool if x.lower() != wl and x.lower() not in ex]
+    if not cand:
+        return None
+    cand.sort(key=lambda x: abs(len(x) - len(w)))
+    import random as _r
+    top = cand[:5]
+    return _r.choice(top)
 
 
 def slug(name):
@@ -73,28 +89,61 @@ def read_sidecar(path):
 
 
 def distractors(correct):
-    """3 single-word-swap variants of the correct sentence."""
+    """3 hard distractors: each swaps 2–3 close words at different positions,
+    so you can't guess by majority — every option looks equally plausible."""
+    import random as _r
     toks = correct.split()
     idxs = [i for i, w in enumerate(toks)
-            if len(re.sub(r"[^\wäöüß]", "", w, flags=re.I)) >= 3]
-    outs, seen = [], {correct}
+            if len(re.sub(r"[^\wäöüß]", "", w, flags=re.I)) >= 3
+            and re.sub(r"[^\wäöüß]", "", w, flags=re.I).lower() not in STOPWORDS]
+    if not idxs:
+        idxs = [i for i, w in enumerate(toks)
+                if len(re.sub(r"[^\wäöüß]", "", w, flags=re.I)) >= 3]
     if not idxs:
         return [correct + " ja", correct + " wohl", correct + " schon"][:3]
-    pool_i = 0
+    n = len(toks)
+    # user wants 3+ different words — so 3 swaps for normal sentences, 2 for tiny ones
+    want = 3 if n >= 6 else 2
+    want = min(want, len(idxs))
+    outs, seen = [], {correct}
+    used_per_pos = {i: set() for i in idxs}
     guard = 0
-    while len(outs) < 3 and guard < 60:
+    while len(outs) < 3 and guard < 80:
         guard += 1
-        i = idxs[(pool_i // len(SWAP_POOL)) % len(idxs)]
-        rep = SWAP_POOL[pool_i % len(SWAP_POOL)]
-        pool_i += 1
-        bare = re.sub(r"[^\wäöüß]", "", toks[i], flags=re.I)
-        if not bare or rep.lower() == bare.lower():
+        chosen = _r.sample(idxs, want) if len(idxs) >= want else idxs[:]
+        # shuffle to avoid always picking same positions together
+        _r.shuffle(chosen)
+        cand = toks[:]
+        ok = True
+        for i in chosen:
+            m = re.match(r"^([\wäöüß]+)(.*)$", cand[i], flags=re.I)
+            bare = m.group(1) if m else re.sub(r"[^\wäöüß]", "", cand[i], flags=re.I)
+            suffix = m.group(2) if m else cand[i][len(bare):]
+            if not bare:
+                ok = False
+                break
+            ex = {bare.lower()} | used_per_pos[i]
+            rep = _sim_word(bare, ex)
+            if not rep:
+                ok = False
+                break
+            cand[i] = rep + suffix
+            used_per_pos[i].add(rep.lower())
+        s = " ".join(cand)
+        if not ok or s in seen:
             continue
-        cand = toks[:i] + [rep + toks[i][len(bare):]] + toks[i + 1:]
-        cand = " ".join(cand)
-        if cand not in seen:
-            seen.add(cand)
-            outs.append(cand)
+        # keep distractors diverse — not sharing the exact same 2-word pattern
+        too_close = False
+        for o in outs:
+            ot = o.split()
+            diff = sum(1 for a, b in zip(cand, ot) if a != b)
+            if diff < 2:
+                too_close = True
+                break
+        if too_close:
+            continue
+        seen.add(s)
+        outs.append(s)
     while len(outs) < 3:
         outs.append(correct + " " + ("ja", "wohl", "schon")[len(outs)])
     return outs
