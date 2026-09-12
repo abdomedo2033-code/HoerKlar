@@ -164,7 +164,7 @@ def course_order(fn):
 
 def build(audio_dir, base_url, id_map=None, api_base="",
           section="course", cefr="A1", title_prefix="", book_rank=0,
-          book_tag=""):
+          book_tag="", sc_map=None):
     files = sorted((f for f in os.listdir(audio_dir)
                     if f.lower().endswith(AUDIO_EXTS)),
                    key=lambda fn: (book_rank,) + course_order(fn))
@@ -198,6 +198,10 @@ def build(audio_dir, base_url, id_map=None, api_base="",
         title = title_from_filename(fn)
         if title_prefix:
             title = title_prefix + " · " + title
+        sc_url = ""
+        if sc_map:
+            sc_url = (sc_map.get(fn) or sc_map.get(base)
+                      or sc_map.get(title) or sc_map.get(title_from_filename(fn)) or "")
         clip = {
             "clip_id": cid,
             "provider": "html5",
@@ -216,6 +220,8 @@ def build(audio_dir, base_url, id_map=None, api_base="",
             "license": "Course audio — personal study copy, not redistributed",
             "attribution": "Menschen course audio (personal study copy)",
         }
+        if sc_url:
+            clip["soundcloud_url"] = sc_url
         if transcript:
             clip.update({
                 "dutch_text": transcript,
@@ -304,6 +310,11 @@ def main():
     ap.add_argument("--merge-out", default="",
                     help="append built clips to this JSON file instead of "
                          "overwriting --out (keeps other books' clips)")
+    ap.add_argument("--sc-map", default="",
+                    help="JSON file mapping local mp3 basename (or clip title) "
+                         "-> SoundCloud track page URL; stored as "
+                         "soundcloud_url, used by the in-page SC widget "
+                         "fallback when the hosted file fails")
     a = ap.parse_args()
     if not os.path.isdir(a.audio_dir):
         print(f"no audio dir yet: {a.audio_dir}")
@@ -317,7 +328,8 @@ def main():
         print(f"id map: {len(id_map)} entries (streaming from Drive)")
     clips = build(a.audio_dir, a.base_url, id_map, a.api_base,
                   a.section, a.cefr, a.title_prefix, a.book_rank,
-                  a.book_tag)
+                  a.book_tag,
+                  json.load(open(a.sc_map, encoding="utf-8")) if a.sc_map else None)
     if not clips:
         print(f"no audio files in {a.audio_dir}")
         return 1
