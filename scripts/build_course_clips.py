@@ -265,8 +265,8 @@ def update_manifest(clips):
     return man.get("course")
 
 
-BOOK_ORDER = ["A1.1 AB", "A1.1 KB", "A1.2 AB", "A2.1 KB", "A2.1 AB",
-              "B1.1 KB", "B1.2 KB"]
+BOOK_ORDER = ["A1.1 AB", "A1.1 KB", "A1.2 AB", "A1.2 KB", "A2.1 KB",
+              "A2.1 AB", "A2.2 KB", "A2.2 AB", "B1.1 KB", "B1.2 KB"]
 
 
 def merged_key(c):
